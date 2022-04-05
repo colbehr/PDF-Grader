@@ -1,0 +1,117 @@
+@font-face {
+    -fx-font-family: "Raleway";
+    src: url("fonts/Raleway-Regular.ttf");
+}
+
+@font-face {
+    -fx-font-family: "Quicksand";
+    src: url("fonts/Quicksand-Regular.ttf");
+}
+
+@font-face {
+    -fx-font-family: "Quicksand Bold";
+    src: url("fonts/Quicksand-Bold.ttf");
+}
+
+#root {
+    -fx-font-family: 'Quicksand';
+}
+
+.vert-spacer {
+    -fx-label-padding: 0 0 20px 0;
+    -fx-padding: 5px 0 10px 0;
+}
+
+.space-box {
+    -fx-min-height: 20px;
+}
+
+#grading-side {
+    /*
+    -fx-background-color: linear-gradient(to top right, rgba(171,235,255,1), rgba(219,190,255,1));
+    */
+    -fx-background-color: linear-gradient(to top right, #71b48d, #B8E0BE);
+    -fx-padding: 10px;
+    -fx-label-padding: 10px;
+    -fx-text-fill: white;
+    -fx-min-width: 300px;
+}
+
+#test-name {
+    -fx-font-size: 14pt;
+}
+
+#question-header {
+    -fx-alignment: bottom-left;
+}
+
+#total-questions {
+    -fx-font-size: 12pt;
+    -fx-label-padding: 0 0 0 10px;
+}
+
+.score-num {
+    -fx-font-family: "Quicksand Bold";
+    -fx-font-size: 16pt;
+}
+
+#score-given {
+    -fx-font-family: "Quicksand Bold";
+    -fx-pref-column-count: 1;
+    -fx-alignment: center;
+}
+#score-outof {
+    -fx-padding: 0px 5px 0px 5px;
+}
+
+#q-score {
+    -fx-alignment: center-left;
+    -fx-text-alignment: center;
+    -fx-padding: 0 0 20px 0;
+}
+
+#feedback-new {
+    -fx-end-margin: 20px;
+    -fx-start-margin: 20px;
+    -fx-pref-column-count: 100;
+    -fx-max-height: 100px;
+}
+
+#add-feedback {
+    -fx-min-width: 75px;
+    -fx-start-margin: 10px;
+}
+
+#feedbacks {
+    -fx-pref-height: 100px;
+}
+
+#question-nav-buttons {
+    -fx-alignment: center;
+}
+
+#button-spacer {
+    -fx-pref-width: 30%;
+}
+
+#grading-top {
+    -fx-alignment: top-left;
+    -fx-pref-height: 200px;
+}
+
+#grading-middle {
+    -fx-alignment: center-left;
+    -fx-min-height: 300px;
+}
+
+#grading-bottom {
+    -fx-min-height: 100px;
+    -fx-spacing: 30px;
+    -fx-padding: 20px 0 0 0;
+    -fx-alignment: center;
+}
+
+#test-counter {
+    -fx-text-alignment: center;
+    -fx-font-size: 12pt;
+}

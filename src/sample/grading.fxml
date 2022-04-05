@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.WebView?>
+<!--
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="sample.Grading"
+            prefHeight="400.0" prefWidth="600.0">
+
+</AnchorPane>
+-->
+<?import java.net.URL?>
+<?import javafx.scene.text.TextFlow?>
+<?import javafx.scene.text.Text?>
+<GridPane id="root" maxWidth="Infinity" maxHeight="Infinity">
+    <stylesheets>
+        <URL value="@./shared.css"/>
+        <URL value="@./grading.css"/>
+    </stylesheets>
+    <HBox id="top-controls">
+        <Button text="hello"></Button>
+    </HBox>
+    <SplitPane id="side-split">
+        <VBox>
+            <WebView id="pdf-view"></WebView>
+        </VBox>
+        <VBox id="grading-side" prefWidth="200">
+            <HBox id="grading-top">
+                <Label id="test-name">Example Test</Label>
+            </HBox>
+            <VBox id="grading-middle">
+                <HBox id="question-header">
+                    <Label styleClass="h2">Question 1</Label>
+                    <Label id="total-questions">of 10</Label>
+                </HBox>
+                <Separator styleClass="vert-spacer"></Separator>
+                <HBox id="q-score">
+                    <TextField styleClass="score-num" id="score-given"></TextField>
+                    <Label id="score-outof"> out of </Label>
+                    <Label styleClass="score-num">10</Label>
+                </HBox>
+                <Label styleClass="h3">Feedback</Label>
+                <HBox style="-fx-spacing: 10px">
+                    <TextField id="feedback-new"></TextField>
+                    <Button text="Add" id="add-feedback"></Button>
+                </HBox>
+                <HBox styleClass="space-box"></HBox>
+                <ListView id="feedbacks"></ListView>
+            </VBox>
+            <HBox id="grading-bottom">
+                <Button text="Prev"></Button>
+                <Button text="Next"></Button>
+            </HBox>
+            <TextFlow id="test-counter">
+                <Text text="Test "/>
+                <Text text="1" style="-fx-font-family: 'Quicksand Bold'"/>
+                <Text text=" of "/>
+                <Text text="22" style="-fx-font-family: 'Quicksand Bold'"/>
+            </TextFlow>
+        </VBox>
+    </SplitPane>
+</GridPane>

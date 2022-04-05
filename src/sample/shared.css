@@ -1,0 +1,22 @@
+.h2 {
+    -fx-font-size: 24pt;
+    -fx-font-family: "Quicksand Bold";
+}
+
+.h3 {
+    -fx-font-size: 14pt;
+    -fx-label-padding: 0 0 10px 0;
+}
+
+.button {
+    -fx-font-family: "Quicksand Bold";
+    -fx-font-size: 14pt;
+    -fx-text-fill: white;
+    -fx-background-color: #251F47;
+    -fx-padding: 10px;
+    -fx-pref-width: 200px;
+    -fx-max-width: 250px;
+}
+.button:hover {
+    -fx-background-color: #404e7c;
+}

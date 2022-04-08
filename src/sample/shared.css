@@ -1,9 +1,35 @@
+@font-face {
+    -fx-font-family: "Raleway";
+    src: url("fonts/Raleway-Regular.ttf");
+}
+
+@font-face {
+    -fx-font-family: "Quicksand";
+    src: url("fonts/Quicksand-Regular.ttf");
+}
+
+@font-face {
+    -fx-font-family: "Quicksand Bold";
+    src: url("fonts/Quicksand-Bold.ttf");
+}
+
+@font-face {
+    -fx-font-family: "Raleway Italic";
+    src: url("fonts/Raleway-Italic.ttf");
+}
+
+@font-face {
+    -fx-font-family: "Font Awesome";
+    src: url("resources/fa/fontawesome-webfont.ttf");
+}
+
 .h2 {
     -fx-font-size: 24pt;
     -fx-font-family: "Quicksand Bold";
 }
 
 .h3 {
+    -fx-font-family: "Quicksand Bold";
     -fx-font-size: 14pt;
     -fx-label-padding: 0 0 10px 0;
 }
@@ -19,4 +45,10 @@
 }
 .button:hover {
     -fx-background-color: #404e7c;
+}
+
+.noheader .column-header-background {
+    -fx-max-height: 0;
+    -fx-pref-height: 0;
+    -fx-min-height: 0;
 }

@@ -1,24 +1,16 @@
 package sample;
 
 import javafx.application.Application;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
-import javafx.scene.control.Button;
-import sun.text.normalizer.VersionInfo;
+import java.io.InputStream;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class Main extends Application {
     @Override
@@ -30,8 +22,17 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
+        // Font Awesome (Icons) -- Currently broken
+        InputStream font = Main.class.getResourceAsStream("fa/fontawesome-webfont.ttf");
+        Font.loadFont(font, 10);
+        Locale currentLocale = new Locale("es");
+        FXMLLoader loader = new FXMLLoader();
+       // loader.setResources(ResourceBundle.getBundle("fontawesome", currentLocale));
+
+
         GridPane root = FXMLLoader.load(getClass().getResource("grading.fxml"));
-        // Vertical stretch works, not horizontal yet though
+
+        // Allow vertical stretch
         ColumnConstraints col = new ColumnConstraints();
         col.setPercentWidth(100);
         root.getColumnConstraints().add(col);

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.WebView?>
+<?import java.net.URL?>
+<?import javafx.scene.text.TextFlow?>
+<?import javafx.scene.text.Text?>
+<?import javafx.collections.FXCollections?>
+<?import com.ezgrader.pdfgrader.Feedback?>
+
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<GridPane id="root" maxWidth="Infinity" maxHeight="Infinity" xmlns:fx="http://javafx.com/fxml" fx:controller="com.ezgrader.pdfgrader.GradingController">
+    <stylesheets>
+        <URL value="@./shared.css"/>
+        <URL value="@./grading.css"/>
+    </stylesheets>
+    <SplitPane id="side-split">
+        <VBox>
+            <WebView id="pdf-view"></WebView>
+        </VBox>
+        <VBox id="grading-side" prefWidth="200">
+            <HBox id="grading-top">
+                <Label id="test-name">CSCI492 SP22 - Example Test</Label>
+            </HBox>
+            <VBox id="grading-middle">
+                <HBox id="question-header">
+                    <Label styleClass="h2">Question 1</Label>
+                    <Label id="total-questions">of 10</Label>
+                </HBox>
+                <Separator styleClass="vert-spacer"></Separator>
+                <HBox id="q-score">
+                    <TextField styleClass="score-num" id="score-given"></TextField>
+                    <Label id="score-outof"> out of </Label>
+                    <Label styleClass="score-num">10</Label>
+                </HBox>
+                <Separator styleClass="vert-spacer"></Separator>
+                <Label styleClass="h3">Feedback</Label>
+                <HBox style="-fx-spacing: 10px">
+                    <TextField fx:id="feedbackNewPoints" promptText="+1"></TextField>
+                    <HBox HBox.hgrow="ALWAYS"><TextField fx:id="feedbackNewDesc" promptText="Reasoning for giving/taking points" onAction="#addFeedback"></TextField></HBox>
+                    <Button text="Add" id="add-feedback" onAction="#addFeedback"></Button>
+                </HBox>
+                <HBox styleClass="space-box"></HBox>
+                <!--<ListView id="feedbacks"></ListView>-->
+                <TableView fx:id="feedbackTable" styleClass="noheader" onKeyPressed="#deleteFeedback">
+                    <placeholder><Label text="No Feedback yet"/></placeholder>
+                    <columns>
+                        <TableColumn text="Points" style="-fx-pref-width: 40px; -fx-alignment: baseline-center; -fx-font-family: 'Quicksand Bold';">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="points" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Explanation" style="-fx-alignment: baseline-left; -fx-pref-width: 9999px">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="Explanation" />
+                            </cellValueFactory>
+                        </TableColumn>
+                    </columns>
+                </TableView>
+                <!--
+                <VBox id="feedbacks">
+                    <HBox styleClass="feedback-row">
+                        <TextFlow style="-fx-alignment: baseline-center">
+                            <Text styleClass="feedback-points">+4</Text>
+                            <Text>: incorrect syntax on line 6</Text>
+                        </TextFlow>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="X" styleClass="feedback-delete"></Button>
+                    </HBox>
+                </VBox>
+                -->
+                <Separator styleClass="vert-spacer"></Separator>
+            </VBox>
+            <HBox id="grading-bottom">
+                <Button text="Prev"></Button>
+                <Button text="Next"></Button>
+                <!--<Button text="%fa.compass" style="-fx-font-family: 'Font Awesome'"></Button>-->
+            </HBox>
+            <TextFlow id="test-counter">
+                <Text text="Test "/>
+                <Text text="1" style="-fx-font-family: 'Quicksand Bold'"/>
+                <Text text=" of "/>
+                <Text text="22" style="-fx-font-family: 'Quicksand Bold'"/>
+            </TextFlow>
+        </VBox>
+    </SplitPane>
+</GridPane>

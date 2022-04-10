@@ -1,4 +1,5 @@
-package sample;
+package com.ezgrader.pdfgrader;
+
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;

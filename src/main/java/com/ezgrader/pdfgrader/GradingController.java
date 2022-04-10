@@ -1,4 +1,5 @@
-package sample;
+package com.ezgrader.pdfgrader;
+
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

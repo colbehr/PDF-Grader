@@ -10,10 +10,10 @@
 <?import javafx.scene.text.TextFlow?>
 <?import javafx.scene.text.Text?>
 <?import javafx.collections.FXCollections?>
-<?import sample.Feedback?>
+<?import com.ezgrader.pdfgrader.Feedback?>
 
 <?import javafx.scene.control.cell.PropertyValueFactory?>
-<GridPane id="root" maxWidth="Infinity" maxHeight="Infinity" xmlns:fx="http://javafx.com/fxml" fx:controller="sample.GradingController">
+<GridPane id="root" maxWidth="Infinity" maxHeight="Infinity" xmlns:fx="http://javafx.com/fxml" fx:controller="com.ezgrader.pdfgrader.GradingController">
     <stylesheets>
         <URL value="@./shared.css"/>
         <URL value="@./grading.css"/>

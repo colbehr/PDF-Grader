@@ -17,11 +17,12 @@
     -fx-font-family: "Raleway Italic";
     src: url("fonts/Raleway-Italic.ttf");
 }
-
+/*
 @font-face {
     -fx-font-family: "Font Awesome";
     src: url("resources/fa/fontawesome-webfont.ttf");
 }
+*/
 
 .h2 {
     -fx-font-size: 24pt;

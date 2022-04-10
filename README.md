@@ -15,7 +15,7 @@ Once the tests have been graded, the software will generate a table of scores as
 ![pdfGrader](PDFGrader.jpg)
 
 ## Development setup
-
+Note: I am running Java 17 with javafx 17.0.2
 #### For IntelliJ IDEA:
 
 - Add the repo URL and directory and clone the project from `File>New>Project From Version Control` 

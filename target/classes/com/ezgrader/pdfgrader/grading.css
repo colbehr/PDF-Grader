@@ -41,7 +41,7 @@
     -fx-font-size: 16pt;
 }
 
-#score-given {
+#pointsGiven {
     -fx-font-family: "Quicksand Bold";
     -fx-pref-column-count: 2;
     -fx-alignment: center;
@@ -129,7 +129,7 @@
 }
 
 #add-feedback {
-    -fx-min-width: 75px;
+    -fx-min-width: 50px;
     -fx-start-margin: 10px;
     -fx-pref-width: 50px;
 }

@@ -8,7 +8,12 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 
+import java.util.function.UnaryOperator;
+import java.util.regex.*;
+
 public class GradingController {
+    @FXML
+    private TextField pointsGiven;
     @FXML
     private VBox feedbacks;
     @FXML
@@ -18,9 +23,43 @@ public class GradingController {
     @FXML
     private TextField feedbackNewDesc;
 
-    private ObservableList<Feedback> feedbackTest = FXCollections.observableArrayList(
+    private ObservableList<Feedback> feedbackTest = FXCollections.observableArrayList();
 
-    );
+    @FXML
+    public void initialize() {
+        // Input sanitizing
+        UnaryOperator<TextFormatter.Change> numericFilter = c -> {
+            if (c.getText().equals("")) return c;
+            String patternString = "(\\d+)\\.?(\\d)*";
+            Pattern p = Pattern.compile(patternString);
+            Matcher m = p.matcher(c.getControlNewText());
+            if (!m.matches()) {
+                c.setText("");
+            }
+            return c;
+        };
+        pointsGiven.setTextFormatter(new TextFormatter<>(numericFilter));
+
+        UnaryOperator<TextFormatter.Change> filter = c -> {
+            if (c.getText().equals("")) return c;
+            String patternString = "([+-]?)((\\d+)\\.?(\\d)*)?";
+            Pattern p = Pattern.compile(patternString);
+            Matcher m = p.matcher(c.getControlNewText());
+            if (!m.matches()) {
+                c.setText("");
+            } else if (((TextField)c.getControl()).getText().equals("")) {
+                Pattern p2 = Pattern.compile("[0-9]");
+                Matcher m2 = p2.matcher(c.getText());
+                if (m2.matches()) {
+                    c.setText("+" + c.getText());
+                    int end = c.getControlNewText().length();
+                    c.selectRange(end, end);
+                }
+            }
+            return c;
+        };
+        feedbackNewPoints.setTextFormatter(new TextFormatter<>(filter));
+    }
 
     @FXML
     private void addFeedback() {
@@ -33,6 +72,8 @@ public class GradingController {
 
         feedbackNewPoints.setText("");
         feedbackNewDesc.setText("");
+
+        feedbackNewPoints.requestFocus();
     }
 
     @FXML

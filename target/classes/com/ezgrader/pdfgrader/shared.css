@@ -17,13 +17,6 @@
     -fx-font-family: "Raleway Italic";
     src: url("fonts/Raleway-Italic.ttf");
 }
-/*
-@font-face {
-    -fx-font-family: "Font Awesome";
-    src: url("resources/fa/fontawesome-webfont.ttf");
-}
-*/
-
 .h2 {
     -fx-font-size: 24pt;
     -fx-font-family: "Quicksand Bold";
@@ -52,4 +45,8 @@
     -fx-max-height: 0;
     -fx-pref-height: 0;
     -fx-min-height: 0;
+}
+
+.fa-icon {
+    -fx-font-family: 'FontAwesome';
 }

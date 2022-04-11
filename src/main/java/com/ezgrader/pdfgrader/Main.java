@@ -14,21 +14,15 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class Main extends Application {
-    @Override
-    public void init() throws Exception {
-        super.init();
-        //Font.loadFont(getClass().getResourceAsStream("../../fonts/Raleway-Regular.ttf"), 10);
+    static {
+        Font.loadFont(Main.class.getResource("/fa/fontawesome-webfont.ttf").toExternalForm(), 10);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception{
 
         // Font Awesome (Icons) -- Currently broken
-        InputStream font = Main.class.getResourceAsStream("fa/fontawesome-webfont.ttf");
-        Font.loadFont(font, 10);
-        Locale currentLocale = new Locale("es");
-        FXMLLoader loader = new FXMLLoader();
-       // loader.setResources(ResourceBundle.getBundle("fontawesome", currentLocale));
+        //ResourceBundle resources = ResourceBundle.getBundle("fa.fontawesome");
 
 
         GridPane root = FXMLLoader.load(getClass().getResource("grading.fxml"));

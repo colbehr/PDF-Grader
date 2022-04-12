@@ -14,18 +14,10 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class Main extends Application {
-    static {
-        Font.loadFont(Main.class.getResource("/fa/fontawesome-webfont.ttf").toExternalForm(), 10);
-    }
-
     @Override
     public void start(Stage primaryStage) throws Exception{
-
-        // Font Awesome (Icons) -- Currently broken
-        //ResourceBundle resources = ResourceBundle.getBundle("fa.fontawesome");
-
-
-        GridPane root = FXMLLoader.load(getClass().getResource("grading.fxml"));
+        ResourceBundle resources = ResourceBundle.getBundle("fa.fontawesome");
+        GridPane root = FXMLLoader.load(getClass().getResource("grading.fxml"), resources);
 
         // Allow vertical stretch
         ColumnConstraints col = new ColumnConstraints();
@@ -46,6 +38,7 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
+        Font.loadFont(Main.class.getResource("/fa/fontawesome-webfont.ttf").toExternalForm(), 10); // Icon Support
         launch(args);
     }
 }

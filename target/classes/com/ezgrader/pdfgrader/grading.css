@@ -131,7 +131,7 @@
 #add-feedback {
     -fx-min-width: 50px;
     -fx-start-margin: 10px;
-    -fx-pref-width: 50px;
+    -fx-pref-width: 75px;
 }
 
 #feedbacks {

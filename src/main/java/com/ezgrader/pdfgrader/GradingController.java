@@ -38,7 +38,7 @@ public class GradingController {
             }
             return c;
         };
-        //pointsGiven.setTextFormatter(new TextFormatter<>(numericFilter));
+        pointsGiven.setTextFormatter(new TextFormatter<>(numericFilter));
 
         UnaryOperator<TextFormatter.Change> filter = c -> {
             if (c.getText().equals("")) return c;

@@ -15,17 +15,32 @@ Once the tests have been graded, the software will generate a table of scores as
 ![pdfGrader](PDFGrader.jpg)
 
 ## Development setup
-Note: I am running Java 17 with javafx 17.0.2
-#### For IntelliJ IDEA:
+Note: I am running Java 17 with javafx 17.0.1
 
-- Add the repo URL and directory and clone the project from `File>New>Project From Version Control` 
+#### (NEW) For IntelliJ IDEA:
+- Add the repo and clone the project using `File>New>Project From Version Control` or using the `Get from VCS` button on the home page.
+  - This should autopopulate if you log into Github.
+- Add a new 'Application configuration under `Run>Edit Configurations...` or at the top right under `Add Configuration...`
+- Confirm you are using `Java 17` and choose a main class using the icon on the right, should be `com.ezgrader.pdfgrader.Main`
+  - The main class should autopopulate, if it does not there may be a problem.
+- Add a name at the top and hit Apply or OK.
+- The project should now run.
+
+
+#### Troubleshooting tips:
+- On the far right there is a 'Maven' tab, within that tab there is `pdfgrader>lifecycle>install` this should install everything in the pom.xml file.
+
+
+#### (OLD) For IntelliJ IDEA:
+
+- Add the repo URL and directory and clone the project from `File>New>Project From Version Control`
 - Once cloned, open `File>Project Structure>Libraries` and remove all the Maven related libraries.
-- Add your javafx library location (lib folder) 
-e.g.  `C:\Files\javafx-sdk-17.0.2\lib`
-- Hit Apply or OK 
-- Add a new 'Application configuration under `Run>Edit Configurations...` 
+- Add your javafx library location (lib folder)
+  e.g.  `C:\Files\javafx-sdk-17.0.2\lib`
+- Hit Apply or OK
+- Add a new 'Application configuration under `Run>Edit Configurations...`
 - Choose the Main class and add these program arguments (on Windows)
-`--module-path "\path\to\javafx-sdk-17.0.2\lib" --add-modules javafx.controls,javafx.fxml`
+  `--module-path "\path\to\javafx-sdk-17.0.2\lib" --add-modules javafx.controls,javafx.fxml`
 - Add a name at the top and hit Apply or OK.
 - The project should now run.
 
@@ -38,7 +53,7 @@ https://openjfx.io/openjfx-docs/#IDE-Intellij
 
 
 * 0.0.1
-    * Work in progress
+  * Work in progress
 
 
 <!---

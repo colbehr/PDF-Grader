@@ -29,7 +29,7 @@ Note: I am running Java 17 with javafx 17.0.1
 
 #### Troubleshooting tips:
 - On the far right there is a 'Maven' tab, within that tab there is `pdfgrader>lifecycle>install` this should install everything in the pom.xml file.
-
+- Sometimes a convinent little Maven icon pops up in the top right when looking at `pom.xml` click that if possible. 
 
 #### (OLD) For IntelliJ IDEA:
 

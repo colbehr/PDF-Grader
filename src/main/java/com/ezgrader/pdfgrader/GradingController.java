@@ -7,11 +7,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+import javafx.scene.web.WebView;
 
 import java.util.function.UnaryOperator;
 import java.util.regex.*;
 
 public class GradingController {
+    @FXML
+    private WebView pdfView;
     @FXML
     private TextField pointsGiven;
     @FXML
@@ -27,18 +30,11 @@ public class GradingController {
 
     @FXML
     public void initialize() {
+        // Temp pdf view
+        pdfView.getEngine().load("https://www.google.com");
+
         // Input sanitizing
-        UnaryOperator<TextFormatter.Change> numericFilter = c -> {
-            if (c.getText().equals("")) return c;
-            String patternString = "(\\d+)\\.?(\\d)*";
-            Pattern p = Pattern.compile(patternString);
-            Matcher m = p.matcher(c.getControlNewText());
-            if (!m.matches()) {
-                c.setText("");
-            }
-            return c;
-        };
-        pointsGiven.setTextFormatter(new TextFormatter<>(numericFilter));
+        pointsGiven.setTextFormatter(TextFilters.GetDoubleFilter());
 
         UnaryOperator<TextFormatter.Change> filter = c -> {
             if (c.getText().equals("")) return c;

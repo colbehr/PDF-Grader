@@ -1,12 +1,3 @@
-#root {
-    -fx-font-family: 'Quicksand';
-}
-
-.vert-spacer {
-    -fx-label-padding: 0 0 20px 0;
-    -fx-padding: 10px 0 10px 0;
-}
-
 .space-box {
     -fx-min-height: 20px;
 }
@@ -167,4 +158,9 @@
 #test-counter {
     -fx-text-alignment: center;
     -fx-font-size: 12pt;
+}
+
+#pagesField {
+    -fx-pref-columns: 6;
+    -fx-text-alignment: center;
 }

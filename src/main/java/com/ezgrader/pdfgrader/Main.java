@@ -17,7 +17,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         ResourceBundle resources = ResourceBundle.getBundle("fa.fontawesome");
-        GridPane root = FXMLLoader.load(getClass().getResource("grading.fxml"), resources);
+        GridPane root = FXMLLoader.load(getClass().getResource("setup.fxml"), resources);
 
         // Allow vertical stretch
         ColumnConstraints col = new ColumnConstraints();
@@ -31,11 +31,7 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.sizeToScene();
         primaryStage.show();
-
-        WebView pdfView = (WebView) root.lookup("#pdf-view");
-        pdfView.getEngine().load("https://www.google.com");
     }
-
 
     public static void main(String[] args) {
         Font.loadFont(Main.class.getResource("/fa/fontawesome-webfont.ttf").toExternalForm(), 10); // Icon Support

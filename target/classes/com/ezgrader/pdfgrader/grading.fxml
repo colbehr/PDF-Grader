@@ -21,7 +21,7 @@
     </stylesheets>
     <SplitPane id="side-split">
         <VBox>
-            <WebView id="pdf-view"></WebView>
+            <WebView fx:id="pdfView"></WebView>
         </VBox>
         <VBox id="grading-side" prefWidth="200">
             <HBox id="grading-top">
@@ -34,7 +34,7 @@
                 </HBox>
                 <Separator styleClass="vert-spacer"></Separator>
                 <HBox id="q-score">
-                    <TextField styleClass="score-num" fx:id="pointsGiven"></TextField>
+                    <TextField styleClass="numberField" fx:id="pointsGiven"></TextField>
                     <Label id="score-outof"> out of </Label>
                     <Label styleClass="score-num">10</Label>
                 </HBox>

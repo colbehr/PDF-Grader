@@ -23,12 +23,14 @@ import java.io.IOException;
 
 public class SetupController {
     private File pdf;
-    private ObservableList<Question> questionTest = FXCollections.observableArrayList();
+    private ObservableList<Question> questionTest = FXCollections.observableArrayList(); // temporary testing list
 
     @FXML
     private Label pdfFilename;
     @FXML
     private TextField pagesField;
+    @FXML
+    private Label totalPoints;
 
     @FXML
     private TableView questionTable;
@@ -66,13 +68,19 @@ public class SetupController {
 
         questionTest.add(new Question(questionTest.size()+1, 0.0, 1));
         questionTable.setItems(questionTest);
+        UpdateTotalPoints();
     }
 
     @FXML
     public void deleteQuestion(javafx.scene.input.KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.DELETE) {
-            Feedback selectedItem = (Feedback) questionTable.getSelectionModel().getSelectedItem();
+            Question selectedItem = (Question) questionTable.getSelectionModel().getSelectedItem();
             questionTable.getItems().remove(selectedItem);
+
+            for (int i = 0; i < questionTest.size(); i++) {
+                questionTest.get(i).setQNum(i+1);
+            }
+            UpdateTotalPoints();
         }
     }
 
@@ -81,5 +89,13 @@ public class SetupController {
         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
         Scene grading = new Scene(FXMLLoader.load(getClass().getResource("grading.fxml")));
         stage.setScene(grading);
+    }
+
+    @FXML private void UpdateTotalPoints() { // not properly functional yet
+        double total = 0;
+        for (int i = 0; i < questionTest.size(); i++) {
+            total += questionTest.get(i).getPointsPossible();
+        }
+        totalPoints.setText("" + total);
     }
 }

@@ -50,7 +50,7 @@
                 <TableView fx:id="feedbackTable" styleClass="noheader" onKeyPressed="#deleteFeedback">
                     <placeholder><Label text="No Feedback yet"/></placeholder>
                     <columns>
-                        <TableColumn text="Points" style="-fx-pref-width: 40px; -fx-alignment: baseline-center; -fx-font-family: 'Quicksand Bold';">
+                        <TableColumn fx:id="pointsCol" text="Points" style="-fx-pref-width: 40px; -fx-alignment: baseline-center; -fx-font-family: 'Quicksand Bold';">
                             <cellValueFactory>
                                 <PropertyValueFactory property="points" />
                             </cellValueFactory>

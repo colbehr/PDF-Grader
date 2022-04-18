@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.web.WebView;
@@ -21,6 +22,8 @@ public class GradingController {
     private VBox feedbacks;
     @FXML
     private TableView feedbackTable;
+    @FXML
+    private TableColumn pointsCol;
     @FXML
     private TextField feedbackNewPoints;
     @FXML

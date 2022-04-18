@@ -56,26 +56,45 @@
             <Separator styleClass="vert-spacer"></Separator>
             <HBox styleClass="spacedCenteredBox">
                 <Label styleClass="h3">Questions</Label>
-                <Button styleClass="fa-icon" id="addQuestionButton"><text><AwesomeIcon fx:constant="PLUS"/></text></Button>
+                <Button styleClass="fa-icon" id="addQuestionButton" onAction="#addQuestion"><text><AwesomeIcon fx:constant="PLUS"/></text></Button>
                 <HBox HBox.hgrow="ALWAYS" />
                 <Label styleClass="h4">Total Points</Label>
                 <Label styleClass="h4, bubbleNumber" fx:id="totalPoints">0</Label>
             </HBox>
-            <TableView fx:id="questionTable" styleClass="noheader, prettyTable">
+            <TableView fx:id="questionTable" styleClass="prettyTable" onKeyPressed="#deleteQuestion">
                 <placeholder><Label text="No Questions yet"/></placeholder>
-<!--                <columns>-->
-<!--                    <TableColumn text="Points" style="-fx-pref-width: 40px; -fx-alignment: baseline-center; -fx-font-family: 'Quicksand Bold';">-->
-<!--                        <cellValueFactory>-->
-<!--                            <PropertyValueFactory property="points" />-->
-<!--                        </cellValueFactory>-->
-<!--                    </TableColumn>-->
-<!--                    <TableColumn text="Explanation" style="-fx-alignment: baseline-left; -fx-pref-width: 9999px">-->
-<!--                        <cellValueFactory>-->
-<!--                            <PropertyValueFactory property="Explanation" />-->
-<!--                        </cellValueFactory>-->
-<!--                    </TableColumn>-->
-<!--                </columns>-->
+                <columns>
+                    <TableColumn fx:id="qNumberCol" text="#" style="-fx-pref-width: 40px; -fx-alignment: baseline-center; -fx-font-family: 'Quicksand Bold';">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="qNum" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="pointsPossibleCol" text="Points" style="-fx-alignment: baseline-left;">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="pointsPossible" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="pageNumCol" text="Page" style="-fx-alignment: baseline-left;">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="pageNum" />
+                        </cellValueFactory>
+                    </TableColumn>
+                </columns>
             </TableView>
+            <HBox style="-fx-alignment: center">
+                <Button onAction="#GoToGrading">
+                    <graphic><BorderPane>
+                        <center>
+                            <Label style="-fx-text-fill: white">Grade</Label>
+                        </center>
+                        <right>
+                            <Label styleClass="fa-icon" style="-fx-text-fill: white">
+                                <AwesomeIcon fx:constant="ARROW_RIGHT"/>
+                            </Label>
+                        </right>
+                    </BorderPane></graphic>
+                </Button>
+            </HBox>
         </VBox>
     </SplitPane>
 </GridPane>

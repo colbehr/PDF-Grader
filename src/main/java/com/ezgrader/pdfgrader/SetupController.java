@@ -3,6 +3,7 @@ package com.ezgrader.pdfgrader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -13,6 +14,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.converter.DoubleStringConverter;
@@ -48,6 +50,7 @@ public class SetupController {
         questionTable.setEditable(true);
         pointsPossibleCol.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
         pageNumCol.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        // TODO: Figure out how to call UpdateTotalPoints() on table edit
     }
 
     @FXML
@@ -87,14 +90,16 @@ public class SetupController {
     @FXML
     public void GoToGrading(ActionEvent event) throws IOException {
         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        Scene grading = new Scene(FXMLLoader.load(getClass().getResource("grading.fxml")));
-        stage.setScene(grading);
+        GridPane gradingRoot = FXMLLoader.load(getClass().getResource("grading.fxml"));
+        Main.MakeStretchy(gradingRoot);
+        stage.setScene(new Scene(gradingRoot));
+
     }
 
     @FXML private void UpdateTotalPoints() { // not properly functional yet
         double total = 0;
-        for (int i = 0; i < questionTest.size(); i++) {
-            total += questionTest.get(i).getPointsPossible();
+        for (Object points : questionTable.getItems()) {
+            total += (Double) pointsPossibleCol.getCellObservableValue(points).getValue();
         }
         totalPoints.setText("" + total);
     }

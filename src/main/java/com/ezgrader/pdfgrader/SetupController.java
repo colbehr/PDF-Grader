@@ -3,7 +3,6 @@ package com.ezgrader.pdfgrader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -13,6 +12,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
@@ -22,10 +22,16 @@ import javafx.util.converter.IntegerStringConverter;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class SetupController {
     private File pdf;
     private ObservableList<Question> questionTest = FXCollections.observableArrayList(); // temporary testing list
+    private int totalPages;
+    private Test test;
+    @FXML
+    private ImageView pdfView;
 
     @FXML
     private Label pdfFilename;
@@ -33,6 +39,8 @@ public class SetupController {
     private TextField pagesField;
     @FXML
     private Label totalPoints;
+    @FXML
+    private Label totalTests;
 
     @FXML
     private TableView questionTable;
@@ -46,7 +54,8 @@ public class SetupController {
     @FXML
     public void initialize() {
         pagesField.setTextFormatter(TextFilters.GetIntFilter());
-
+        //tests are initially 1 page long
+        pagesField.setText(1 + "");
         questionTable.setEditable(true);
         pointsPossibleCol.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
         pageNumCol.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
@@ -62,7 +71,23 @@ public class SetupController {
         pdf = fileChooser.showOpenDialog(((Node)event.getSource()).getScene().getWindow());
         if (pdf != null) {
             pdfFilename.setText(pdf.getName());
+            System.out.println(pdf.getAbsoluteFile());
+            // create test
+            Path path = Paths.get(pdf.getPath());
+            test = new Test(path);
+            pdfView.setImage(test.renderPageImage(0));
+            totalTests.setText(test.getTotalPages() + "");
+            //initial page update
+            updatePages();
         }
+    }
+
+    @FXML
+    public void updatePages(){
+        //get int from box
+        test.setPagesPerTest(Integer.parseInt(pagesField.getText()));
+        //set text for total tests
+        totalTests.setText((test.getTotalPages() / test.getPagesPerTest()) + "");
     }
 
     @FXML
@@ -73,6 +98,7 @@ public class SetupController {
         questionTable.setItems(questionTest);
         UpdateTotalPoints();
     }
+
 
     @FXML
     public void deleteQuestion(javafx.scene.input.KeyEvent keyEvent) {

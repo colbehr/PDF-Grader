@@ -4,18 +4,23 @@ package com.ezgrader.pdfgrader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.*;
-import javafx.scene.web.WebView;
+import javafx.scene.layout.VBox;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.function.UnaryOperator;
-import java.util.regex.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GradingController {
     @FXML
-    private WebView pdfView;
+    private ImageView pdfView;
     @FXML
     private TextField pointsGiven;
     @FXML
@@ -30,11 +35,15 @@ public class GradingController {
     private TextField feedbackNewDesc;
 
     private ObservableList<Feedback> feedbackTest = FXCollections.observableArrayList();
+    private Test test;
 
     @FXML
     public void initialize() {
-        // Temp pdf view
-        pdfView.getEngine().load("https://www.google.com");
+        // Temp pdf
+        //TODO: pass test data correctly so we don't have to do this part
+        Path path = Paths.get(System.getProperty("user.dir") + "\\SPIF - PDF Grader.pdf");
+        test = new Test(path);
+        pdfView.setImage(test.renderPageImage(0));
 
         // Input sanitizing
         pointsGiven.setTextFormatter(TextFilters.GetDoubleFilter());
@@ -81,6 +90,10 @@ public class GradingController {
             Feedback selectedItem = (Feedback) feedbackTable.getSelectionModel().getSelectedItem();
             feedbackTable.getItems().remove(selectedItem);
         }
+    }
+
+    public void setTest(Test test) {
+        this.test = test;
     }
 
     /*

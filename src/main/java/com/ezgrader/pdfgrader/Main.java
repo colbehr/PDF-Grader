@@ -3,18 +3,17 @@ package com.ezgrader.pdfgrader;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.layout.*;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
-import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
-import java.io.InputStream;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class Main extends Application {
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         ResourceBundle resources = ResourceBundle.getBundle("fa.fontawesome");
@@ -41,4 +40,5 @@ public class Main extends Application {
         row.setPercentHeight(100);
         root.getRowConstraints().add(row);
     }
+
 }

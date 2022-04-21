@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import com.ezgrader.pdfgrader.AwesomeIcon?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.web.WebView?>
 <?import java.net.URL?>
-<?import javafx.scene.text.TextFlow?>
-<?import javafx.scene.text.Text?>
-<?import javafx.collections.FXCollections?>
-<?import com.ezgrader.pdfgrader.Feedback?>
-<?import com.ezgrader.pdfgrader.AwesomeIcon?>
-
-<?import javafx.scene.control.cell.PropertyValueFactory?>
 <GridPane id="root" maxWidth="Infinity" maxHeight="Infinity" xmlns:fx="http://javafx.com/fxml" fx:controller="com.ezgrader.pdfgrader.GradingController">
     <stylesheets>
         <URL value="@./shared.css"/>
@@ -21,7 +15,8 @@
     </stylesheets>
     <SplitPane id="side-split">
         <VBox>
-            <WebView fx:id="pdfView"></WebView>
+            <ImageView fx:id="pdfView"/>
+<!--            <WebView fx:id="pdfView"></WebView>-->
         </VBox>
         <VBox id="grading-side" prefWidth="200">
             <HBox id="grading-top">

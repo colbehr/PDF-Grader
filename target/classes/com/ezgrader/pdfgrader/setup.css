@@ -6,5 +6,8 @@
 }
 
 #addQuestionButton {
-    -fx-max-width: 45px;
+    -fx-max-width: 30px;
+    -fx-max-height: 30px;
+    -fx-font-size: 10pt;
+    -fx-padding: 10px;
 }

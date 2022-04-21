@@ -28,6 +28,7 @@
     -fx-label-padding: 10px;
     -fx-text-fill: white;
     -fx-min-width: 300px;
+    -fx-spacing: 4px;
 }
 
 .h1 {
@@ -76,7 +77,7 @@
 
 .vert-spacer {
     -fx-label-padding: 0 0 20px 0;
-    -fx-padding: 10px 0 10px 0;
+    -fx-padding: 6px 0 6px 0;
 }
 
 .bubbleNumber {
@@ -120,6 +121,16 @@
     -fx-border-width: 0;
     -fx-background-color: transparent;
 }
+.prettyTable .column-header {
+    -fx-background-color: transparent;
+}
+.prettyTable .column-header-background {
+    -fx-background-color: linear-gradient(to bottom, #00000055, #00000000);
+    -fx-background-radius: 10px 10px 0 0;
+}
+.prettyTable .column-header-background .filler {
+    -fx-background-color: transparent;
+}
 .prettyTable:row-selection {
     -fx-text-fill: black;
 }
@@ -127,6 +138,12 @@
     -fx-background-color: transparent;
     -fx-padding: 5 0 5 0px;
     -fx-border-width: 0;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+}
+.prettyTable .table-row-cell:even {
+    -fx-background-color: rgba(0,0,0,0.05);
+    -fx-background-radius: 15px;
 }
 .prettyTable .table-row-cell {
     -fx-background-color: transparent;

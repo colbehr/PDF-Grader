@@ -14,9 +14,11 @@
     </stylesheets>
     <SplitPane id="side-split">
         <VBox>
-            <ImageView fx:id="pdfView"/>
+            <ImageView fx:id="pdfView"  fitWidth="650.0" pickOnBounds="true" preserveRatio="true"/>
+            <VBox VBox.vgrow="ALWAYS" />
+            <Pagination fx:id="pagination" prefHeight="66.0" prefWidth="354.0" />
         </VBox>
-        <VBox styleClass="mainContainer" prefWidth="200">
+        <VBox styleClass="mainContainer" prefHeight="900" prefWidth="500">
             <HBox style="-fx-spacing: 10px">
                 <Label styleClass="fa-icon, h1"><AwesomeIcon fx:constant="PENCIL"/></Label>
                 <TextField styleClass="h1, stealthTextField" promptText="New Test"></TextField>
@@ -41,7 +43,7 @@
             <Separator styleClass="vert-spacer"></Separator>
             <HBox styleClass="spacedCenteredBox">
                 <Label styleClass="h3">Pages Per Test</Label>
-                <TextField fx:id="pagesField" onAction="#updatePages" styleClass="numberField"></TextField>
+                <TextField fx:id="pagesField" onKeyTyped="#updatePages" styleClass="numberField"></TextField>
                 <HBox HBox.hgrow="ALWAYS" />
                 <Label styleClass="h4">Total Tests</Label>
                 <Label styleClass="h4, bubbleNumber" fx:id="totalTests">0</Label>

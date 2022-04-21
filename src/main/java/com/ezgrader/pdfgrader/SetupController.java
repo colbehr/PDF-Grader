@@ -7,10 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -28,11 +25,11 @@ import java.nio.file.Paths;
 public class SetupController {
     private File pdf;
     private ObservableList<Question> questionTest = FXCollections.observableArrayList(); // temporary testing list
-    private int totalPages;
     private Test test;
     @FXML
     private ImageView pdfView;
-
+    @FXML
+    private Pagination pagination;
     @FXML
     private Label pdfFilename;
     @FXML
@@ -79,15 +76,29 @@ public class SetupController {
             totalTests.setText(test.getTotalPages() + "");
             //initial page update
             updatePages();
+            pagination.setPageCount(test.getTotalPages());
+            pagination.setPageFactory((Integer pageIndex) -> {
+                    pdfView.setImage(test.renderPageImage(pageIndex));
+                    return pdfView;
+                }
+            );
         }
     }
 
     @FXML
     public void updatePages(){
         //get int from box
-        test.setPagesPerTest(Integer.parseInt(pagesField.getText()));
-        //set text for total tests
-        totalTests.setText((test.getTotalPages() / test.getPagesPerTest()) + "");
+        if (this.test != null) {
+            String pagesPerTestString = pagesField.getText();
+            try {
+                int pagesPerTestInt = Integer.parseInt(pagesPerTestString);
+                test.setPagesPerTest(pagesPerTestInt);
+                //set text for total tests
+                totalTests.setText((test.getTotalPages() / test.getPagesPerTest()) + "");
+            } catch (NumberFormatException e) {
+                System.out.println("No characters in box.");
+            }
+        }
     }
 
     @FXML

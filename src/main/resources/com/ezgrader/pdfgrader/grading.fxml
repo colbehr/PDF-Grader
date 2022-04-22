@@ -15,8 +15,9 @@
     </stylesheets>
     <SplitPane id="side-split">
         <VBox>
-            <ImageView fx:id="pdfView"/>
-<!--            <WebView fx:id="pdfView"></WebView>-->
+            <ImageView fx:id="pdfView"  fitWidth="650.0" pickOnBounds="true" preserveRatio="true"/>
+            <VBox VBox.vgrow="ALWAYS" />
+            <Pagination fx:id="pagination" prefHeight="66.0" prefWidth="354.0" />
         </VBox>
         <VBox id="grading-side" prefWidth="200">
             <HBox id="grading-top">

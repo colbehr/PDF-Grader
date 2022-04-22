@@ -4,10 +4,7 @@ package com.ezgrader.pdfgrader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
@@ -33,6 +30,8 @@ public class GradingController {
     private TextField feedbackNewPoints;
     @FXML
     private TextField feedbackNewDesc;
+    @FXML
+    private Pagination pagination;
 
     private ObservableList<Feedback> feedbackTest = FXCollections.observableArrayList();
     private Test test;
@@ -44,6 +43,13 @@ public class GradingController {
         Path path = Paths.get(System.getProperty("user.dir") + "\\SPIF - PDF Grader.pdf");
         test = new Test(path);
         pdfView.setImage(test.renderPageImage(0));
+        pagination.setPageCount(test.getTotalPages());
+        pagination.setPageFactory((Integer pageIndex) -> {
+                    pdfView.setImage(test.renderPageImage(pageIndex));
+                    //TODO: fix image display
+                    return pdfView;
+                }
+        );
 
         // Input sanitizing
         pointsGiven.setTextFormatter(TextFilters.GetDoubleFilter());
@@ -67,6 +73,8 @@ public class GradingController {
             return c;
         };
         feedbackNewPoints.setTextFormatter(new TextFormatter<>(filter));
+
+
     }
 
     @FXML

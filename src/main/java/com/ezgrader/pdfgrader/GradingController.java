@@ -42,14 +42,8 @@ public class GradingController {
         //TODO: pass test data correctly so we don't have to do this part
         Path path = Paths.get(System.getProperty("user.dir") + "\\SPIF - PDF Grader.pdf");
         test = new Test(path);
-        pdfView.setImage(test.renderPageImage(0));
         pagination.setPageCount(test.getTotalPages());
-        pagination.setPageFactory((Integer pageIndex) -> {
-                    pdfView.setImage(test.renderPageImage(pageIndex));
-                    //TODO: fix image display
-                    return pdfView;
-                }
-        );
+        pagination.setPageFactory(n -> new ImageView(test.renderPageImage(n)));
 
         // Input sanitizing
         pointsGiven.setTextFormatter(TextFilters.GetDoubleFilter());

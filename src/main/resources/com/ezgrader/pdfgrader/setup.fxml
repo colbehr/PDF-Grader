@@ -14,7 +14,6 @@
     </stylesheets>
     <SplitPane fx:id="sideSplit">
         <VBox>
-            <ImageView fx:id="pdfView"  fitWidth="650.0" pickOnBounds="true" preserveRatio="true"/>
             <VBox VBox.vgrow="ALWAYS" />
             <Pagination fx:id="pagination" prefHeight="66.0" prefWidth="354.0" />
         </VBox>

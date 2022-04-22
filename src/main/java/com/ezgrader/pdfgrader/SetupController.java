@@ -73,18 +73,12 @@ public class SetupController {
             // create test
             Path path = Paths.get(pdf.getPath());
             test = new Test(path);
-            pdfView.setImage(test.renderPageImage(0));
             totalTests.setText(test.getTotalPages() + "");
             //initial page update
             updatePages();
             pagination.setPageCount(test.getTotalPages());
-            pagination.setPageFactory((Integer pageIndex) -> {
-                    pdfView.setImage(test.renderPageImage(pageIndex));
-                    //TODO: issue with error after every page change, either image glitch or error for now
-                    sideSplit2.setDividerPosition(0,sideSplit2.getDividerPositions()[0]+1);
-                    return pdfView;
-                }
-            );
+            //sets up pagination page grabbing
+            pagination.setPageFactory(pageNumber -> new ImageView(test.renderPageImage(pageNumber)));
         }
     }
 

@@ -38,7 +38,8 @@ public class SetupController {
     private Label totalPoints;
     @FXML
     private Label totalTests;
-
+    @FXML
+    private SplitPane sideSplit2;
     @FXML
     private TableView questionTable;
     @FXML
@@ -79,6 +80,8 @@ public class SetupController {
             pagination.setPageCount(test.getTotalPages());
             pagination.setPageFactory((Integer pageIndex) -> {
                     pdfView.setImage(test.renderPageImage(pageIndex));
+                    //TODO: issue with error after every page change, either image glitch or error for now
+                    sideSplit2.setDividerPosition(0,sideSplit2.getDividerPositions()[0]+1);
                     return pdfView;
                 }
             );

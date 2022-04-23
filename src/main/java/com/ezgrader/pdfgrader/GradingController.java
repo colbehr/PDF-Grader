@@ -1,27 +1,32 @@
 package com.ezgrader.pdfgrader;
 
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.function.UnaryOperator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.ezgrader.pdfgrader.Main.workingTest;
 
 public class GradingController {
     @FXML
     private ImageView pdfView;
     @FXML
-    private TextField pointsGiven;
+    private Label testNameText;
     @FXML
-    private VBox feedbacks;
+    private Text questionNumberText;
+    @FXML
+    private Text questionsTotalText;
+    @FXML
+    private TextField pointsGivenField;
+    @FXML
+    private Label pointsTotalText;
     @FXML
     private TableView feedbackTable;
     @FXML
@@ -32,22 +37,27 @@ public class GradingController {
     private TextField feedbackNewDesc;
     @FXML
     private Pagination pagination;
+    @FXML
+    private Text currentTestText;
+    @FXML
+    private Text totalTestsText;
 
-    private ObservableList<Feedback> feedbackTest = FXCollections.observableArrayList();
-    private Test test;
+    //private Test test;
+    private int currentQuestion;
+    private int currentTakenTest;
+    private ObservableList<Feedback> feedbacks;
 
     @FXML
     public void initialize() {
-        // Temp pdf
-        //TODO: pass test data correctly so we don't have to do this part
-        Path path = Paths.get(System.getProperty("user.dir") + "\\SPIF - PDF Grader.pdf");
-        test = new Test(path);
-        pagination.setPageCount(test.getTotalPages());
-        pagination.setPageFactory(n -> new ImageView(test.renderPageImage(n)));
+        if (workingTest != null) {
+            pagination.setPageCount(workingTest.getTotalPages());
+            pagination.setPageFactory(n -> new ImageView(workingTest.renderPageImage(n)));
+        }
 
-        // Input sanitizing
-        pointsGiven.setTextFormatter(TextFilters.GetDoubleFilter());
+        // INPUT SANITIZING
+        pointsGivenField.setTextFormatter(TextFilters.GetDoubleFilter());
 
+        // For feedback points, allow + or - followed by a decimal number
         UnaryOperator<TextFormatter.Change> filter = c -> {
             if (c.getText().equals("")) return c;
             String patternString = "([+-]?)((\\d+)\\.?(\\d)*)?";
@@ -67,8 +77,27 @@ public class GradingController {
             return c;
         };
         feedbackNewPoints.setTextFormatter(new TextFormatter<>(filter));
+        // -------------
 
+        // Grading setup
+        setCurrentQuestion(0);
+        currentTakenTest = 0;
+        loadCurrentTakenTest();
 
+        pointsGivenField.textProperty().addListener((observable, oldValue, newValue) -> {
+            double points = Double.parseDouble(newValue);
+            double maxPoints = workingTest.getQuestions().get(currentQuestion).getPointsPossible();
+            if (points > maxPoints) {
+                points = maxPoints;
+                pointsGivenField.setText(points + "");
+            }
+            workingTest.getTakenTests()[currentTakenTest].GradeQuestion(currentQuestion, points);
+        });
+
+        // One-time view updates
+        testNameText.setText(workingTest.getName());
+        questionsTotalText.setText(workingTest.getQuestions().size() + "");
+        totalTestsText.setText(workingTest.getTakenTests().length + "");
     }
 
     @FXML
@@ -77,8 +106,7 @@ public class GradingController {
 
         feedbackTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        feedbackTest.add(new Feedback(feedbackNewPoints.getText(), feedbackNewDesc.getText()));
-        feedbackTable.setItems(feedbackTest);
+        feedbacks.add(new Feedback(feedbackNewPoints.getText(), feedbackNewDesc.getText()));
 
         feedbackNewPoints.setText("");
         feedbackNewDesc.setText("");
@@ -94,9 +122,38 @@ public class GradingController {
         }
     }
 
-    public void setTest(Test test) {
-        this.test = test;
+    @FXML
+    public void nextTest() {
+        currentTakenTest = Math.min(currentTakenTest + 1, workingTest.getTakenTests().length - 1);
+        loadCurrentTakenTest();
     }
+
+    @FXML
+    public void prevTest() {
+        currentTakenTest = Math.max(currentTakenTest - 1, 0);
+        loadCurrentTakenTest();
+    }
+
+    private void loadCurrentTakenTest() {
+        TakenTest takenTest = workingTest.getTakenTests()[currentTakenTest];
+        pointsGivenField.setText(takenTest.GetQuestionPointsGiven(currentQuestion) + "");
+        feedbacks = takenTest.GetQuestionFeedbacks(currentQuestion);
+        feedbackTable.setItems(feedbacks);
+
+        currentTestText.setText(currentTakenTest + 1 + "");
+    }
+
+    private void setCurrentQuestion(int q) {
+        if (workingTest != null && workingTest.getQuestions().size() >= q) {
+            currentQuestion = q;
+            pointsTotalText.setText(workingTest.getQuestions().get(currentQuestion).getPointsPossible() + "");
+            loadCurrentTakenTest();
+        }
+    }
+
+//    public void setTest(Test test) {
+//        this.test = test;
+//    }
 
     /*
     @FXML

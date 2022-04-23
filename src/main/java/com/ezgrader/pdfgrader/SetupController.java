@@ -4,16 +4,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 
@@ -22,14 +18,17 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static com.ezgrader.pdfgrader.Main.workingTest;
+
 public class SetupController {
     private File pdf;
-    private ObservableList<Question> questionTest = FXCollections.observableArrayList(); // temporary testing list
-    private Test test;
+    //private Test test;
     @FXML
     private ImageView pdfView;
     @FXML
     private Pagination pagination;
+    @FXML
+    private TextField testNameField;
     @FXML
     private Label pdfFilename;
     @FXML
@@ -72,26 +71,31 @@ public class SetupController {
             System.out.println(pdf.getAbsoluteFile());
             // create test
             Path path = Paths.get(pdf.getPath());
-            test = new Test(path);
-            totalTests.setText(test.getTotalPages() + "");
+            workingTest = new Test(path);
+            totalTests.setText(workingTest.getTotalPages() + "");
             //initial page update
             updatePages();
-            pagination.setPageCount(test.getTotalPages());
+            pagination.setPageCount(workingTest.getTotalPages());
             //sets up pagination page grabbing
-            pagination.setPageFactory(pageNumber -> new ImageView(test.renderPageImage(pageNumber)));
+            pagination.setPageFactory(pageNumber -> new ImageView(workingTest.renderPageImage(pageNumber)));
+
+            // set default test name, unless one has already been entered
+            if (testNameField.getText().equals("")) {
+                testNameField.setText(pdf.getName().substring(0, pdf.getName().indexOf(".pdf")));
+            }
         }
     }
 
     @FXML
     public void updatePages(){
         //get int from box
-        if (this.test != null) {
+        if (workingTest != null) {
             String pagesPerTestString = pagesField.getText();
             try {
                 int pagesPerTestInt = Integer.parseInt(pagesPerTestString);
-                test.setPagesPerTest(pagesPerTestInt);
+                workingTest.setPagesPerTest(pagesPerTestInt);
                 //set text for total tests
-                totalTests.setText((test.getTotalPages() / test.getPagesPerTest()) + "");
+                totalTests.setText((workingTest.getTotalPages() / workingTest.getPagesPerTest()) + "");
             } catch (NumberFormatException e) {
                 System.out.println("No characters in box.");
             }
@@ -102,8 +106,8 @@ public class SetupController {
     private void addQuestion() {
         questionTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        questionTest.add(new Question(questionTest.size()+1, 0.0, 1));
-        questionTable.setItems(questionTest);
+        workingTest.getQuestions().add(new Question(workingTest.getQuestions().size()+1, 0.0, 1));
+        questionTable.setItems(workingTest.getQuestions());
         UpdateTotalPoints();
     }
 
@@ -114,23 +118,21 @@ public class SetupController {
             Question selectedItem = (Question) questionTable.getSelectionModel().getSelectedItem();
             questionTable.getItems().remove(selectedItem);
 
-            for (int i = 0; i < questionTest.size(); i++) {
-                questionTest.get(i).setQNum(i+1);
+            for (int i = 0; i < workingTest.getQuestions().size(); i++) {
+                workingTest.getQuestions().get(i).setQNum(i+1);
             }
             UpdateTotalPoints();
         }
     }
 
     @FXML
-    public void GoToGrading(ActionEvent event) throws IOException {
-        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        GridPane gradingRoot = FXMLLoader.load(getClass().getResource("grading.fxml"));
-        Main.MakeStretchy(gradingRoot);
-        stage.setScene(new Scene(gradingRoot));
-
+    public void StartGrading(ActionEvent event) throws IOException {
+        workingTest.setName(testNameField.getText());
+        workingTest.CreateTakenTests();
+        Main.SwitchScene("grading.fxml");
     }
 
-    @FXML private void UpdateTotalPoints() { // not properly functional yet
+    @FXML private void UpdateTotalPoints() {
         double total = 0;
         for (Object points : questionTable.getItems()) {
             total += (Double) pointsPossibleCol.getCellObservableValue(points).getValue();

@@ -13,7 +13,7 @@
     -fx-min-width: 300px;
 }
 
-#test-name {
+#testNameText {
     -fx-font-family: "Raleway Italic";
     -fx-font-size: 14pt;
 }
@@ -25,6 +25,7 @@
 #total-questions {
     -fx-font-size: 12pt;
     -fx-label-padding: 0 0 0 10px;
+    -fx-spacing: 5px;
 }
 
 .score-num {
@@ -32,7 +33,7 @@
     -fx-font-size: 16pt;
 }
 
-#pointsGiven {
+#pointsGivenField {
     -fx-font-family: "Quicksand Bold";
     -fx-pref-column-count: 2;
     -fx-alignment: center;

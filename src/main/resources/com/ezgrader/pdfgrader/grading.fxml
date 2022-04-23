@@ -20,28 +20,34 @@
         </VBox>
         <VBox id="grading-side" prefWidth="200">
             <HBox id="grading-top">
-                <Label id="test-name">CSCI492 SP22 - Example Test</Label>
+                <!-- TODO: add little paper icon back to test name label -->
+                <Label fx:id="testNameText">CSCI492 SP22 - Example Test</Label>
             </HBox>
             <VBox id="grading-middle">
                 <HBox id="question-header">
-                    <Label styleClass="h2">Question 1</Label>
-                    <Label id="total-questions">of 10</Label>
+<!--                    <Label styleClass="h2">Question 1</Label>-->
+<!--                    <Label id="total-questions">of 10</Label>-->
+                    <TextFlow styleClass="h2">
+                        <Text>Question</Text><Text style="-fx-padding: 0 0 0 10px" fx:id="questionNumberText">1</Text>
+                    </TextFlow>
+                    <TextFlow id="total-questions">
+                        <Text style="-fx-padding: 0 0 0 5px">of</Text><Text fx:id="questionsTotalText">10</Text>
+                    </TextFlow>
                 </HBox>
                 <Separator styleClass="vert-spacer"></Separator>
                 <HBox id="q-score">
-                    <TextField styleClass="numberField" fx:id="pointsGiven"></TextField>
+                    <TextField styleClass="numberField" fx:id="pointsGivenField"></TextField>
                     <Label id="score-outof"> out of </Label>
-                    <Label styleClass="score-num">10</Label>
+                    <Label fx:id="pointsTotalText" styleClass="score-num">10</Label>
                 </HBox>
                 <Separator styleClass="vert-spacer"></Separator>
                 <Label styleClass="h3">Feedback</Label>
                 <HBox style="-fx-spacing: 10px">
                     <TextField fx:id="feedbackNewPoints" promptText="+1"></TextField>
                     <HBox HBox.hgrow="ALWAYS"><TextField fx:id="feedbackNewDesc" promptText="Reasoning for giving/taking points" onAction="#addFeedback"></TextField></HBox>
-                    <Button text="Add" id="add-feedback" onAction="#addFeedback"></Button>
+                    <Button styleClass="fa-icon" id="add-feedback" onAction="#addFeedback"><text><AwesomeIcon fx:constant="PLUS"/></text></Button>
                 </HBox>
                 <HBox styleClass="space-box"></HBox>
-                <!--<ListView id="feedbacks"></ListView>-->
                 <TableView fx:id="feedbackTable" styleClass="noheader" onKeyPressed="#deleteFeedback">
                     <placeholder><Label text="No Feedback yet"/></placeholder>
                     <columns>
@@ -60,14 +66,14 @@
                 <Separator styleClass="vert-spacer"></Separator>
             </VBox>
             <HBox id="grading-bottom">
-                <Button styleClass="fa-icon"><text><AwesomeIcon fx:constant="ARROW_LEFT"/></text></Button>
-                <Button styleClass="fa-icon"><text><AwesomeIcon fx:constant="ARROW_RIGHT"/></text></Button>
+                <Button onAction="#prevTest" styleClass="fa-icon"><text><AwesomeIcon fx:constant="ARROW_LEFT"/></text></Button>
+                <Button onAction="#nextTest" styleClass="fa-icon"><text><AwesomeIcon fx:constant="ARROW_RIGHT"/></text></Button>
             </HBox>
             <TextFlow id="test-counter">
                 <Text text="Test "/>
-                <Text text="1" style="-fx-font-family: 'Quicksand Bold'"/>
+                <Text fx:id="currentTestText" text="1" style="-fx-font-family: 'Quicksand Bold'"/>
                 <Text text=" of "/>
-                <Text text="22" style="-fx-font-family: 'Quicksand Bold'"/>
+                <Text fx:id="totalTestsText" text="22" style="-fx-font-family: 'Quicksand Bold'"/>
             </TextFlow>
         </VBox>
     </SplitPane>

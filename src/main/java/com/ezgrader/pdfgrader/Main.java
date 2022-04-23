@@ -2,7 +2,9 @@ package com.ezgrader.pdfgrader;
 
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -10,9 +12,13 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ResourceBundle;
 
 public class Main extends Application {
+
+    public static Test workingTest;
+    private static Stage stage;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -24,6 +30,7 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.sizeToScene();
         primaryStage.show();
+        stage = primaryStage;
     }
 
     public static void main(String[] args) {
@@ -39,6 +46,12 @@ public class Main extends Application {
         RowConstraints row = new RowConstraints();
         row.setPercentHeight(100);
         root.getRowConstraints().add(row);
+    }
+
+    public static void SwitchScene(String sceneName) throws IOException {
+        GridPane newRoot = FXMLLoader.load(Main.class.getResource("grading.fxml"));
+        MakeStretchy(newRoot);
+        stage.setScene(new Scene(newRoot));
     }
 
 }

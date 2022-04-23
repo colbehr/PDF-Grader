@@ -20,7 +20,7 @@
         <VBox styleClass="mainContainer" prefHeight="900" prefWidth="500">
             <HBox style="-fx-spacing: 10px">
                 <Label styleClass="fa-icon, h1"><AwesomeIcon fx:constant="PENCIL"/></Label>
-                <TextField styleClass="h1, stealthTextField" promptText="New Test"></TextField>
+                <TextField fx:id="testNameField" styleClass="h1, stealthTextField" promptText="New Test"></TextField>
             </HBox>
 <!--            <Label styleClass="h1">New Test</Label>-->
             <Separator styleClass="vert-spacer"></Separator>
@@ -76,7 +76,7 @@
                 </columns>
             </TableView>
             <HBox style="-fx-alignment: center">
-                <Button onAction="#GoToGrading">
+                <Button onAction="#StartGrading">
                     <graphic><BorderPane>
                         <center>
                             <Label style="-fx-text-fill: white">Grade</Label>

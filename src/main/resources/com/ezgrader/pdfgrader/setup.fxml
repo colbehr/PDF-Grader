@@ -18,11 +18,10 @@
             <Pagination fx:id="pagination" prefHeight="66.0" prefWidth="354.0" />
         </VBox>
         <VBox styleClass="mainContainer" prefHeight="900" prefWidth="500">
-            <HBox style="-fx-spacing: 10px">
+            <HBox styleClass="iconAndText" style="-fx-spacing: 10px">
                 <Label styleClass="fa-icon, h1"><AwesomeIcon fx:constant="PENCIL"/></Label>
                 <TextField fx:id="testNameField" styleClass="h1, stealthTextField" promptText="New Test"></TextField>
             </HBox>
-<!--            <Label styleClass="h1">New Test</Label>-->
             <Separator styleClass="vert-spacer"></Separator>
             <HBox styleClass="fileSelectionBox">
                 <Button onAction="#browseForPDF">
@@ -50,7 +49,7 @@
             <Separator styleClass="vert-spacer"></Separator>
             <HBox styleClass="spacedCenteredBox">
                 <Label styleClass="h3">Questions</Label>
-                <Button styleClass="fa-icon" id="addQuestionButton" onAction="#addQuestion"><text><AwesomeIcon fx:constant="PLUS"/></text></Button>
+                <Button styleClass="fa-icon" fx:id="addQuestionButton" onAction="#addQuestion"><text><AwesomeIcon fx:constant="PLUS"/></text></Button>
                 <HBox HBox.hgrow="ALWAYS" />
                 <Label styleClass="h4">Total Points</Label>
                 <Label styleClass="h4, bubbleNumber" fx:id="totalPoints">0</Label>
@@ -76,10 +75,10 @@
                 </columns>
             </TableView>
             <HBox style="-fx-alignment: center">
-                <Button onAction="#StartGrading">
+                <Button fx:id="startGradingButton" onAction="#StartGrading">
                     <graphic><BorderPane>
                         <center>
-                            <Label style="-fx-text-fill: white">Grade</Label>
+                            <Label style="-fx-text-fill: white">Confirm &amp; Grade</Label>
                         </center>
                         <right>
                             <Label styleClass="fa-icon" style="-fx-text-fill: white">

@@ -50,8 +50,10 @@ public class Test {
         return SwingFXUtils.toFXImage(image, null);
     }
 
-    public Image renderQuestionPageImage(int question) {
-        return renderPageImage(questions.get(question).getPageNum());
+    public Image renderQuestionImage(int question, int takenTest) {
+        int page = Math.min(questions.get(question).getPageNum() * (1+takenTest),
+                document.getNumberOfPages()); // will pick last page instead if OOB
+        return renderPageImage(page);
     }
 
     public void CreateTakenTests() {

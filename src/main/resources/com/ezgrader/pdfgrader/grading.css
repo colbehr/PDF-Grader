@@ -20,6 +20,7 @@
 
 #question-header {
     -fx-alignment: bottom-left;
+    -fx-spacing: 12px;
 }
 
 #total-questions {
@@ -140,7 +141,7 @@
 }
 
 #grading-top {
-    -fx-alignment: top-left;
+    -fx-alignment: baseline-left;
     -fx-pref-height: 200px;
 }
 
@@ -164,4 +165,18 @@
 #pagesField {
     -fx-pref-columns: 6;
     -fx-text-alignment: center;
+}
+
+#questionNav {
+    -fx-padding: 20px;
+    -fx-spacing: 20px;
+}
+
+#questionNumberText {
+    -fx-font-family: "Quicksand Bold";
+}
+
+#doneButton {
+    -fx-padding: 5px;
+    -fx-pref-width: 100px;
 }

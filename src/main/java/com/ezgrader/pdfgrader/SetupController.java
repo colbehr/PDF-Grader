@@ -47,6 +47,10 @@ public class SetupController {
     private TableColumn pointsPossibleCol;
     @FXML
     private TableColumn pageNumCol;
+    @FXML
+    private Button addQuestionButton;
+    @FXML
+    private Button startGradingButton;
 
     @FXML
     public void initialize() {
@@ -57,6 +61,9 @@ public class SetupController {
         pointsPossibleCol.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
         pageNumCol.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         // TODO: Figure out how to call UpdateTotalPoints() on table edit
+
+        addQuestionButton.setDisable(true);
+        startGradingButton.setDisable(true);
     }
 
     @FXML
@@ -83,6 +90,9 @@ public class SetupController {
             if (testNameField.getText().equals("")) {
                 testNameField.setText(pdf.getName().substring(0, pdf.getName().indexOf(".pdf")));
             }
+
+            // allow adding questions
+            addQuestionButton.setDisable(false);
         }
     }
 
@@ -109,6 +119,9 @@ public class SetupController {
         workingTest.getQuestions().add(new Question(workingTest.getQuestions().size()+1, 0.0, 1));
         questionTable.setItems(workingTest.getQuestions());
         UpdateTotalPoints();
+
+        // if at least one question, allow
+        startGradingButton.setDisable(false);
     }
 
 
@@ -122,6 +135,10 @@ public class SetupController {
                 workingTest.getQuestions().get(i).setQNum(i+1);
             }
             UpdateTotalPoints();
+
+            if (workingTest.getQuestions().isEmpty()) {
+                startGradingButton.setDisable(true);
+            }
         }
     }
 

@@ -57,7 +57,7 @@
     -fx-font-size: 14pt;
     -fx-text-fill: white;
     -fx-background-color: #251F47;
-    -fx-padding: 10px;
+    -fx-padding: 8px;
     -fx-pref-width: 200px;
     -fx-max-width: 250px;
 }
@@ -99,6 +99,18 @@
     -fx-spacing: 10px;
 }
 
+.errorText {
+    -fx-font-size: 11pt;
+    -fx-background-color: rgba(255, 0, 0, 0.5);
+    -fx-text-fill: white;
+    -fx-label-padding: 7px;
+    -fx-background-radius: 5px;
+}
+
+.iconAndText {
+    -fx-spacing: 5px;
+}
+
 .numberField {
     -fx-font-family: "Quicksand Bold";
     -fx-font-size: 16pt;
@@ -123,10 +135,15 @@
 }
 .prettyTable .column-header {
     -fx-background-color: transparent;
+
+}
+.prettyTable .column-header .label {
+    -fx-text-fill: white;
 }
 .prettyTable .column-header-background {
-    -fx-background-color: linear-gradient(to bottom, #00000055, #00000000);
-    -fx-background-radius: 10px 10px 0 0;
+    /*-fx-background-color: linear-gradient(to bottom, #00000055, #00000000);*/
+    -fx-background-color: rgba(0,0,0,0.25);
+    -fx-background-radius: 10px;
 }
 .prettyTable .column-header-background .filler {
     -fx-background-color: transparent;

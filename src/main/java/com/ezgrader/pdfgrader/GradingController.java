@@ -20,9 +20,9 @@ public class GradingController {
     @FXML
     private Label testNameText;
     @FXML
-    private Text questionNumberText;
+    private Label questionNumberText;
     @FXML
-    private Text questionsTotalText;
+    private Label questionsTotalText;
     @FXML
     private TextField pointsGivenField;
     @FXML
@@ -41,6 +41,14 @@ public class GradingController {
     private Text currentTestText;
     @FXML
     private Text totalTestsText;
+    @FXML
+    private Button nextQuestionButton;
+    @FXML
+    private Button prevQuestionButton;
+    @FXML
+    private Button prevTestButton;
+    @FXML
+    private Button nextTestButton;
 
     //private Test test;
     private int currentQuestion;
@@ -81,7 +89,10 @@ public class GradingController {
 
         // Grading setup
         setCurrentQuestion(0);
+        prevQuestionButton.setDisable(true);
+
         currentTakenTest = 0;
+        prevTestButton.setDisable(true);
         loadCurrentTakenTest();
 
         pointsGivenField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -126,12 +137,38 @@ public class GradingController {
     public void nextTest() {
         currentTakenTest = Math.min(currentTakenTest + 1, workingTest.getTakenTests().length - 1);
         loadCurrentTakenTest();
+        if (currentTakenTest == workingTest.getTakenTests().length - 1) {
+            nextTestButton.setDisable(true);
+        }
+        prevTestButton.setDisable(false);
     }
 
     @FXML
     public void prevTest() {
         currentTakenTest = Math.max(currentTakenTest - 1, 0);
         loadCurrentTakenTest();
+        if (currentTakenTest == 0) {
+            prevTestButton.setDisable(true);
+        }
+        nextTestButton.setDisable(false);
+    }
+
+    @FXML
+    public void nextQuestion() {
+        setCurrentQuestion(currentQuestion + 1);
+        if (currentQuestion == workingTest.getQuestions().size() - 1) {
+            nextQuestionButton.setDisable(true);
+        }
+        prevQuestionButton.setDisable(false);
+    }
+
+    @FXML
+    public void prevQuestion() {
+        setCurrentQuestion(currentQuestion - 1);
+        if (currentQuestion == 0) {
+            prevQuestionButton.setDisable(true);
+        }
+        nextQuestionButton.setDisable(false);
     }
 
     private void loadCurrentTakenTest() {
@@ -146,20 +183,9 @@ public class GradingController {
     private void setCurrentQuestion(int q) {
         if (workingTest != null && workingTest.getQuestions().size() >= q) {
             currentQuestion = q;
+            questionNumberText.setText(q + 1 + "");
             pointsTotalText.setText(workingTest.getQuestions().get(currentQuestion).getPointsPossible() + "");
             loadCurrentTakenTest();
         }
     }
-
-//    public void setTest(Test test) {
-//        this.test = test;
-//    }
-
-    /*
-    @FXML
-    private void handleTFAction(ActionEvent event) {
-        TextField source = (TextField)event.getSource();
-        System.out.println("You entered: "+source.getText());
-    }
-    */
 }

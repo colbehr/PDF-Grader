@@ -20,19 +20,32 @@
         </VBox>
         <VBox id="grading-side" prefWidth="200">
             <HBox id="grading-top">
-                <!-- TODO: add little paper icon back to test name label -->
-                <Label fx:id="testNameText">CSCI492 SP22 - Example Test</Label>
+                <HBox styleClass="iconAndText">
+                    <Label styleClass="fa-icon" style="-fx-font-size: 14pt"><AwesomeIcon fx:constant="FILE"/></Label>
+                    <Label fx:id="testNameText">CSCI492 SP22 - Example Test</Label>
+                </HBox>
+                <HBox HBox.hgrow="ALWAYS" />
+                <Button fx:id="doneButton">
+                    <graphic><BorderPane>
+                        <center>
+                            <Label style="-fx-text-fill: white">Done</Label>
+                        </center>
+                        <right>
+                            <Label styleClass="fa-icon" style="-fx-text-fill: white">
+                                <AwesomeIcon fx:constant="CHECK_CIRCLE"/>
+                            </Label>
+                        </right>
+                    </BorderPane></graphic>
+                </Button>
             </HBox>
             <VBox id="grading-middle">
                 <HBox id="question-header">
-<!--                    <Label styleClass="h2">Question 1</Label>-->
-<!--                    <Label id="total-questions">of 10</Label>-->
-                    <TextFlow styleClass="h2">
-                        <Text>Question</Text><Text style="-fx-padding: 0 0 0 10px" fx:id="questionNumberText">1</Text>
-                    </TextFlow>
-                    <TextFlow id="total-questions">
-                        <Text style="-fx-padding: 0 0 0 5px">of</Text><Text fx:id="questionsTotalText">10</Text>
-                    </TextFlow>
+                    <HBox styleClass="h2" style="-fx-spacing: 12px">
+                        <Label>Question</Label><Label fx:id="questionNumberText">1</Label>
+                    </HBox>
+                    <HBox id="total-questions" style="-fx-spacing: 5px; -fx-alignment: center-left">
+                        <Label style="-fx-padding: 0 0 0 5px">of</Label><Label fx:id="questionsTotalText">10</Label>
+                    </HBox>
                 </HBox>
                 <Separator styleClass="vert-spacer"></Separator>
                 <HBox id="q-score">
@@ -66,8 +79,8 @@
                 <Separator styleClass="vert-spacer"></Separator>
             </VBox>
             <HBox id="grading-bottom">
-                <Button onAction="#prevTest" styleClass="fa-icon"><text><AwesomeIcon fx:constant="ARROW_LEFT"/></text></Button>
-                <Button onAction="#nextTest" styleClass="fa-icon"><text><AwesomeIcon fx:constant="ARROW_RIGHT"/></text></Button>
+                <Button fx:id="prevTestButton" onAction="#prevTest" styleClass="fa-icon"><text><AwesomeIcon fx:constant="ARROW_LEFT"/></text></Button>
+                <Button fx:id="nextTestButton" onAction="#nextTest" styleClass="fa-icon"><text><AwesomeIcon fx:constant="ARROW_RIGHT"/></text></Button>
             </HBox>
             <TextFlow id="test-counter">
                 <Text text="Test "/>
@@ -75,6 +88,35 @@
                 <Text text=" of "/>
                 <Text fx:id="totalTestsText" text="22" style="-fx-font-family: 'Quicksand Bold'"/>
             </TextFlow>
+            <VBox VBox.vgrow="ALWAYS"></VBox>
+            <HBox fx:id="questionNav">
+                <Button fx:id="prevQuestionButton" onAction="#prevQuestion">
+                    <graphic><BorderPane>
+                        <left>
+                            <Label styleClass="fa-icon" style="-fx-text-fill: white">
+                                <AwesomeIcon fx:constant="ARROW_CIRCLE_LEFT"/>
+                            </Label>
+                        </left>
+                        <center>
+                            <Label style="-fx-text-fill: white">Prev Question</Label>
+                        </center>
+                    </BorderPane></graphic>
+                </Button>
+                <HBox HBox.hgrow="ALWAYS"></HBox>
+                <Button fx:id="nextQuestionButton" onAction="#nextQuestion">
+                    <graphic><BorderPane>
+
+                        <center>
+                            <Label style="-fx-text-fill: white">Next Question</Label>
+                        </center>
+                        <right>
+                            <Label styleClass="fa-icon" style="-fx-text-fill: white">
+                                <AwesomeIcon fx:constant="ARROW_CIRCLE_RIGHT"/>
+                            </Label>
+                        </right>
+                    </BorderPane></graphic>
+                </Button>
+            </HBox>
         </VBox>
     </SplitPane>
 </GridPane>

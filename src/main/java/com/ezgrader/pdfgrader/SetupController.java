@@ -58,6 +58,7 @@ public class SetupController {
         pointsPossibleCol.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
         pageNumCol.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         // TODO: Figure out how to call UpdateTotalPoints() on table edit
+
     }
 
     @FXML

@@ -184,6 +184,8 @@ public class GradingController {
         if (workingTest != null && workingTest.getQuestions().size() >= q) {
             currentQuestion = q;
             questionNumberText.setText(q + 1 + "");
+            //set the current page number to the question's page number
+            pagination.setCurrentPageIndex(workingTest.getQuestions().get(currentQuestion).getPageNum()-1);
             pointsTotalText.setText(workingTest.getQuestions().get(currentQuestion).getPointsPossible() + "");
             loadCurrentTakenTest();
         }

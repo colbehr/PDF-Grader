@@ -1,7 +1,5 @@
 package com.ezgrader.pdfgrader;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -115,8 +113,8 @@ public class SetupController {
     @FXML
     private void addQuestion() {
         questionTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-        workingTest.getQuestions().add(new Question(workingTest.getQuestions().size()+1, 0.0, 1));
+        //current page index saves an index not a page, so when displaying it might be best to add 1
+        workingTest.getQuestions().add(new Question(workingTest.getQuestions().size()+1, 0.0, pagination.getCurrentPageIndex() + 1));
         questionTable.setItems(workingTest.getQuestions());
         UpdateTotalPoints();
 

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<GridPane xmlns="http://javafx.com/javafx/16" id="root" maxWidth="Infinity" maxHeight="Infinity" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ezgrader.pdfgrader.ExportController">
+
+   <children>
+      <VBox styleClass="mainContainer" prefHeight="600" prefWidth="800"  VBox.vgrow="ALWAYS">
+
+          <children>
+            <Label layoutX="10.0" layoutY="10.0" style="-fx-text-alignment: center;" styleClass="h1" text="Export" />
+            <Label text="Choose a folder for outputting individual tests." />
+            <HBox>
+               <children>
+                  <TextField />
+                  <Button mnemonicParsing="false" text="Select Folder" />
+               </children>
+            </HBox>
+            <Label layoutX="10.0" layoutY="27.0" text="Choose a file to output test overview." />
+            <HBox layoutX="10.0" layoutY="27.0">
+               <children>
+                  <TextField />
+                  <Button mnemonicParsing="false" text="Select File" />
+               </children>
+            </HBox>
+            <Button id="newButton" mnemonicParsing="false" text="Export" />
+         </children>
+          <stylesheets>
+              <URL value="@./shared.css" />
+              <URL value="@./setup.css"/>
+          </stylesheets>
+      </VBox>
+   </children>
+</GridPane>

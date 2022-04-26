@@ -2,12 +2,14 @@ package com.ezgrader.pdfgrader;
 
 
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
 import java.util.function.UnaryOperator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -189,5 +191,10 @@ public class GradingController {
             pointsTotalText.setText(workingTest.getQuestions().get(currentQuestion).getPointsPossible() + "");
             loadCurrentTakenTest();
         }
+    }
+
+    public void finishedGrading(ActionEvent event) throws IOException {
+        //finish grading and go to export page
+        Main.SwitchScene("export.fxml");
     }
 }

@@ -47,7 +47,7 @@ public class Main extends Application {
     }
 
     public static void SwitchScene(String sceneName) throws IOException {
-        GridPane newRoot = FXMLLoader.load(Main.class.getResource("grading.fxml"));
+        GridPane newRoot = FXMLLoader.load(Main.class.getResource(sceneName));
         MakeStretchy(newRoot);
         stage.setScene(new Scene(newRoot));
     }

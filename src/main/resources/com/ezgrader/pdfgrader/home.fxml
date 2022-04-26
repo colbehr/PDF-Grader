@@ -20,7 +20,9 @@
         <URL value="@./home.css"/>
     </stylesheets>
     <VBox id="outerContainer">
-        <VBox id="title"><Label styleClass="h1" style="-fx-text-alignment: center">PDF Grader</Label></VBox>
+        <VBox id="title">
+            <Label styleClass="h1" style="-fx-text-alignment: center">PDF Grader</Label>
+        </VBox>
         <Button text="NEW" id="newButton"></Button>
         <VBox>
             <Label>Recent Tests</Label>

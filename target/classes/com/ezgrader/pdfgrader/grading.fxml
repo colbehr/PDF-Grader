@@ -25,7 +25,7 @@
                     <Label fx:id="testNameText">CSCI492 SP22 - Example Test</Label>
                 </HBox>
                 <HBox HBox.hgrow="ALWAYS" />
-                <Button fx:id="doneButton">
+                <Button fx:id="doneButton" onAction="#finishedGrading">
                     <graphic><BorderPane>
                         <center>
                             <Label style="-fx-text-fill: white">Done</Label>

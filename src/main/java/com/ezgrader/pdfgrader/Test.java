@@ -50,12 +50,6 @@ public class Test {
         return SwingFXUtils.toFXImage(image, null);
     }
 
-    public Image renderQuestionImage(int question, int takenTest) {
-        int page = Math.min(questions.get(question).getPageNum() * (1+takenTest),
-                document.getNumberOfPages()); // will pick last page instead if OOB
-        return renderPageImage(page);
-    }
-
     public void CreateTakenTests() {
         takenTests = new TakenTest[totalPages / pagesPerTest];
         for (int i = 0; i < takenTests.length; i++) {
@@ -89,5 +83,9 @@ public class Test {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public PDDocument getDocument() {
+        return document;
     }
 }

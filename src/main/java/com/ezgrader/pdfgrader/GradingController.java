@@ -30,6 +30,8 @@ public class GradingController {
     @FXML
     private Label pointsTotalText;
     @FXML
+    private CheckBox autoTotalCheckbox;
+    @FXML
     private TableView feedbackTable;
     @FXML
     private TableColumn pointsCol;
@@ -114,6 +116,28 @@ public class GradingController {
     }
 
     @FXML
+    private void ToggleAutoTotal() {
+        if (autoTotalCheckbox.isSelected()) {
+            pointsGivenField.setEditable(false);
+            autoTotal();
+        } else {
+            pointsGivenField.setEditable(true);
+        }
+    }
+
+    private void autoTotal() {
+        double total = 0;
+        if (feedbacks != null && !feedbacks.isEmpty()) {
+            String firstSign = feedbacks.get(0).getPoints().substring(0,1);
+            total = firstSign.equals("+") ? 0 : workingTest.getQuestions().get(currentQuestion).getPointsPossible();
+            for (Feedback feedback : feedbacks) {
+                total += Double.parseDouble(feedback.getPoints().replace("+", ""));
+            }
+        }
+        pointsGivenField.setText(total + "");
+    }
+
+    @FXML
     private void addFeedback() {
         if (feedbackNewDesc.getText().equals("")) return;
 
@@ -125,6 +149,8 @@ public class GradingController {
         feedbackNewDesc.setText("");
 
         feedbackNewPoints.requestFocus();
+
+        if (autoTotalCheckbox.isSelected()) autoTotal();
     }
 
     @FXML
@@ -132,6 +158,8 @@ public class GradingController {
         if (keyEvent.getCode() == KeyCode.DELETE) {
             Feedback selectedItem = (Feedback) feedbackTable.getSelectionModel().getSelectedItem();
             feedbackTable.getItems().remove(selectedItem);
+
+            if (autoTotalCheckbox.isSelected()) autoTotal();
         }
     }
 
@@ -178,19 +206,28 @@ public class GradingController {
         pointsGivenField.setText(takenTest.GetQuestionPointsGiven(currentQuestion) + "");
         feedbacks = takenTest.GetQuestionFeedbacks(currentQuestion);
         feedbackTable.setItems(feedbacks);
-
         currentTestText.setText(currentTakenTest + 1 + "");
+
+        UpdatePagination();
     }
 
     private void setCurrentQuestion(int q) {
         if (workingTest != null && workingTest.getQuestions().size() >= q) {
             currentQuestion = q;
             questionNumberText.setText(q + 1 + "");
-            //set the current page number to the question's page number
-            pagination.setCurrentPageIndex(workingTest.getQuestions().get(currentQuestion).getPageNum()-1);
+
+            // Update View
             pointsTotalText.setText(workingTest.getQuestions().get(currentQuestion).getPointsPossible() + "");
             loadCurrentTakenTest();
         }
+    }
+
+    private void UpdatePagination() {
+        //set the current page number to the question's page number
+        int questionPage = workingTest.getQuestions().get(currentQuestion).getPageNum() - 1;
+        int currentTestOffset = currentTakenTest * workingTest.getPagesPerTest();
+        int page = Math.min(questionPage + currentTestOffset, workingTest.getDocument().getNumberOfPages());
+        pagination.setCurrentPageIndex(page);
     }
 
     public void finishedGrading(ActionEvent event) throws IOException {

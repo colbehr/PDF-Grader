@@ -21,7 +21,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         ResourceBundle resources = ResourceBundle.getBundle("fa.fontawesome");
-        GridPane root = FXMLLoader.load(getClass().getResource("/com/ezgrader/pdfgrader/setup.fxml"), resources);
+        GridPane root = FXMLLoader.load(getClass().getResource("/com/ezgrader/pdfgrader/home.fxml"), resources);
         MakeStretchy(root);
 
         primaryStage.setTitle("PDF Grader");

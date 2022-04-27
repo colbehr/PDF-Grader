@@ -180,3 +180,7 @@
     -fx-padding: 5px;
     -fx-pref-width: 100px;
 }
+
+#autoTotalCheckbox {
+    -fx-padding: 0 0 0 25px;
+}

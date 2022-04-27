@@ -19,16 +19,15 @@
         <URL value="@./shared.css"/>
         <URL value="@./home.css"/>
     </stylesheets>
-    <VBox styleClass="mainContainer" id="outerContainer">
+    <VBox id="outerContainer">
         <VBox id="title">
             <Label styleClass="h1" style="-fx-text-alignment: center">PDF Grader</Label>
         </VBox>
-        <Button text="NEW" id="newButton" onAction="#GoToSetup"></Button>
-        <Separator styleClass="vert-spacer"/>
-        <VBox style="-fx-alignment: center">
-            <Label styleClass="h3">Recent Tests</Label>
-            <TableView styleClass="prettyTable, noheader" style="-fx-max-width: 500px">
-                <placeholder><Label text="No recent PDFs"/></placeholder>
+        <Button text="NEW" id="newButton"></Button>
+        <VBox>
+            <Label>Recent Tests</Label>
+            <TableView>
+
             </TableView>
         </VBox>
     </VBox>

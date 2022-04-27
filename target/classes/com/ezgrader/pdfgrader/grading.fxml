@@ -52,7 +52,6 @@
                     <TextField styleClass="numberField" fx:id="pointsGivenField"></TextField>
                     <Label id="score-outof"> out of </Label>
                     <Label fx:id="pointsTotalText" styleClass="score-num">10</Label>
-                    <CheckBox fx:id="autoTotalCheckbox" text="Auto-Total" onAction="#ToggleAutoTotal"></CheckBox>
                 </HBox>
                 <Separator styleClass="vert-spacer"></Separator>
                 <Label styleClass="h3">Feedback</Label>

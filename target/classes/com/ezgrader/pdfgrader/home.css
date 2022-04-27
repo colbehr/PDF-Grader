@@ -7,10 +7,10 @@
 }
 
 #outerContainer {
+    -fx-background-color: gray;
     -fx-padding: 100px;
     -fx-start-margin: 20px;
     -fx-alignment: center;
-    -fx-spacing: 25px;
 }
 
 #newButton {

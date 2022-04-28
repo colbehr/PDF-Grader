@@ -2,6 +2,8 @@
 /shelf/
 /.idea/workspace.xml
 
+/target/
+
 ### Java template
 *.class
 

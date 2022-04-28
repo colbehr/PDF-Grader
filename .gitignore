@@ -3,6 +3,7 @@
 /.idea/workspace.xml
 
 /target/
+/target
 
 ### Java template
 *.class

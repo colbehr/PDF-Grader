@@ -3,30 +3,42 @@
 <?import java.net.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-
-<GridPane xmlns="http://javafx.com/javafx/16" id="root" maxWidth="Infinity" maxHeight="Infinity" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ezgrader.pdfgrader.ExportController">
+<GridPane id="root" maxHeight="Infinity" maxWidth="Infinity" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ezgrader.pdfgrader.ExportController">
     <stylesheets>
         <URL value="@./shared.css" />
-        <URL value="@./setup.css"/>
+        <URL value="@./setup.css" />
     </stylesheets>
-    <VBox styleClass="mainContainer" prefHeight="600" prefWidth="800" style="-fx-alignment: center; -fx-spacing: 20px" VBox.vgrow="ALWAYS">
+    <VBox prefHeight="600" prefWidth="800" style="-fx-alignment: center; -fx-spacing: 20px" styleClass="mainContainer" VBox.vgrow="ALWAYS">
         <Label styleClass="h1" text="Export" />
         <VBox style="-fx-alignment: center; -fx-spacing: 8px">
-            <Label text="Choose a folder for outputting individual tests." />
+            <Label text="Choose a folder for outputting individual tests.">
+            <font>
+               <Font size="14.0" />
+            </font></Label>
             <HBox style="-fx-alignment: center; -fx-spacing: 15px">
-              <TextField />
-              <Button mnemonicParsing="false" text="Select Folder" />
+              <Button mnemonicParsing="false" onAction="#browseForTestFolder" text="Select Folder" />
             </HBox>
+         <Label fx:id="folderPathText" textFill="#434343" />
         </VBox>
         <VBox style="-fx-alignment: center; -fx-spacing: 8px">
-            <Label text="Choose a file to output test overview." />
+            <Label text="Choose a file to output test overview.">
+            <font>
+               <Font size="14.0" />
+            </font></Label>
             <HBox style="-fx-alignment: center; -fx-spacing: 15px">
-              <TextField />
-              <Button mnemonicParsing="false" text="Select File" />
+              <Button mnemonicParsing="false" onAction="#browseForStatistics" text="Select File" />
             </HBox>
+         <Label fx:id="filePathText" layoutX="298.0" layoutY="10.0" textFill="#434343" />
         </VBox>
-        <Separator styleClass="vert-spacer"/>
-        <Button id="newButton" mnemonicParsing="false" text="Export" />
+        <Separator styleClass="vert-spacer" />
+        <Button id="newButton" mnemonicParsing="false" onAction="#exportFiles" text="Export" />
     </VBox>
+   <columnConstraints>
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+   </rowConstraints>
 </GridPane>

@@ -1,5 +1,6 @@
 package com.ezgrader.pdfgrader;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -18,11 +19,11 @@ import java.nio.file.Paths;
 
 import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
 
+/**
+ * Setup Controller works with setup.fxml to setup UI and functionality for the scene.
+ */
 public class SetupController {
-    private File pdf;
-    //private Test test;
-    @FXML
-    private ImageView pdfView;
+
     @FXML
     private Pagination pagination;
     @FXML
@@ -35,8 +36,6 @@ public class SetupController {
     private Label totalPoints;
     @FXML
     private Label totalTests;
-    @FXML
-    private SplitPane sideSplit2;
     @FXML
     private TableView questionTable;
     @FXML
@@ -64,29 +63,38 @@ public class SetupController {
         startGradingButton.setDisable(true);
     }
 
+    /**
+     * OnAction of Choose PDF button, open a File Chooser,
+     * then setup page viewing once we get a file.
+     * @param event
+     */
     @FXML
     private void browseForPDF(ActionEvent event) {
+        //open a FileChooser when ChoosePDF is clicked
         FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter pdfFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf");
+        FileChooser.ExtensionFilter pdfFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf", "*.PDF");
         fileChooser.getExtensionFilters().add(pdfFilter);
         fileChooser.setTitle("Choose PDF");
-        pdf = fileChooser.showOpenDialog(((Node)event.getSource()).getScene().getWindow());
+        //Set initial directory to users downloads
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator")+ "Downloads"));
+        File pdf = fileChooser.showOpenDialog(((Node) event.getSource()).getScene().getWindow());
+
         if (pdf != null) {
             pdfFilename.setText(pdf.getName());
             System.out.println(pdf.getAbsoluteFile());
-            // create test
+            // create test a new test using path from file chooser
             Path path = Paths.get(pdf.getPath());
             workingTest = new Test(path);
             totalTests.setText(workingTest.getTotalPages() + "");
             //initial page update
             updatePages();
+            //set up pagination page grabbing
             pagination.setPageCount(workingTest.getTotalPages());
-            //sets up pagination page grabbing
             pagination.setPageFactory(pageNumber -> new ImageView(workingTest.renderPageImage(pageNumber)));
 
             // set default test name, unless one has already been entered
             if (testNameField.getText().equals("")) {
-                testNameField.setText(pdf.getName().substring(0, pdf.getName().indexOf(".pdf")));
+                testNameField.setText(pdf.getName().substring(0, pdf.getName().toLowerCase().indexOf(".pdf")));
             }
 
             // allow adding questions
@@ -94,10 +102,14 @@ public class SetupController {
         }
     }
 
+    /**
+     * Updates total pages per test shown in UI.
+     * TODO: might be able to be solved using a SimpleStringProperty
+     */
     @FXML
     public void updatePages(){
-        //get int from box
         if (workingTest != null) {
+            //get int from pagesField
             String pagesPerTestString = pagesField.getText();
             try {
                 int pagesPerTestInt = Integer.parseInt(pagesPerTestString);
@@ -110,6 +122,10 @@ public class SetupController {
         }
     }
 
+    /**
+     * Creates a new question and adds it to the test.
+     * Also adds to the UI and updates the points.
+     */
     @FXML
     private void addQuestion() {
         questionTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -123,31 +139,45 @@ public class SetupController {
     }
 
 
+    /**
+     * When the delete key is pressed in the tableView delete the selected question.
+     * @param keyEvent
+     */
     @FXML
     public void deleteQuestion(javafx.scene.input.KeyEvent keyEvent) {
+        // if delete key is pressed,
         if (keyEvent.getCode() == KeyCode.DELETE) {
+            //delete the currently selected question
             Question selectedItem = (Question) questionTable.getSelectionModel().getSelectedItem();
             questionTable.getItems().remove(selectedItem);
 
-            for (int i = 0; i < workingTest.getQuestions().size(); i++) {
-                workingTest.getQuestions().get(i).setQNum(i+1);
+            //fix the question numbers for each question
+            ObservableList<Question> questions = workingTest.getQuestions();
+            for (int i = 0; i < questions.size(); i++) {
+                questions.get(i).setQNum(i+1);
             }
             UpdateTotalPoints();
-
+            //if there are no questions in the list after the deletion then disable the start button
             if (workingTest.getQuestions().isEmpty()) {
                 startGradingButton.setDisable(true);
             }
         }
     }
 
+    /**
+     * Switches scene to the grading scene.
+     * @throws IOException
+     */
     @FXML
-    public void StartGrading(ActionEvent event) throws IOException {
+    public void StartGrading() throws IOException {
+        // TODO: Make testNameField into simpleStringProperty so when the field is updated the value is updated.
         workingTest.setName(testNameField.getText());
         workingTest.CreateTakenTests();
         PDFGrader.SwitchScene("grading.fxml");
     }
 
-    @FXML private void UpdateTotalPoints() {
+    @FXML
+    private void UpdateTotalPoints() {
         double total = 0;
         for (Object points : questionTable.getItems()) {
             total += (Double) pointsPossibleCol.getCellObservableValue(points).getValue();

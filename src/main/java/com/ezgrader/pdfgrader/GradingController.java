@@ -227,7 +227,7 @@ public class GradingController {
         //set the current page number to the question's page number
         int questionPage = workingTest.getQuestions().get(currentQuestion).getPageNum() - 1;
         int currentTestOffset = currentTakenTest * workingTest.getPagesPerTest();
-        int page = Math.min(questionPage + currentTestOffset, workingTest.getDocument().getNumberOfPages());
+        int page = Math.min(questionPage + currentTestOffset, workingTest.getTotalPages());
         pagination.setCurrentPageIndex(page);
     }
 

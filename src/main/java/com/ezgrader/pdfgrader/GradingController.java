@@ -14,7 +14,7 @@ import java.util.function.UnaryOperator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.ezgrader.pdfgrader.Main.workingTest;
+import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
 
 public class GradingController {
     @FXML
@@ -233,6 +233,6 @@ public class GradingController {
 
     public void finishedGrading(ActionEvent event) throws IOException {
         //finish grading and go to export page
-        Main.SwitchScene("export.fxml");
+        PDFGrader.SwitchScene("export.fxml");
     }
 }

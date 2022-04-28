@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static com.ezgrader.pdfgrader.Main.workingTest;
+import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
 
 public class SetupController {
     private File pdf;
@@ -144,7 +144,7 @@ public class SetupController {
     public void StartGrading(ActionEvent event) throws IOException {
         workingTest.setName(testNameField.getText());
         workingTest.CreateTakenTests();
-        Main.SwitchScene("grading.fxml");
+        PDFGrader.SwitchScene("grading.fxml");
     }
 
     @FXML private void UpdateTotalPoints() {

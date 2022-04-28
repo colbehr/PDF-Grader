@@ -21,7 +21,7 @@ Note: I am running Java 17 with javafx 17.0.1
 - Add the repo and clone the project using `File>New>Project From Version Control` or using the `Get from VCS` button on the home page.
   - This should autopopulate if you log into Github.
 - Add a new 'Application configuration under `Run>Edit Configurations...` or at the top right under `Add Configuration...`
-- Confirm you are using `Java 17` and choose a main class using the icon on the right, should be `com.ezgrader.pdfgrader.Main`
+- Confirm you are using `Java 17` and choose a main class using the icon on the right, should be `com.ezgrader.pdfgrader.PDFGrader`
   - The main class should autopopulate, if it does not there may be a problem.
 - Add a name at the top and hit Apply or OK.
 - The project should now run.

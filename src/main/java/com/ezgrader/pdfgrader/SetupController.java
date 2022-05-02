@@ -176,6 +176,10 @@ public class SetupController {
         PDFGrader.SwitchScene("grading.fxml");
     }
 
+    /**
+     * runs through each question and tallies the points
+     */
+
     @FXML
     private void UpdateTotalPoints() {
         double total = 0;

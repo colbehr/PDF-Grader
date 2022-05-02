@@ -14,6 +14,9 @@ import java.nio.file.Paths;
 
 import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
 
+/**
+ * Export Controller works with export.fxml to set up UI and functionality for the scene.
+ */
 public class ExportController {
 
     private Path statisticsPath;
@@ -56,7 +59,7 @@ public class ExportController {
         if (workingTest != null) {
             fileChooser.setInitialFileName(workingTest.getName() + "_statistics.pdf");
         } else{
-            fileChooser.setInitialFileName("test_statistics.pdf");
+            fileChooser.setInitialFileName("grade_statistics.pdf");
         }
         File pdf = fileChooser.showSaveDialog(((Node) event.getSource()).getScene().getWindow());
         statisticsPath = Paths.get(pdf.getPath());
@@ -75,10 +78,10 @@ public class ExportController {
             alert.setTitle("Error");
             alert.setHeaderText("Path has not been set");
             if (statisticsPath == null){
-                errorMessage = "Please find a location for the statistics file.";
+                errorMessage = "Please find a location for the statistics file.\n\n";
             }
             if (folderPath == null){
-                errorMessage += "\n\nPlease find a folder for graded files.";
+                errorMessage += "Please find a folder for graded files.";
             }
             alert.setContentText(errorMessage);
             alert.showAndWait();
@@ -88,8 +91,8 @@ public class ExportController {
         //TODO: export statistics
         System.out.println("Exported students tests");
         //TODO: export tests
-        //open dialog, return to home
 
+        //open dialog, return to home
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Finished Exporting");
         alert.setHeaderText("Files exported.");

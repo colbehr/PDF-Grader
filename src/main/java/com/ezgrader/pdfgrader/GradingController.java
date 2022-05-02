@@ -18,8 +18,6 @@ import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
 
 public class GradingController {
     @FXML
-    private ImageView pdfView;
-    @FXML
     private Label testNameText;
     @FXML
     private Label questionNumberText;
@@ -54,7 +52,6 @@ public class GradingController {
     @FXML
     private Button nextTestButton;
 
-    //private Test test;
     private int currentQuestion;
     private int currentTakenTest;
     private ObservableList<Feedback> feedbacks;

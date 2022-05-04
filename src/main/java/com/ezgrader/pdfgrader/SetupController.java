@@ -61,15 +61,16 @@ public class SetupController {
 
         addQuestionButton.setDisable(true);
         startGradingButton.setDisable(true);
+
+        browseForPDF();
     }
 
     /**
      * OnAction of Choose PDF button, open a File Chooser,
      * then setup page viewing once we get a file.
-     * @param event
      */
     @FXML
-    private void browseForPDF(ActionEvent event) {
+    private void browseForPDF() {
         //open a FileChooser when ChoosePDF is clicked
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter pdfFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf", "*.PDF");
@@ -77,7 +78,7 @@ public class SetupController {
         fileChooser.setTitle("Choose PDF");
         //Set initial directory to users downloads
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator")+ "Downloads"));
-        File pdf = fileChooser.showOpenDialog(((Node) event.getSource()).getScene().getWindow());
+        File pdf = fileChooser.showOpenDialog(PDFGrader.getStage().getScene().getWindow());
 
         if (pdf != null) {
             pdfFilename.setText(pdf.getName());

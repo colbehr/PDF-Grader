@@ -106,6 +106,8 @@ public class GradingController {
             workingTest.getTakenTests()[currentTakenTest].GradeQuestion(currentQuestion, points);
         });
 
+        autoTotalCheckbox.setSelected(true);
+
         // One-time view updates
         testNameText.setText(workingTest.getName());
         questionsTotalText.setText(workingTest.getQuestions().size() + "");

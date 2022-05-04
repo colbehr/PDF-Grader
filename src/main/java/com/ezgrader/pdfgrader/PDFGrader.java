@@ -52,4 +52,7 @@ public class PDFGrader extends Application {
         stage.setScene(new Scene(newRoot));
     }
 
+    public static Stage getStage() {
+        return stage;
+    }
 }

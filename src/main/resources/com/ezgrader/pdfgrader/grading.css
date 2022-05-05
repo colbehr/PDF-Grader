@@ -143,6 +143,7 @@
 #grading-top {
     -fx-alignment: baseline-left;
     -fx-pref-height: 200px;
+    -fx-spacing: 20px;
 }
 
 #grading-middle {
@@ -179,6 +180,11 @@
 #doneButton {
     -fx-padding: 5px;
     -fx-pref-width: 100px;
+}
+
+#saveButton {
+    -fx-padding: 5px;
+    -fx-pref-width: 35px;
 }
 
 #autoTotalCheckbox {

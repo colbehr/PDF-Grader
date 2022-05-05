@@ -18,6 +18,7 @@ public class TakenTest {
     }
 
     private Test test;
+
     private Map<Question, QuestionResult> questionResultMap;
 
     public TakenTest(Test test) {
@@ -33,6 +34,10 @@ public class TakenTest {
         } else {
             questionResultMap.put(question, new QuestionResult(pointsGiven));
         }
+    }
+
+    public void AddFeedbackToQuestion(int questionNumber, Feedback feedback) {
+        questionResultMap.get(test.getQuestions().get(questionNumber)).feedbacks.add(feedback);
     }
 
     public double GetQuestionPointsGiven(Question question) {
@@ -60,5 +65,9 @@ public class TakenTest {
 
     public ObservableList<Feedback> GetQuestionFeedbacks(int questionNumber) {
         return GetQuestionFeedbacks(test.getQuestions().get(questionNumber));
+    }
+
+    public Map<Question, QuestionResult> getQuestionResultMap() {
+        return questionResultMap;
     }
 }

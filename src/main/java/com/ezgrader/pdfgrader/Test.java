@@ -22,10 +22,13 @@ public class Test {
     private Path path;
     private int totalPages;
     private int pagesPerTest;
-
     private String name;
     private ObservableList<Question> questions;
     private TakenTest[] takenTests;
+
+    // For a saved then reloaded test, where grading left off
+    // [0] = question number, [1] = taken test number
+    private int savedPlace[];
 
     /**
      * Initializes a document and renderer for the PDF at path.
@@ -41,6 +44,7 @@ public class Test {
             throw new UncheckedIOException("Issue loading " + path, e);
         }
         questions = FXCollections.observableArrayList();
+        savedPlace = new int[2]; // default to question 0, taken test 0
     }
 
     /**
@@ -123,5 +127,18 @@ public class Test {
      */
     public String getName() {
         return name;
+    }
+
+    public Path getPath() {
+        return path;
+    }
+
+    public void setSavedPlace(int question, int takenTest) {
+        savedPlace[0] = question;
+        savedPlace[1] = takenTest;
+    }
+
+    public int[] getSavedPlace() {
+        return savedPlace;
     }
 }

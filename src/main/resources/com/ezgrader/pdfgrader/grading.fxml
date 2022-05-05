@@ -25,6 +25,7 @@
                     <Label fx:id="testNameText">CSCI492 SP22 - Example Test</Label>
                 </HBox>
                 <HBox HBox.hgrow="ALWAYS" />
+                <Button fx:id="saveButton" styleClass="fa-icon" onAction="#SaveTest"><text><AwesomeIcon fx:constant="SAVE"/></text></Button>
                 <Button fx:id="doneButton" onAction="#finishedGrading">
                     <graphic><BorderPane>
                         <center>

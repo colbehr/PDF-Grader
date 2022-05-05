@@ -8,7 +8,9 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.function.UnaryOperator;
 import java.util.regex.Matcher;
@@ -89,12 +91,9 @@ public class GradingController {
         // -------------
 
         // Grading setup
-        setCurrentQuestion(0);
-        prevQuestionButton.setDisable(true);
-
-        currentTakenTest = 0;
-        prevTestButton.setDisable(true);
-        loadCurrentTakenTest();
+        int savedPlace[] = workingTest.getSavedPlace();
+        setCurrentQuestion(savedPlace[0]);
+        setCurrentTakenTest(savedPlace[1]);
 
         pointsGivenField.textProperty().addListener((observable, oldValue, newValue) -> {
             double points = Double.parseDouble(newValue);
@@ -165,40 +164,50 @@ public class GradingController {
 
     @FXML
     public void nextTest() {
-        currentTakenTest = Math.min(currentTakenTest + 1, workingTest.getTakenTests().length - 1);
-        loadCurrentTakenTest();
-        if (currentTakenTest == workingTest.getTakenTests().length - 1) {
-            nextTestButton.setDisable(true);
-        }
-        prevTestButton.setDisable(false);
+        setCurrentTakenTest(currentTakenTest + 1);
     }
 
     @FXML
     public void prevTest() {
-        currentTakenTest = Math.max(currentTakenTest - 1, 0);
-        loadCurrentTakenTest();
-        if (currentTakenTest == 0) {
-            prevTestButton.setDisable(true);
-        }
-        nextTestButton.setDisable(false);
+        setCurrentTakenTest(currentTakenTest - 1);
     }
 
     @FXML
     public void nextQuestion() {
         setCurrentQuestion(currentQuestion + 1);
-        if (currentQuestion == workingTest.getQuestions().size() - 1) {
-            nextQuestionButton.setDisable(true);
-        }
-        prevQuestionButton.setDisable(false);
     }
 
     @FXML
     public void prevQuestion() {
         setCurrentQuestion(currentQuestion - 1);
-        if (currentQuestion == 0) {
-            prevQuestionButton.setDisable(true);
+    }
+
+    @FXML
+    public void SaveTest() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json", "*.JSON"));
+        File outFile = fileChooser.showSaveDialog(PDFGrader.getStage().getScene().getWindow());
+        if (outFile != null) {
+            SaveLoad.SaveTest(workingTest, outFile.getPath(), currentQuestion, currentTakenTest);
         }
-        nextQuestionButton.setDisable(false);
+    }
+
+    private void setCurrentTakenTest(int t) {
+        // safe clamped assignment
+        currentTakenTest = Math.min(Math.max(0, t), workingTest.getTakenTests().length - 1);
+        loadCurrentTakenTest();
+        // Ensure safe buttons, including case of only 1 taken test
+        if (currentTakenTest == 0) {
+            nextTestButton.setDisable(false);
+            prevTestButton.setDisable(true);
+        } else {
+            nextTestButton.setDisable(false);
+            prevTestButton.setDisable(false);
+        }
+        if (currentTakenTest == workingTest.getTakenTests().length - 1) {
+            nextTestButton.setDisable(true);
+        }
     }
 
     private void loadCurrentTakenTest() {
@@ -212,13 +221,26 @@ public class GradingController {
     }
 
     private void setCurrentQuestion(int q) {
-        if (workingTest != null && workingTest.getQuestions().size() >= q) {
-            currentQuestion = q;
-            questionNumberText.setText(q + 1 + "");
+        if (workingTest != null) {
+            // safe clamped assignment
+            currentQuestion = Math.min(Math.max(0, q), workingTest.getQuestions().size() - 1);
+            questionNumberText.setText(currentQuestion + 1 + "");
+
+            setCurrentTakenTest(0);
 
             // Update View
             pointsTotalText.setText(workingTest.getQuestions().get(currentQuestion).getPointsPossible() + "");
-            loadCurrentTakenTest();
+            // Ensure safe buttons, including case of only 1 question
+            if (currentQuestion == 0) {
+                nextQuestionButton.setDisable(false);
+                prevQuestionButton.setDisable(true);
+            } else {
+                nextQuestionButton.setDisable(false);
+                prevQuestionButton.setDisable(false);
+            }
+            if (currentQuestion == workingTest.getQuestions().size() - 1) {
+                nextQuestionButton.setDisable(true);
+            }
         }
     }
 

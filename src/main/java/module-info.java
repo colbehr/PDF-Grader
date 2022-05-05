@@ -5,6 +5,7 @@ module com.ezgrader.pdfgrader {
     requires javafx.swing;
     requires org.apache.pdfbox;
     requires java.desktop;
+    requires org.json;
 
 
     opens com.ezgrader.pdfgrader to javafx.fxml;

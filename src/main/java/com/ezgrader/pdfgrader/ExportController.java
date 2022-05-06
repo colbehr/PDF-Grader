@@ -6,9 +6,15 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -71,7 +77,7 @@ public class ExportController {
      * @param event
      */
     @FXML
-    private void exportFiles(ActionEvent event) {
+    private void exportFiles(ActionEvent event) throws IOException {
         if (statisticsPath == null || folderPath == null){
             String errorMessage = "";
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -88,7 +94,52 @@ public class ExportController {
             return;
         }
         System.out.println("Exported statistics");
-        //TODO: export statistics
+        PDDocument statsDoc = new PDDocument();
+        statsDoc.addPage(new PDPage());
+        PDPage pageOne = statsDoc.getPage(0);
+
+        int pageHeight = (int) pageOne.getTrimBox().getHeight();
+        int pageWidth = (int) pageOne.getTrimBox().getWidth();
+
+        PDPageContentStream contentStream = new PDPageContentStream(statsDoc, pageOne);
+
+        //creating table
+        contentStream.setStrokingColor(Color.DARK_GRAY);
+        contentStream.setLineWidth(1);
+
+        int initX = 50;
+        int initY = pageHeight-50;
+        int cellHeight = 30;
+        int cellWidth = 100;
+
+        int colCount = workingTest.getQuestions().size()+2;
+        int rowCount = workingTest.getTakenTests().length;
+
+        for (int i = 1; i <= rowCount; i++) {
+
+            contentStream.beginText();
+            contentStream.newLineAtOffset(initX+10, initY-cellHeight+10);
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 18);
+            //TODO: Figure out a way to label the students correctly
+            contentStream.showText("Student " + i);
+            contentStream.endText();
+
+            for (int j = 1; j <=colCount; j++) {
+                contentStream.addRect(initX, initY, cellWidth, -cellHeight);
+                //TODO: fill in points for each student
+                initX+=cellWidth;
+            }
+            initX = 50;
+            initY -= cellHeight;
+        }
+
+        contentStream.stroke();
+        contentStream.close();
+        statsDoc.save(statisticsPath.toString());
+        statsDoc.close();
+
+
+
         System.out.println("Exported students tests");
         //TODO: export tests
 

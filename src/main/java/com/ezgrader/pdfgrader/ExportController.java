@@ -1,20 +1,24 @@
 package com.ezgrader.pdfgrader;
 
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -142,7 +146,7 @@ public class ExportController {
 
         System.out.println("Exported students tests");
         //TODO: export tests
-
+        exportTests();
         //open dialog, return to home
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Finished Exporting");
@@ -154,6 +158,41 @@ public class ExportController {
             PDFGrader.SwitchScene("home.fxml");
         } catch (IOException e) {
             System.exit(0);
+        }
+    }
+
+    private void exportTests() throws IOException {
+        int testsNumber = 1;
+        //for each student
+        for (TakenTest test: workingTest.getTakenTests()) {
+            System.out.println("Total tests: " + workingTest.getTakenTests().length);
+            System.out.println("Working on: " + testsNumber);
+            //create a new test that is wider than original
+            PDDocument studentTest = new PDDocument();
+            //for each page
+            for (int i = 0; i < workingTest.getPagesPerTest(); i++) {
+                studentTest.addPage(new PDPage());
+                PDPage page = studentTest.getPage(i);
+
+                //contentstream
+                PDPageContentStream contentStream = new PDPageContentStream(studentTest, page);
+
+                //add original image of page to left side
+                System.out.println("Render Page " + (i + (workingTest.getPagesPerTest() * testsNumber - workingTest.getPagesPerTest()))+ " of Original pdf");
+                Image pageRenderedImage = test.getTest().renderPageImage(i + (workingTest.getPagesPerTest() * testsNumber - workingTest.getPagesPerTest()));
+                BufferedImage bufferedImage = SwingFXUtils.fromFXImage(pageRenderedImage, null);
+                PDImageXObject img = LosslessFactory.createFromImage(studentTest, bufferedImage);
+                contentStream.drawImage(img, 0 , 0);
+
+                //for each question on page
+                    //show feedback on right
+
+                contentStream.close();
+
+            }
+            //save file to path
+            studentTest.save(folderPath.toString() + "\\test_" + testsNumber + ".pdf");
+            testsNumber++;
         }
     }
 }

@@ -70,4 +70,9 @@ public class TakenTest {
     public Map<Question, QuestionResult> getQuestionResultMap() {
         return questionResultMap;
     }
+
+    public Test getTest() {
+        return test;
+    }
+
 }

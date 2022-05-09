@@ -182,7 +182,13 @@ public class ExportController {
                 Image pageRenderedImage = test.getTest().renderPageImage(i + (workingTest.getPagesPerTest() * testsNumber - workingTest.getPagesPerTest()));
                 BufferedImage bufferedImage = SwingFXUtils.fromFXImage(pageRenderedImage, null);
                 PDImageXObject img = LosslessFactory.createFromImage(studentTest, bufferedImage);
-                contentStream.drawImage(img, 0 , 0);
+                int scale = 20; // alter this value to set the image size
+                contentStream.setStrokingColor(Color.lightGray);
+                //these magic numbers are 8.5 * 2 by 11 * 2 to get 17 by 22, an int instead of float
+                contentStream.addRect(20-3, 330-3, 17 * scale+6, 22 * scale+6);
+                contentStream.closeAndStroke();
+                contentStream.drawImage(img, 20, 330, 17 * scale , 22 * scale);
+
 
                 //for each question on page
                     //show feedback on right

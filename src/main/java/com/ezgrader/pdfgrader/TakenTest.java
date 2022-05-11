@@ -9,6 +9,7 @@ import java.util.Map;
 public class TakenTest {
     private class QuestionResult {
         private double pointsGiven;
+
         private ObservableList<Feedback> feedbacks;
 
         private QuestionResult(double pointsGiven) {

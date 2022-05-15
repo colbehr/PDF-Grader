@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
 
@@ -200,6 +201,7 @@ public class ExportController {
                     if (q.getPageNum() == i + 1) {
                         int spacer = (pageQuestionNumber) * 10;
                         pageQuestionNumber++;
+                        //generate box does the work of creating a feedback box with all the necessary info
                         yOffset = yOffset - generateBox(contentStream, 380, 772 - yOffset - spacer,220, test, q);
                     }
                 }
@@ -212,20 +214,94 @@ public class ExportController {
         }
     }
 
+    /**
+     * Everything involved with generating box for feedback
+     * @param contentStream
+     * @param x
+     * @param y
+     * @param width
+     * @param test
+     * @param question
+     * @return height taken by box, so we can move the next box below it
+     * @throws IOException
+     */
     private int generateBox(PDPageContentStream contentStream, int x, int y, int width, TakenTest test, Question question) throws IOException {
-        int height = -40;
-        contentStream.addRect(x, y, width, height);
-        contentStream.closeAndStroke();
+        int boxHeight = -40;
+        ArrayList<String> lines = new ArrayList<>();
         contentStream.beginText();
         contentStream.setFont(PDType1Font.HELVETICA, 10);
         contentStream.newLineAtOffset(x + 3, y - 10 - 3);
         contentStream.setLeading(13F);
-        contentStream.showText("Question: " + question.getQNum());
+
+        //sum all feedbacks for a point total on the question, this could be refactored into takenTest
+        float totalPoints = 0;
+        for (Feedback f:test.GetQuestionFeedbacks(question.getQNum() - 1)) {
+            totalPoints += Float.parseFloat(f.getPoints());
+        }
+
+        //initial info line
+        contentStream.showText("Question: " + question.getQNum() + "           " + totalPoints + "/" + question.getPointsPossible());
         contentStream.newLine();
-        //TODO: have to be able to handle multiple explanations per question
-        contentStream.showText(test.GetQuestionFeedbacks(question.getQNum() - 1).get(0).getExplanation());
+
+        //loops through each feedback on the question and splits it into lines
+        for (int i = 0; i < test.GetQuestionFeedbacks(question.getQNum() - 1).size(); i++) {
+            lines.addAll(splitString("(" + test.GetQuestionFeedbacks(question.getQNum() - 1).get(i).getPoints()+") " + test.GetQuestionFeedbacks(question.getQNum() - 1).get(i).getExplanation(), (float) width-3));
+            lines.add(" ");
+        }
+        //loops through lines and prints them to the page, expanding the box as we go
+        for (String s: lines) {
+            contentStream.showText(s);
+            contentStream.newLine();
+            boxHeight -= 10;
+        }
         contentStream.endText();
-        return height;
+        contentStream.addRect(x, y, width, boxHeight);
+        contentStream.closeAndStroke();
+        return boxHeight;
+    }
+
+    /**
+     * Splits string based on width
+     * https://stackoverflow.com/questions/19635275/how-to-generate-multiple-lines-in-pdf-using-apache-pdfbox
+     * @param text The text that should be split
+     * @param width The width of the box
+     * @return Arraylist of the split strings
+     * @throws IOException
+     */
+    private ArrayList<String> splitString(String text, float width) throws IOException {
+        ArrayList<String> lines = new ArrayList<String>();
+        int lastSpace = -1;
+        while (text.length() > 0)
+        {
+            int spaceIndex = text.indexOf(' ', lastSpace + 1);
+            if (spaceIndex < 0)
+                spaceIndex = text.length();
+            String subString = text.substring(0, spaceIndex);
+            PDType1Font pdfFont = PDType1Font.HELVETICA;
+            float size = 10 * pdfFont.getStringWidth(subString) / 1000;
+            System.out.printf("'%s' - %f of %f\n", subString, size, width);
+            if (size > width)
+            {
+                if (lastSpace < 0)
+                    lastSpace = spaceIndex;
+                subString = text.substring(0, lastSpace);
+                lines.add(subString);
+                text = text.substring(lastSpace).trim();
+                System.out.printf("'%s' is line\n", subString);
+                lastSpace = -1;
+            }
+            else if (spaceIndex == text.length())
+            {
+                lines.add(text);
+                System.out.printf("'%s' is line\n", text);
+                text = "";
+            }
+            else
+            {
+                lastSpace = spaceIndex;
+            }
+        }
+        return lines;
     }
 
 

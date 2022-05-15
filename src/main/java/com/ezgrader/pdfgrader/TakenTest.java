@@ -21,7 +21,7 @@ public class TakenTest {
     private Test test;
 
     private Map<Question, QuestionResult> questionResultMap;
-
+    //TODO: maybe sum all the question feedback points here instead of the export controller
     public TakenTest(Test test) {
         this.test = test;
         questionResultMap = new HashMap<>();

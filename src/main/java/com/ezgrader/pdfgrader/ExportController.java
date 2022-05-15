@@ -279,7 +279,7 @@ public class ExportController {
             String subString = text.substring(0, spaceIndex);
             PDType1Font pdfFont = PDType1Font.HELVETICA;
             float size = 10 * pdfFont.getStringWidth(subString) / 1000;
-            System.out.printf("'%s' - %f of %f\n", subString, size, width);
+//            System.out.printf("'%s' - %f of %f\n", subString, size, width);
             if (size > width)
             {
                 if (lastSpace < 0)
@@ -287,13 +287,13 @@ public class ExportController {
                 subString = text.substring(0, lastSpace);
                 lines.add(subString);
                 text = text.substring(lastSpace).trim();
-                System.out.printf("'%s' is line\n", subString);
+//                System.out.printf("'%s' is line\n", subString);
                 lastSpace = -1;
             }
             else if (spaceIndex == text.length())
             {
                 lines.add(text);
-                System.out.printf("'%s' is line\n", text);
+//                System.out.printf("'%s' is line\n", text);
                 text = "";
             }
             else

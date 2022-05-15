@@ -6,7 +6,7 @@
 
     <groupId>com.ezgrader</groupId>
     <artifactId>pdfgrader</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>Pre-Alpha_0.9</version>
     <name>pdfgrader</name>
 
     <properties>

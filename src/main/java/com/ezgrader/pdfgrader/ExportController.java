@@ -40,7 +40,7 @@ public class ExportController {
 
 
     /**
-     * opens a browser to find a folder to put tests into
+     * Opens a browser to find a folder to put tests into
      *
      * @param event
      */
@@ -80,7 +80,7 @@ public class ExportController {
     }
 
     /**
-     * exports files when export button is pressed
+     * Exports files when export button is pressed
      *
      * @param event
      */
@@ -147,7 +147,7 @@ public class ExportController {
         statsDoc.close();
 
 
-        //TODO: export tests
+        //TODO: catch error when the tests cant be fully exported because of file replacement issue, show error on screen
         exportTests();
         System.out.println("Exported students tests");
         //open dialog, return to home
@@ -164,6 +164,10 @@ public class ExportController {
         }
     }
 
+    /**
+     * Exports the tests to folderPath
+     * @throws IOException
+     */
     private void exportTests() throws IOException {
         int testsNumber = 1;
         //for each student
@@ -202,7 +206,7 @@ public class ExportController {
                         int spacer = (pageQuestionNumber) * 10;
                         pageQuestionNumber++;
                         //generate box does the work of creating a feedback box with all the necessary info
-                        yOffset = yOffset - generateBox(contentStream, 380, 772 - yOffset - spacer,220, test, q);
+                        yOffset = yOffset - generateBox(contentStream, 380, 772 - yOffset - spacer, 220, test, q);
                     }
                 }
 
@@ -216,6 +220,7 @@ public class ExportController {
 
     /**
      * Everything involved with generating box for feedback
+     *
      * @param contentStream
      * @param x
      * @param y
@@ -235,7 +240,7 @@ public class ExportController {
 
         //sum all feedbacks for a point total on the question, this could be refactored into takenTest
         float totalPoints = 0;
-        for (Feedback f:test.GetQuestionFeedbacks(question.getQNum() - 1)) {
+        for (Feedback f : test.GetQuestionFeedbacks(question.getQNum() - 1)) {
             totalPoints += Float.parseFloat(f.getPoints());
         }
 
@@ -245,11 +250,11 @@ public class ExportController {
 
         //loops through each feedback on the question and splits it into lines
         for (int i = 0; i < test.GetQuestionFeedbacks(question.getQNum() - 1).size(); i++) {
-            lines.addAll(splitString("(" + test.GetQuestionFeedbacks(question.getQNum() - 1).get(i).getPoints()+") " + test.GetQuestionFeedbacks(question.getQNum() - 1).get(i).getExplanation(), (float) width-3));
+            lines.addAll(splitString("(" + test.GetQuestionFeedbacks(question.getQNum() - 1).get(i).getPoints() + ") " + test.GetQuestionFeedbacks(question.getQNum() - 1).get(i).getExplanation(), (float) width - 3));
             lines.add(" ");
         }
         //loops through lines and prints them to the page, expanding the box as we go
-        for (String s: lines) {
+        for (String s : lines) {
             contentStream.showText(s);
             contentStream.newLine();
             boxHeight -= 10;
@@ -261,9 +266,10 @@ public class ExportController {
     }
 
     /**
-     * Splits string based on width
+     * Splits string to arraylist based on width of string
      * https://stackoverflow.com/questions/19635275/how-to-generate-multiple-lines-in-pdf-using-apache-pdfbox
-     * @param text The text that should be split
+     *
+     * @param text  The text that should be split
      * @param width The width of the box
      * @return Arraylist of the split strings
      * @throws IOException
@@ -271,38 +277,33 @@ public class ExportController {
     private ArrayList<String> splitString(String text, float width) throws IOException {
         ArrayList<String> lines = new ArrayList<String>();
         int lastSpace = -1;
-        while (text.length() > 0)
-        {
+        while (text.length() > 0) {
             int spaceIndex = text.indexOf(' ', lastSpace + 1);
-            if (spaceIndex < 0)
+            if (spaceIndex < 0) {
                 spaceIndex = text.length();
+            }
             String subString = text.substring(0, spaceIndex);
             PDType1Font pdfFont = PDType1Font.HELVETICA;
             float size = 10 * pdfFont.getStringWidth(subString) / 1000;
-//            System.out.printf("'%s' - %f of %f\n", subString, size, width);
-            if (size > width)
-            {
-                if (lastSpace < 0)
+            //System.out.printf("'%s' - %f of %f\n", subString, size, width);
+            if (size > width) {
+                if (lastSpace < 0) {
                     lastSpace = spaceIndex;
+                }
                 subString = text.substring(0, lastSpace);
                 lines.add(subString);
                 text = text.substring(lastSpace).trim();
-//                System.out.printf("'%s' is line\n", subString);
+                //System.out.printf("'%s' is line\n", subString);
                 lastSpace = -1;
-            }
-            else if (spaceIndex == text.length())
-            {
+            } else if (spaceIndex == text.length()) {
                 lines.add(text);
-//                System.out.printf("'%s' is line\n", text);
+                //System.out.printf("'%s' is line\n", text);
                 text = "";
-            }
-            else
-            {
+            } else {
                 lastSpace = spaceIndex;
             }
         }
         return lines;
     }
-
 
 }

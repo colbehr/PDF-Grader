@@ -15,20 +15,20 @@ import java.util.ResourceBundle;
 
 public class PDFGrader extends Application {
 
+    private static final int MIN_WIDTH = 300;
+    private static final int MIN_HEIGHT = 500;
+
     public static Test workingTest;
     private static Stage stage;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        ResourceBundle resources = ResourceBundle.getBundle("fa.fontawesome");
-        GridPane root = FXMLLoader.load(getClass().getResource("/com/ezgrader/pdfgrader/home.fxml"), resources);
-        MakeStretchy(root);
-
-        primaryStage.setTitle("PDF Grader");
-        primaryStage.setScene(new Scene(root));
-        primaryStage.sizeToScene();
-        primaryStage.show();
         stage = primaryStage;
+        stage.setTitle("PDF Grader");
+        stage.setMinWidth(MIN_WIDTH);
+        stage.setMinHeight(MIN_HEIGHT);
+        SwitchScene("home.fxml", false);
+        primaryStage.show();
     }
 
     public static void main(String[] args) {
@@ -36,8 +36,11 @@ public class PDFGrader extends Application {
         launch(args);
     }
 
+    /**
+     * Allows a scene with the given root to be fully resizable
+     * @param root
+     */
     public static void MakeStretchy(GridPane root) {
-        // Allow vertical stretch
         ColumnConstraints col = new ColumnConstraints();
         col.setPercentWidth(100);
         root.getColumnConstraints().add(col);
@@ -46,10 +49,29 @@ public class PDFGrader extends Application {
         root.getRowConstraints().add(row);
     }
 
-    public static void SwitchScene(String sceneName) throws IOException {
+    /**
+     * Switches the application stage to display a new scene
+     * @param sceneName
+     * @param maintainSize
+     * @throws IOException
+     */
+    public static void SwitchScene(String sceneName, boolean maintainSize) throws IOException {
         GridPane newRoot = FXMLLoader.load(PDFGrader.class.getResource(sceneName));
         MakeStretchy(newRoot);
+
+        if (maintainSize || stage.isMaximized()) {
+            // force maintaining window size
+            newRoot.setMinSize(stage.getWidth(), stage.getHeight());
+            newRoot.setMaxSize(stage.getWidth(), stage.getHeight());
+        }
         stage.setScene(new Scene(newRoot));
+        // set back
+        newRoot.setMinSize(MIN_WIDTH, MIN_HEIGHT);
+        newRoot.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+    }
+
+    public static void SwitchScene(String sceneName) throws IOException {
+        SwitchScene(sceneName, true);
     }
 
     public static Stage getStage() {

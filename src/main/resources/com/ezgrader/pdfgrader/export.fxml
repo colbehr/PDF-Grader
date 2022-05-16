@@ -35,10 +35,4 @@
         <Separator styleClass="vert-spacer" />
         <Button id="newButton" mnemonicParsing="false" onAction="#exportFiles" text="Export" />
     </VBox>
-   <columnConstraints>
-      <ColumnConstraints />
-   </columnConstraints>
-   <rowConstraints>
-      <RowConstraints />
-   </rowConstraints>
 </GridPane>

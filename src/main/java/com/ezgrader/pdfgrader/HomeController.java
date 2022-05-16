@@ -14,7 +14,7 @@ public class HomeController {
 
     @FXML
     private void GoToSetup() throws IOException {
-        PDFGrader.SwitchScene("setup.fxml");
+        PDFGrader.SwitchScene("setup.fxml", false);
     }
 
     @FXML

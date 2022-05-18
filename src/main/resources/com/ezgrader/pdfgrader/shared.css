@@ -52,7 +52,7 @@
     -fx-font-size: 12pt;
 }
 
-.button {
+.button, .small-button {
     -fx-font-family: "Quicksand Bold";
     -fx-font-size: 14pt;
     -fx-text-fill: white;
@@ -60,9 +60,16 @@
     -fx-padding: 8px;
     -fx-pref-width: 200px;
     -fx-max-width: 250px;
+    -fx-border-radius: 4px;
+    -fx-text-alignment: center;
 }
 .button:hover {
     -fx-background-color: #404e7c;
+}
+
+.small-button {
+    -fx-padding: 1px;
+    -fx-pref-width: 15px;
 }
 
 .noheader .column-header-background {

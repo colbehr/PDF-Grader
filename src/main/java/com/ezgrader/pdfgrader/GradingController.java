@@ -1,6 +1,7 @@
 package com.ezgrader.pdfgrader;
 
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,9 +10,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.util.Callback;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.UnaryOperator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,6 +43,8 @@ public class GradingController {
     private TextField feedbackNewPoints;
     @FXML
     private TextField feedbackNewDesc;
+    @FXML
+    private TableView reuseFeedbackTable;
     @FXML
     private Pagination pagination;
     @FXML
@@ -106,11 +112,13 @@ public class GradingController {
         });
 
         autoTotalCheckbox.setSelected(true);
+        ToggleAutoTotal();
 
         // One-time view updates
         testNameText.setText(workingTest.getName());
         questionsTotalText.setText(workingTest.getQuestions().size() + "");
         totalTestsText.setText(workingTest.getTakenTests().length + "");
+        addButtonToReuseFeedbacksTable();
     }
 
     @FXML
@@ -143,9 +151,13 @@ public class GradingController {
     private void addFeedback() {
         if (feedbackNewDesc.getText().equals("")) return;
 
+        addFeedback(new Feedback(feedbackNewPoints.getText(), feedbackNewDesc.getText()));
+    }
+
+    private void addFeedback(Feedback f) {
         feedbackTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        feedbacks.add(new Feedback(feedbackNewPoints.getText(), feedbackNewDesc.getText()));
+        feedbacks.add(f);
 
         feedbackNewPoints.setText("");
         feedbackNewDesc.setText("");
@@ -220,6 +232,8 @@ public class GradingController {
         feedbackTable.setItems(feedbacks);
         currentTestText.setText(currentTakenTest + 1 + "");
 
+        getUsedFeedbacks();
+
         UpdatePagination();
     }
 
@@ -247,6 +261,21 @@ public class GradingController {
         }
     }
 
+    private void getUsedFeedbacks() {
+        ObservableList<Feedback> usedFeedbacks = FXCollections.observableArrayList();
+        Set<String> usedFeedbackExplanations = new HashSet<>();
+        for (TakenTest t: workingTest.getTakenTests()) {
+            for (Feedback f : t.GetQuestionFeedbacks(currentQuestion)) {
+                System.out.println(f.getExplanation());
+                if (!usedFeedbackExplanations.contains(f.getExplanation())) {
+                    usedFeedbacks.add(f);
+                }
+                usedFeedbackExplanations.add(f.getExplanation());
+            }
+        }
+        reuseFeedbackTable.setItems(usedFeedbacks);
+    }
+
     private void UpdatePagination() {
         //set the current page number to the question's page number
         int questionPage = workingTest.getQuestions().get(currentQuestion).getPageNum() - 1;
@@ -258,5 +287,44 @@ public class GradingController {
     public void finishedGrading(ActionEvent event) throws IOException {
         //finish grading and go to export page
         PDFGrader.SwitchScene("export.fxml");
+    }
+
+    // Thanks to https://riptutorial.com/javafx/example/27946/add-button-to-tableview
+    private void addButtonToReuseFeedbacksTable() {
+        TableColumn<Feedback, Void> colBtn = new TableColumn("Add");
+
+        Callback<TableColumn<Feedback, Void>, TableCell<Feedback, Void>> cellFactory = new Callback<TableColumn<Feedback, Void>, TableCell<Feedback, Void>>() {
+            @Override
+            public TableCell<Feedback, Void> call(final TableColumn<Feedback, Void> param) {
+                final TableCell<Feedback, Void> cell = new TableCell<Feedback, Void>() {
+
+                    private final Button btn = new Button("+");
+
+                    {
+                        btn.getStyleClass().add("small-button");
+                        btn.setOnAction((ActionEvent event) -> {
+                            Feedback f = getTableView().getItems().get(getIndex());
+                            if (!feedbacks.contains(f)) {
+                                addFeedback(f);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(btn);
+                        }
+                    }
+                };
+                return cell;
+            }
+        };
+        colBtn.setCellFactory(cellFactory);
+        reuseFeedbackTable.getColumns().add(colBtn);
+
     }
 }

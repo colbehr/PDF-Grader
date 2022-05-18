@@ -78,6 +78,22 @@
                         </TableColumn>
                     </columns>
                 </TableView>
+                <Label styleClass="h3">Reuse Other Feedback</Label>
+                <TableView fx:id="reuseFeedbackTable" styleClass="prettyTable, noheader" onKeyPressed="#deleteFeedback">
+                    <placeholder><Label text="No Feedbacks written for this question"/></placeholder>
+                    <columns>
+                        <TableColumn text="Points" style="-fx-pref-width: 40px; -fx-alignment: baseline-center; -fx-font-family: 'Quicksand Bold';">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="points" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Explanation" style="-fx-alignment: baseline-left">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="Explanation" />
+                            </cellValueFactory>
+                        </TableColumn>
+                    </columns>
+                </TableView>
                 <Separator styleClass="vert-spacer"></Separator>
             </VBox>
             <HBox id="grading-bottom">

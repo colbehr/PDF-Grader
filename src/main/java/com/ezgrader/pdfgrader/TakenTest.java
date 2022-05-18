@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class TakenTest {
@@ -19,6 +20,7 @@ public class TakenTest {
 
     private Test test;
 
+    public int total;
     private Map<Question, QuestionResult> questionResultMap;
 
     public TakenTest(Test test) {
@@ -65,6 +67,17 @@ public class TakenTest {
 
     public ObservableList<Feedback> GetQuestionFeedbacks(int questionNumber) {
         return GetQuestionFeedbacks(test.getQuestions().get(questionNumber));
+    }
+
+    public double GetTotalPoints() {
+        double total = 0;
+        Iterator questionMapIterator = questionResultMap.entrySet().iterator();
+        while (questionMapIterator.hasNext()) {
+            Map.Entry mapElement = (Map.Entry) questionMapIterator.next();
+            Question question = (Question) mapElement.getKey();
+            total += questionResultMap.get(question).pointsGiven;
+        }
+        return total;
     }
 
     public Map<Question, QuestionResult> getQuestionResultMap() {

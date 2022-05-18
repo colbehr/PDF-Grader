@@ -71,6 +71,7 @@ public class Test {
         for (int i = 0; i < takenTests.length; i++) {
             takenTests[i] = new TakenTest(this);
         }
+
     }
 
     /**

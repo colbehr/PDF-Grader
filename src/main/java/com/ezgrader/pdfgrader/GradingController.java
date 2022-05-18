@@ -102,6 +102,7 @@ public class GradingController {
                 points = maxPoints;
                 pointsGivenField.setText(points + "");
             }
+
             workingTest.getTakenTests()[currentTakenTest].GradeQuestion(currentQuestion, points);
         });
 

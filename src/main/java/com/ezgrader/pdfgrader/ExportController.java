@@ -112,33 +112,40 @@ public class ExportController {
         int cellHeight = 30;
         int cellWidth = 100;
 
-        int colCount = workingTest.getQuestions().size()+2;
         int rowCount = workingTest.getTakenTests().length;
 
+        //getTakenTests(); Probably gonna be useful
+        //TODO: add "Student name" and "total" labels
         for (int i = 1; i <= rowCount; i++) {
-
             contentStream.beginText();
-            contentStream.newLineAtOffset(initX+10, initY-cellHeight+10);
+            contentStream.newLineAtOffset(initX + 10, initY - cellHeight + 10);
             contentStream.setFont(PDType1Font.TIMES_ROMAN, 18);
             //TODO: Figure out a way to label the students correctly
             contentStream.showText("Student " + i);
             contentStream.endText();
 
-            for (int j = 1; j <=colCount; j++) {
+            for (int j = 1; j <= 2; j++) {
                 contentStream.addRect(initX, initY, cellWidth, -cellHeight);
-                //TODO: fill in points for each student
-                initX+=cellWidth;
+                initX += cellWidth;
+                if (j == 2) {
+                    double totalPoints = workingTest.getTakenTests()[i - 1].GetTotalPoints();
+                    contentStream.beginText();
+                    contentStream.newLineAtOffset(initX + 10 - cellWidth, initY - cellHeight + 10);
+                    contentStream.setFont(PDType1Font.TIMES_ROMAN, 18);
+                    contentStream.showText(String.valueOf(totalPoints));
+                    contentStream.endText();
+                }
             }
             initX = 50;
             initY -= cellHeight;
         }
 
+        //TODO: seperate table for other stats (mean, median, etc)
+
         contentStream.stroke();
         contentStream.close();
         statsDoc.save(statisticsPath.toString());
         statsDoc.close();
-
-
 
         System.out.println("Exported students tests");
         //TODO: export tests

@@ -54,10 +54,10 @@
                 <Label styleClass="h4">Total Points</Label>
                 <Label styleClass="h4, bubbleNumber" fx:id="totalPoints">0</Label>
             </HBox>
-            <TableView fx:id="questionTable" styleClass="prettyTable" onKeyPressed="#deleteQuestion">
+            <TableView fx:id="questionTable" styleClass="prettyTable">
                 <placeholder><Label text="No Questions yet"/></placeholder>
                 <columns>
-                    <TableColumn fx:id="qNumberCol" text="#">
+                    <TableColumn fx:id="qNumberCol" text="#" style="-fx-font-family: 'Quicksand Bold'">
                         <cellValueFactory>
                             <PropertyValueFactory property="qNum" />
                         </cellValueFactory>

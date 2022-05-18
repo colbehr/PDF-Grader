@@ -126,11 +126,14 @@ public class GradingController {
     private void autoTotal() {
         double total = 0;
         if (feedbacks != null && !feedbacks.isEmpty()) {
-            String firstSign = feedbacks.get(0).getPoints().substring(0,1);
+            String firstSign = feedbacks.get(0).getPoints().length() > 0 ?
+                    feedbacks.get(0).getPoints().substring(0,1) : "+";
             // If the first feedback is subtractive (rather than additive), begin from full points
             total = firstSign.equals("+") ? 0 : workingTest.getQuestions().get(currentQuestion).getPointsPossible();
             for (Feedback feedback : feedbacks) {
-                total += Double.parseDouble(feedback.getPoints().replace("+", ""));
+                if (feedback.getPoints().length() > 0) {
+                    total += Double.parseDouble(feedback.getPoints().replace("+", ""));
+                }
             }
         }
         pointsGivenField.setText(total + "");

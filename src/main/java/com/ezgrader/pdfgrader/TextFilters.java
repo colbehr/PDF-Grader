@@ -7,15 +7,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TextFilters {
+    public static final String intRegex = "(\\d*)";
+    public static final String doubleRegex = "(\\d+)\\.?(\\d)*";
+
     public static TextFormatter GetIntFilter() {
-        return MakeFilter("(\\d*)");
+        return MakeFilter(intRegex);
     }
     public static TextFormatter GetDoubleFilter() {
-        return MakeFilter("(\\d+)\\.?(\\d)*");
+        return MakeFilter(doubleRegex);
     }
 
-    private static TextFormatter MakeFilter(String regex) {
-        UnaryOperator<TextFormatter.Change> numericFilter = c -> {
+    public static TextFormatter MakeFilter(String regex) {
+        UnaryOperator<TextFormatter.Change> filter = c -> {
             if (c.getText().equals("")) return c;
 
             Pattern p = Pattern.compile(regex);
@@ -25,6 +28,6 @@ public class TextFilters {
             }
             return c;
         };
-        return new TextFormatter<>(numericFilter);
+        return new TextFormatter<>(filter);
     }
 }

@@ -1,17 +1,24 @@
 package com.ezgrader.pdfgrader;
 
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
+import javafx.util.Callback;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -41,9 +48,9 @@ public class SetupController {
     @FXML
     private TableColumn qNumberCol;
     @FXML
-    private TableColumn pointsPossibleCol;
+    private TableColumn<Question, Double> pointsPossibleCol;
     @FXML
-    private TableColumn pageNumCol;
+    private TableColumn<Question, Integer> pageNumCol;
     @FXML
     private Button addQuestionButton;
     @FXML
@@ -54,10 +61,8 @@ public class SetupController {
         pagesField.setTextFormatter(TextFilters.GetIntFilter());
         //tests are initially 1 page long
         pagesField.setText(1 + "");
-        questionTable.setEditable(true);
-        pointsPossibleCol.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-        pageNumCol.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        // TODO: Figure out how to call UpdateTotalPoints() on table edit
+
+        setTableEditable();
 
         addQuestionButton.setDisable(true);
         startGradingButton.setDisable(true);
@@ -135,6 +140,11 @@ public class SetupController {
         questionTable.setItems(workingTest.getQuestions());
         UpdateTotalPoints();
 
+        // Focus on new entry
+        //questionTable.requestFocus();
+        questionTable.getSelectionModel().select(questionTable.getItems().size()-1, pointsPossibleCol);
+        questionTable.getFocusModel().focus(questionTable.getItems().size()-1, pointsPossibleCol);
+
         // if at least one question, allow
         startGradingButton.setDisable(false);
     }
@@ -142,27 +152,24 @@ public class SetupController {
 
     /**
      * When the delete key is pressed in the tableView delete the selected question.
-     * @param keyEvent
      */
     @FXML
-    public void deleteQuestion(javafx.scene.input.KeyEvent keyEvent) {
-        // if delete key is pressed,
-        if (keyEvent.getCode() == KeyCode.DELETE) {
-            //delete the currently selected question
-            Question selectedItem = (Question) questionTable.getSelectionModel().getSelectedItem();
-            questionTable.getItems().remove(selectedItem);
+    public void deleteQuestion() {
+        //delete the currently selected question
+        workingTest.getQuestions().remove(questionTable.getSelectionModel().getSelectedItem());
+        System.out.println("DELETE " + questionTable.getSelectionModel().getSelectedIndex());
 
-            //fix the question numbers for each question
-            ObservableList<Question> questions = workingTest.getQuestions();
-            for (int i = 0; i < questions.size(); i++) {
-                questions.get(i).setQNum(i+1);
-            }
-            UpdateTotalPoints();
-            //if there are no questions in the list after the deletion then disable the start button
-            if (workingTest.getQuestions().isEmpty()) {
-                startGradingButton.setDisable(true);
-            }
+        //fix the question numbers for each question
+        ObservableList<Question> questions = workingTest.getQuestions();
+        for (int i = 0; i < questions.size(); i++) {
+            questions.get(i).setQNum(i+1);
         }
+        UpdateTotalPoints();
+        //if there are no questions in the list after the deletion then disable the start button
+        if (workingTest.getQuestions().isEmpty()) {
+            startGradingButton.setDisable(true);
+        }
+        questionTable.refresh();
     }
 
     /**
@@ -185,8 +192,78 @@ public class SetupController {
     private void UpdateTotalPoints() {
         double total = 0;
         for (Object points : questionTable.getItems()) {
-            total += (Double) pointsPossibleCol.getCellObservableValue(points).getValue();
+            total += (Double) pointsPossibleCol.getCellObservableValue((Question) points).getValue();
         }
         totalPoints.setText("" + total);
+    }
+
+    private void setTableEditable() {
+        questionTable.setEditable(true);
+
+        questionTable.setOnKeyPressed(event -> {
+            if (event.getCode().isDigitKey()) {
+                editFocusedCell();
+            } else if (event.getCode() == KeyCode.DELETE) {
+                deleteQuestion();
+            }
+        });
+        questionTable.getFocusModel().focusedCellProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                TablePosition selectedCellPosition = questionTable.getFocusModel().getFocusedCell();
+                Platform.runLater(() -> questionTable.edit(selectedCellPosition.getRow(), selectedCellPosition.getTableColumn()));
+            }
+        });
+        // This is the only property I could find where this triggers at the right
+        // time, seems fine to do
+        questionTable.focusedProperty().addListener(event -> {
+            UpdateTotalPoints();
+        });
+        // use custom editable cells
+        pointsPossibleCol.setCellFactory(EditableTableCell.<Question, Double>forTableColumn(new DoubleStringConverter(), TextFilters.doubleRegex));
+        pageNumCol.setCellFactory(EditableTableCell.<Question, Integer>forTableColumn(new IntegerStringConverter(), TextFilters.intRegex));
+        // No sorting columns except Question Number
+        pointsPossibleCol.setSortable(false);
+        pageNumCol.setSortable(false);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void editFocusedCell() {
+        final TablePosition<Question, ?> focusedCell = (TablePosition<Question, ?>) ((TableView.TableViewFocusModel)questionTable
+                .focusModelProperty().get()).focusedCellProperty().get();
+        questionTable.edit(focusedCell.getRow(), focusedCell.getTableColumn());
+    }
+
+    @SuppressWarnings("unchecked")
+    private void selectPrevious() {
+        if (questionTable.getSelectionModel().isCellSelectionEnabled()) {
+            // in cell selection mode, we have to wrap around, going from
+            // right-to-left, and then wrapping to the end of the previous line
+            TablePosition<Question, ?> pos = questionTable.getFocusModel()
+                    .getFocusedCell();
+            if (pos.getColumn() - 1 >= 0) {
+                // go to previous row
+                questionTable.getSelectionModel().select(pos.getRow(),
+                        getTableColumn(pos.getTableColumn(), -1));
+            } else if (pos.getRow() < questionTable.getItems().size()) {
+                // wrap to end of previous row
+                questionTable.getSelectionModel().select(pos.getRow() - 1,
+                        questionTable.getVisibleLeafColumn(
+                                questionTable.getVisibleLeafColumns().size() - 1));
+            }
+        } else {
+            int focusIndex = questionTable.getFocusModel().getFocusedIndex();
+            if (focusIndex == -1) {
+                questionTable.getSelectionModel().select(questionTable.getItems().size() - 1);
+            } else if (focusIndex > 0) {
+                questionTable.getSelectionModel().select(focusIndex - 1);
+            }
+        }
+    }
+
+    private TableColumn<Question, ?> getTableColumn(
+            final TableColumn<Question, ?> column, int offset) {
+        int columnIndex = questionTable.getVisibleLeafIndex(column);
+        int newColumnIndex = columnIndex + offset;
+        return questionTable.getVisibleLeafColumn(newColumnIndex);
     }
 }

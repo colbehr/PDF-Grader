@@ -141,14 +141,14 @@ public class ExportController {
         //TODO: add new page when row count exceeds certain limit, or at least check if it does this automatically
         for (int i = 1; i <= rowCount; i++) {
             if (tableCounter == 23) {
+                contentStream.close();
                 tableCounter = 1;
                 initX = 50;
                 initY = pageHeight-50;
                 statsDoc.addPage(new PDPage());
                 thisPage = statsDoc.getPage(curPage);
                 curPage++;
-                //contentStream = new PDPageContentStream(statsDoc, thisPage);
-                //TODO: Currently don't understand how to write on a new page using PDFBox
+                contentStream = new PDPageContentStream(statsDoc, thisPage);
             }
             contentStream.beginText();
             contentStream.newLineAtOffset(initX + 10, initY - cellHeight + 10);

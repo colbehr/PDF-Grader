@@ -120,7 +120,6 @@ public class ExportController {
         contentStream.beginText();
         contentStream.newLineAtOffset(initX + 18, initY - cellHeight + 10);
         contentStream.setFont(PDType1Font.TIMES_ROMAN, 18);
-        //TODO: Figure out a way to label the students correctly
         contentStream.showText("Student");
         contentStream.endText();
 
@@ -138,9 +137,9 @@ public class ExportController {
         initX = 50;
         initY -= cellHeight;
 
-        //TODO: add new page when row count exceeds certain limit, or at least check if it does this automatically
         for (int i = 1; i <= rowCount; i++) {
             if (tableCounter == 23) {
+                contentStream.stroke();
                 contentStream.close();
                 tableCounter = 1;
                 initX = 50;

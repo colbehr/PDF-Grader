@@ -96,12 +96,14 @@ public class ExportController {
         System.out.println("Exported statistics");
         PDDocument statsDoc = new PDDocument();
         statsDoc.addPage(new PDPage());
-        PDPage pageOne = statsDoc.getPage(0);
+        int curPage = 0;
+        PDPage thisPage = statsDoc.getPage(curPage);
+        curPage++;
 
-        int pageHeight = (int) pageOne.getTrimBox().getHeight();
-        int pageWidth = (int) pageOne.getTrimBox().getWidth();
+        int pageHeight = (int) thisPage.getTrimBox().getHeight();
+        int pageWidth = (int) thisPage.getTrimBox().getWidth();
 
-        PDPageContentStream contentStream = new PDPageContentStream(statsDoc, pageOne);
+        PDPageContentStream contentStream = new PDPageContentStream(statsDoc, thisPage);
 
         //creating table
         contentStream.setStrokingColor(Color.DARK_GRAY);
@@ -111,12 +113,43 @@ public class ExportController {
         int initY = pageHeight-50;
         int cellHeight = 30;
         int cellWidth = 100;
+        int tableCounter = 1;
 
         int rowCount = workingTest.getTakenTests().length;
 
-        //getTakenTests(); Probably gonna be useful
-        //TODO: add "Student name" and "total" labels
+        contentStream.beginText();
+        contentStream.newLineAtOffset(initX + 18, initY - cellHeight + 10);
+        contentStream.setFont(PDType1Font.TIMES_ROMAN, 18);
+        //TODO: Figure out a way to label the students correctly
+        contentStream.showText("Student");
+        contentStream.endText();
+
+        contentStream.addRect(initX, initY, cellWidth, -cellHeight);
+        initX += cellWidth;
+
+        contentStream.addRect(initX, initY, cellWidth, -cellHeight);
+
+        contentStream.beginText();
+        contentStream.newLineAtOffset(initX + 10, initY - cellHeight + 10);
+        contentStream.setFont(PDType1Font.TIMES_ROMAN, 18);
+        contentStream.showText("Total Score");
+        contentStream.endText();
+
+        initX = 50;
+        initY -= cellHeight;
+
+        //TODO: add new page when row count exceeds certain limit, or at least check if it does this automatically
         for (int i = 1; i <= rowCount; i++) {
+            if (tableCounter == 23) {
+                tableCounter = 1;
+                initX = 50;
+                initY = pageHeight-50;
+                statsDoc.addPage(new PDPage());
+                thisPage = statsDoc.getPage(curPage);
+                curPage++;
+                //contentStream = new PDPageContentStream(statsDoc, thisPage);
+                //TODO: Currently don't understand how to write on a new page using PDFBox
+            }
             contentStream.beginText();
             contentStream.newLineAtOffset(initX + 10, initY - cellHeight + 10);
             contentStream.setFont(PDType1Font.TIMES_ROMAN, 18);
@@ -138,9 +171,10 @@ public class ExportController {
             }
             initX = 50;
             initY -= cellHeight;
+            tableCounter++;
         }
 
-        //TODO: seperate table for other stats (mean, median, etc)
+        //TODO: seperate table for other stats (mean, median, more???)
 
         contentStream.stroke();
         contentStream.close();

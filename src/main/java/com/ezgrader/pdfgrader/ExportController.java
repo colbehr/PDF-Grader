@@ -6,9 +6,15 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -71,7 +77,7 @@ public class ExportController {
      * @param event
      */
     @FXML
-    private void exportFiles(ActionEvent event) {
+    private void exportFiles(ActionEvent event) throws IOException {
         if (statisticsPath == null || folderPath == null){
             String errorMessage = "";
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -88,9 +94,138 @@ public class ExportController {
             return;
         }
         System.out.println("Exported statistics");
-        //TODO: export statistics
+        PDDocument statsDoc = new PDDocument();
+        statsDoc.addPage(new PDPage());
+        int curPage = 0;
+        PDPage thisPage = statsDoc.getPage(curPage);
+        curPage++;
+
+        int pageHeight = (int) thisPage.getTrimBox().getHeight();
+        int pageWidth = (int) thisPage.getTrimBox().getWidth();
+
+        PDPageContentStream contentStream = new PDPageContentStream(statsDoc, thisPage);
+
+        //creating table
+        contentStream.setStrokingColor(Color.DARK_GRAY);
+        contentStream.setLineWidth(1);
+
+        int initX = 50;
+        int initY = pageHeight-50;
+        int cellHeight = 30;
+        int cellWidth = 100;
+        int tableCounter = 1;
+        double pointArray[];
+        pointArray = new double[workingTest.getTakenTests().length];
+        int mean = 0;
+        double median;
+
+        int rowCount = workingTest.getTakenTests().length;
+
+        contentStream.beginText();
+        contentStream.newLineAtOffset(initX + 18, initY - cellHeight + 10);
+        contentStream.setFont(PDType1Font.TIMES_ROMAN, 18);
+        contentStream.showText("Student");
+        contentStream.endText();
+
+        contentStream.addRect(initX, initY, cellWidth, -cellHeight);
+        initX += cellWidth;
+
+        contentStream.addRect(initX, initY, cellWidth, -cellHeight);
+
+        contentStream.beginText();
+        contentStream.newLineAtOffset(initX + 10, initY - cellHeight + 10);
+        contentStream.setFont(PDType1Font.TIMES_ROMAN, 18);
+        contentStream.showText("Total Score");
+        contentStream.endText();
+
+        initX = 50;
+        initY -= cellHeight;
+
+        for (int i = 1; i <= rowCount; i++) {
+            if (tableCounter == 23) {
+                contentStream.stroke();
+                contentStream.close();
+                tableCounter = 1;
+                initX = 50;
+                initY = pageHeight-50;
+                statsDoc.addPage(new PDPage());
+                thisPage = statsDoc.getPage(curPage);
+                curPage++;
+                contentStream = new PDPageContentStream(statsDoc, thisPage);
+            }
+            contentStream.beginText();
+            contentStream.newLineAtOffset(initX + 10, initY - cellHeight + 10);
+            contentStream.setFont(PDType1Font.TIMES_ROMAN, 18);
+            //TODO: Figure out a way to label the students correctly
+            contentStream.showText("Student " + i);
+            contentStream.endText();
+
+            for (int j = 1; j <= 2; j++) {
+                contentStream.addRect(initX, initY, cellWidth, -cellHeight);
+                initX += cellWidth;
+                if (j == 2) {
+                    double totalPoints = workingTest.getTakenTests()[i - 1].GetTotalPoints();
+                    pointArray[i-1] = workingTest.getTakenTests()[i - 1].GetTotalPoints();
+                    mean += totalPoints;
+                    contentStream.beginText();
+                    contentStream.newLineAtOffset(initX + 10 - cellWidth, initY - cellHeight + 10);
+                    contentStream.setFont(PDType1Font.TIMES_ROMAN, 18);
+                    contentStream.showText(String.valueOf(totalPoints));
+                    contentStream.endText();
+                }
+            }
+            initX = 50;
+            initY -= cellHeight;
+            tableCounter++;
+        }
+
+        //TODO: seperate table for other stats (mean, median, more???)
+        contentStream.stroke();
+        contentStream.close();
+        statsDoc.addPage(new PDPage());
+        PDPage overviewPage = statsDoc.getPage(curPage);
+        contentStream = new PDPageContentStream(statsDoc, overviewPage);
+
+        contentStream.beginText();
+        contentStream.newLineAtOffset(initX + 18, initY - cellHeight + 10);
+        contentStream.setFont(PDType1Font.TIMES_ROMAN, 18);
+        contentStream.showText("Mean: " + mean/workingTest.getTakenTests().length);
+        contentStream.endText();
+
+        contentStream.addRect(initX, initY, cellWidth, -cellHeight);
+        initX += cellWidth;
+
+        contentStream.addRect(initX, initY, cellWidth, -cellHeight);
+
+        contentStream.beginText();
+        contentStream.newLineAtOffset(initX + 10, initY - cellHeight + 10);
+        contentStream.setFont(PDType1Font.TIMES_ROMAN, 18);
+
+        sort(pointArray);
+
+//        if (workingTest.getTakenTests().length % 2 == 0) {
+//            median = (pointArray[workingTest.getTakenTests().length/2-1] + pointArray[workingTest.getTakenTests().length/2])/2;
+//        } else {
+//            median = pointArray[(workingTest.getTakenTests().length+1) - 1];
+//        }
+        if(workingTest.getTakenTests().length%2==1)
+        {
+            median=pointArray[(workingTest.getTakenTests().length+1)/2-1];
+        }
+        else
+        {
+            median=(pointArray[workingTest.getTakenTests().length/2-1]+pointArray[workingTest.getTakenTests().length/2])/2;
+        }
+
+        contentStream.showText("Median: " + median);
+        contentStream.endText();
+
+        contentStream.stroke();
+        contentStream.close();
+        statsDoc.save(statisticsPath.toString());
+        statsDoc.close();
+
         System.out.println("Exported students tests");
-        //TODO: export tests
 
         //open dialog, return to home
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -103,6 +238,23 @@ public class ExportController {
             PDFGrader.SwitchScene("home.fxml");
         } catch (IOException e) {
             System.exit(0);
+        }
+    }
+
+    void sort(double arr[]) {
+        double n = arr.length;
+        for (int i = 1; i < n; ++i) {
+            double key = arr[i];
+            int j = i - 1;
+
+            /* Move elements of arr[0..i-1], that are
+               greater than key, to one position ahead
+               of their current position */
+            while (j >= 0 && arr[j] > key) {
+                arr[j + 1] = arr[j];
+                j = j - 1;
+            }
+            arr[j + 1] = key;
         }
     }
 }

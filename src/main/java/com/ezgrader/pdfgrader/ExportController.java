@@ -101,7 +101,28 @@ public class ExportController {
             alert.showAndWait();
             return;
         }
+        exportStats();
         System.out.println("Exported statistics");
+
+        //TODO: catch error when the tests cant be fully exported because of file replacement issue, show error on screen
+        exportTests();
+        System.out.println("Exported students tests");
+
+        //open dialog, return to home
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Finished Exporting");
+        alert.setHeaderText("Files exported.");
+        alert.setContentText("Statistics exported to \n" + statisticsPath.toString() + "\n\nFiles exported to \n" + folderPath.toString());
+        alert.showAndWait();
+
+        try {
+            PDFGrader.SwitchScene("home.fxml");
+        } catch (IOException e) {
+            System.exit(0);
+        }
+    }
+
+    private void exportStats() throws IOException {
         PDDocument statsDoc = new PDDocument();
         statsDoc.addPage(new PDPage());
         int curPage = 0;
@@ -204,7 +225,7 @@ public class ExportController {
         contentStream.addRect(initX, initY, cellWidth, -cellHeight);
         initX += cellWidth;
 
-        contentStream.addRect(initX, initY, cellWidth, -cellHeight);
+        contentStream.addRect(initX, initY, cellWidth+20, -cellHeight);
 
         contentStream.beginText();
         contentStream.newLineAtOffset(initX + 10, initY - cellHeight + 10);
@@ -212,11 +233,11 @@ public class ExportController {
 
         sort(pointArray);
 
-//        if (workingTest.getTakenTests().length % 2 == 0) {
-//            median = (pointArray[workingTest.getTakenTests().length/2-1] + pointArray[workingTest.getTakenTests().length/2])/2;
-//        } else {
-//            median = pointArray[(workingTest.getTakenTests().length+1) - 1];
-//        }
+        //        if (workingTest.getTakenTests().length % 2 == 0) {
+        //            median = (pointArray[workingTest.getTakenTests().length/2-1] + pointArray[workingTest.getTakenTests().length/2])/2;
+        //        } else {
+        //            median = pointArray[(workingTest.getTakenTests().length+1) - 1];
+        //        }
         if(workingTest.getTakenTests().length%2==1)
         {
             median=pointArray[(workingTest.getTakenTests().length+1)/2-1];
@@ -233,24 +254,6 @@ public class ExportController {
         contentStream.close();
         statsDoc.save(statisticsPath.toString());
         statsDoc.close();
-
-
-        //TODO: catch error when the tests cant be fully exported because of file replacement issue, show error on screen
-        exportTests();
-        System.out.println("Exported students tests");
-
-        //open dialog, return to home
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Finished Exporting");
-        alert.setHeaderText("Files exported.");
-        alert.setContentText("Statistics exported to \n" + statisticsPath.toString() + "\n\nFiles exported to \n" + folderPath.toString());
-        alert.showAndWait();
-
-        try {
-            PDFGrader.SwitchScene("home.fxml");
-        } catch (IOException e) {
-            System.exit(0);
-        }
     }
 
     void sort(double arr[]) {

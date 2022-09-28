@@ -23,7 +23,7 @@
 }
 
 .mainContainer {
-    -fx-background-color: linear-gradient(to top right, #71b48d, #B8E0BE);
+    -fx-background-color: linear-gradient(to top right, #f1f1f1, #ffffff);
     -fx-padding: 10px;
     -fx-label-padding: 10px;
     -fx-text-fill: white;
@@ -173,7 +173,7 @@
     -fx-background-color: transparent;
 }
 .prettyTable:focused .table-row-cell:selected {
-    -fx-background-color: #ffffff55;
+    -fx-background-color: #00000033;
     -fx-background-radius: 15px;
 }
 

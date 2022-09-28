@@ -8,9 +8,12 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ResourceBundle;
 
 public class PDFGrader extends Application {
@@ -76,5 +79,20 @@ public class PDFGrader extends Application {
 
     public static Stage getStage() {
         return stage;
+    }
+
+    public static File OpenFileChooser(String title, FileChooser.ExtensionFilter filter) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(filter);
+        fileChooser.setTitle(title);
+        //Set initial directory to users downloads
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator")+ "Downloads"));
+        File file = fileChooser.showOpenDialog(PDFGrader.getStage().getScene().getWindow());
+        return file;
+    }
+
+    public static void SetWorkingTest(Path path) {
+        if (workingTest != null) workingTest.CloseDocument();
+        workingTest = new Test(path);
     }
 }

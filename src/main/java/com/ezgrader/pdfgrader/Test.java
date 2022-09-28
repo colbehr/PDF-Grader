@@ -75,6 +75,17 @@ public class Test {
     }
 
     /**
+     * Closes PDDocument, used when this test is being discarded.
+     */
+    public void CloseDocument() {
+        try {
+            document.close();
+        } catch (IOException e) {
+            System.out.println("Could not close document");
+        }
+    }
+
+    /**
      * Setter for pagesPerTest, set by user.
      * @param pagesPerTest
      */

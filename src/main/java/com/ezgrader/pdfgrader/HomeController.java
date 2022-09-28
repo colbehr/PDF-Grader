@@ -5,6 +5,7 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 public class HomeController {
     @FXML
@@ -14,21 +15,23 @@ public class HomeController {
 
     @FXML
     private void GoToSetup() throws IOException {
-        PDFGrader.SwitchScene("setup.fxml", false);
+        FileChooser.ExtensionFilter pdfFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf", "*.PDF");
+        File pdf = PDFGrader.OpenFileChooser("Choose PDF", pdfFilter);
+
+        if (pdf != null) {
+            PDFGrader.workingTest = new Test(Paths.get(pdf.getPath()));
+            PDFGrader.SwitchScene("setup.fxml", false);
+        }
     }
 
     @FXML
     private void OpenTest() throws IOException {
-        FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter jsonFilter = new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json", "*.JSON");
-        fileChooser.getExtensionFilters().add(jsonFilter);
-        fileChooser.setTitle("Choose Previously Created Test");
         //Set initial directory to users downloads
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator")+ "Downloads"));
-        File testFile = fileChooser.showOpenDialog(PDFGrader.getStage().getScene().getWindow());
+        File testFile = PDFGrader.OpenFileChooser("Choose Previously Created Test", jsonFilter);
         if (testFile != null) {
             PDFGrader.workingTest = SaveLoad.LoadTest(testFile);
-            PDFGrader.SwitchScene("grading.fxml");
+            PDFGrader.SwitchScene("grading.fxml", false);
         }
     }
 }

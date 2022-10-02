@@ -14,6 +14,7 @@ import javafx.util.Callback;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.UnaryOperator;
@@ -76,13 +77,15 @@ public class GradingController {
 
         // For feedback points, allow + or - followed by a decimal number
         UnaryOperator<TextFormatter.Change> filter = c -> {
-            if (c.getText().equals("")) return c;
+            if (c.getText().equals("")) {
+                return c;
+            }
             String patternString = "([+-]?)((\\d+)\\.?(\\d)*)?";
             Pattern p = Pattern.compile(patternString);
             Matcher m = p.matcher(c.getControlNewText());
             if (!m.matches()) {
                 c.setText("");
-            } else if (((TextField)c.getControl()).getText().equals("")) {
+            } else if (((TextField) c.getControl()).getText().equals("")) {
                 Pattern p2 = Pattern.compile("[0-9]");
                 Matcher m2 = p2.matcher(c.getText());
                 if (m2.matches()) {
@@ -136,7 +139,7 @@ public class GradingController {
         double total = 0;
         if (feedbacks != null && !feedbacks.isEmpty()) {
             String firstSign = feedbacks.get(0).getPoints().length() > 0 ?
-                    feedbacks.get(0).getPoints().substring(0,1) : "+";
+                    feedbacks.get(0).getPoints().substring(0, 1) : "+";
             // If the first feedback is subtractive (rather than additive), begin from full points
             total = firstSign.equals("+") ? 0 : workingTest.getQuestions().get(currentQuestion).getPointsPossible();
             for (Feedback feedback : feedbacks) {
@@ -150,7 +153,9 @@ public class GradingController {
 
     @FXML
     private void addFeedback() {
-        if (feedbackNewDesc.getText().equals("")) return;
+        if (feedbackNewDesc.getText().equals("")) {
+            return;
+        }
 
         addFeedback(new Feedback(feedbackNewPoints.getText(), feedbackNewDesc.getText()));
     }
@@ -165,7 +170,9 @@ public class GradingController {
 
         feedbackNewPoints.requestFocus();
 
-        if (autoTotalCheckbox.isSelected()) autoTotal();
+        if (autoTotalCheckbox.isSelected()) {
+            autoTotal();
+        }
     }
 
     @FXML
@@ -174,7 +181,9 @@ public class GradingController {
             Feedback selectedItem = (Feedback) feedbackTable.getSelectionModel().getSelectedItem();
             feedbackTable.getItems().remove(selectedItem);
 
-            if (autoTotalCheckbox.isSelected()) autoTotal();
+            if (autoTotalCheckbox.isSelected()) {
+                autoTotal();
+            }
         }
     }
 
@@ -202,10 +211,52 @@ public class GradingController {
     public void SaveTest() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json", "*.JSON"));
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("JSON Files", "*.json", "*.JSON"));
+        //get parent folder of original pdf
+        File f = new File(workingTest.getPath().toFile().getAbsoluteFile().toString());
+        String path = f.getParentFile().getAbsolutePath();
+        String currentPath = Paths.get(path).toAbsolutePath().normalize().toString();
+        //set initial folder to current pdf directory
+        fileChooser.setInitialDirectory(new File(currentPath));
         File outFile = fileChooser.showSaveDialog(PDFGrader.getStage().getScene().getWindow());
         if (outFile != null) {
             SaveLoad.SaveTest(workingTest, outFile.getPath(), currentQuestion, currentTakenTest);
+        }
+    }
+
+    @FXML
+    public void SaveTestWithoutDialog() {
+        //get parent folder of original pdf
+        File f = new File(workingTest.getPath().toFile().getAbsoluteFile().toString());
+        String path = removeExtention(f.getAbsolutePath()) + ".json";
+        System.out.println("Saved: " + path);
+        String currentPath = Paths.get(path).toAbsolutePath().normalize().toString() + "";
+        //set initial folder to current pdf directory
+        SaveLoad.SaveTest(workingTest, currentPath, currentQuestion, currentTakenTest);
+    }
+
+    // https://stackoverflow.com/questions/3449218/remove-filename-extension-in-java
+    public static String removeExtention(String filePath) {
+        // These first few lines the same as Justin's
+        File f = new File(filePath);
+
+        // if it's a directory, don't remove the extention
+        if (f.isDirectory()) {
+            return filePath;
+        }
+
+        String name = f.getName();
+
+        // Now we know it's a file - don't need to do any special hidden
+        // checking or contains() checking because of:
+        final int lastPeriodPos = name.lastIndexOf('.');
+        if (lastPeriodPos <= 0) {
+            // No period after first character - return name as it was passed in
+            return filePath;
+        } else {
+            // Remove the last period and everything after it
+            File renamed = new File(f.getParent(), name.substring(0, lastPeriodPos));
+            return renamed.getPath();
         }
     }
 
@@ -265,7 +316,7 @@ public class GradingController {
     private void getUsedFeedbacks() {
         ObservableList<Feedback> usedFeedbacks = FXCollections.observableArrayList();
         Set<String> usedFeedbackExplanations = new HashSet<>();
-        for (TakenTest t: workingTest.getTakenTests()) {
+        for (TakenTest t : workingTest.getTakenTests()) {
             for (Feedback f : t.GetQuestionFeedbacks(currentQuestion)) {
                 System.out.println(f.getExplanation());
                 if (!usedFeedbackExplanations.contains(f.getExplanation())) {
@@ -286,6 +337,8 @@ public class GradingController {
     }
 
     public void finishedGrading(ActionEvent event) throws IOException {
+        //save the file before going to export, so we can go back if needed.
+        SaveTestWithoutDialog();
         //finish grading and go to export page
         PDFGrader.SwitchScene("export.fxml");
     }

@@ -218,6 +218,7 @@ public class GradingController {
         String currentPath = Paths.get(path).toAbsolutePath().normalize().toString();
         //set initial folder to current pdf directory
         fileChooser.setInitialDirectory(new File(currentPath));
+        fileChooser.setInitialFileName(workingTest.getName() + ".json");
         File outFile = fileChooser.showSaveDialog(PDFGrader.getStage().getScene().getWindow());
         if (outFile != null) {
             SaveLoad.SaveTest(workingTest, outFile.getPath(), currentQuestion, currentTakenTest);
@@ -318,7 +319,6 @@ public class GradingController {
         Set<String> usedFeedbackExplanations = new HashSet<>();
         for (TakenTest t : workingTest.getTakenTests()) {
             for (Feedback f : t.GetQuestionFeedbacks(currentQuestion)) {
-                System.out.println(f.getExplanation());
                 if (!usedFeedbackExplanations.contains(f.getExplanation())) {
                     usedFeedbacks.add(f);
                 }

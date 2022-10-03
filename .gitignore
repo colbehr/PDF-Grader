@@ -68,3 +68,6 @@ crashlytics.properties
 crashlytics-build.properties
 
 # Created by .ignore support plugin (hsz.mobi)
+
+# recents file, will likely find a better spot and be unneccesary later
+pdfgrader-recents.txt

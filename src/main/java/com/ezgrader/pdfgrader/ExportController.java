@@ -52,8 +52,10 @@ public class ExportController {
         //Set initial directory to users Desktop
         folderChooser.setInitialDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
         File pdf = folderChooser.showDialog(((Node) event.getSource()).getScene().getWindow());
-        folderPath = Paths.get(pdf.getPath());
-        folderPathText.setText(folderPath.toString());
+        if (pdf != null) {
+            folderPath = Paths.get(pdf.getPath());
+            folderPathText.setText(folderPath.toString());
+        }
     }
 
     /**
@@ -75,8 +77,10 @@ public class ExportController {
             fileChooser.setInitialFileName("grade_statistics.pdf");
         }
         File pdf = fileChooser.showSaveDialog(((Node) event.getSource()).getScene().getWindow());
-        statisticsPath = Paths.get(pdf.getPath());
-        filePathText.setText(statisticsPath.toString());
+        if (pdf != null) {
+            statisticsPath = Paths.get(pdf.getPath());
+            filePathText.setText(statisticsPath.toString());
+        }
     }
 
     /**

@@ -150,7 +150,7 @@ public class EditableTableCell<S, T> extends TextFieldTableCell<S, T> {
                 event.consume();
             } else if (event.getCode() == KeyCode.TAB) {
                 getTableView().requestFocus();
-                getTableView().getFocusModel().focusRightCell();
+                getTableView().getFocusModel().focusBelowCell();
                 event.consume();
             }
         });

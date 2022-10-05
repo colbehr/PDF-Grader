@@ -1,24 +1,15 @@
 package com.ezgrader.pdfgrader;
 
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
-import javafx.util.Callback;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -67,7 +58,7 @@ public class SetupController {
         addQuestionButton.setDisable(true);
         startGradingButton.setDisable(true);
 
-        browseForPDF();
+        setNewPDF(workingTest.getPath().toFile());
     }
 
     /**
@@ -76,21 +67,18 @@ public class SetupController {
      */
     @FXML
     private void browseForPDF() {
-        //open a FileChooser when ChoosePDF is clicked
-        FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter pdfFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf", "*.PDF");
-        fileChooser.getExtensionFilters().add(pdfFilter);
-        fileChooser.setTitle("Choose PDF");
-        //Set initial directory to users downloads
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator")+ "Downloads"));
-        File pdf = fileChooser.showOpenDialog(PDFGrader.getStage().getScene().getWindow());
+        File pdf = PDFGrader.OpenFileChooser("Choose PDF", pdfFilter);
 
+        setNewPDF(pdf);
+    }
+
+    private void setNewPDF(File pdf) {
         if (pdf != null) {
             pdfFilename.setText(pdf.getName());
-            System.out.println(pdf.getAbsoluteFile());
             // create test a new test using path from file chooser
             Path path = Paths.get(pdf.getPath());
-            workingTest = new Test(path);
+            PDFGrader.SetWorkingTest(path);
             totalTests.setText(workingTest.getTotalPages() + "");
             //initial page update
             updatePages();

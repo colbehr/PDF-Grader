@@ -10,6 +10,7 @@ import java.util.Map;
 public class TakenTest {
     private class QuestionResult {
         private double pointsGiven;
+
         private ObservableList<Feedback> feedbacks;
 
         private QuestionResult(double pointsGiven) {
@@ -22,7 +23,7 @@ public class TakenTest {
 
     public int total;
     private Map<Question, QuestionResult> questionResultMap;
-
+    //TODO: maybe sum all the question feedback points here instead of the export controller
     public TakenTest(Test test) {
         this.test = test;
         questionResultMap = new HashMap<>();
@@ -91,4 +92,9 @@ public class TakenTest {
     public Map<Question, QuestionResult> getQuestionResultMap() {
         return questionResultMap;
     }
+
+    public Test getTest() {
+        return test;
+    }
+
 }

@@ -1,22 +1,27 @@
 package com.ezgrader.pdfgrader;
 
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
 
@@ -35,7 +40,8 @@ public class ExportController {
 
 
     /**
-     * opens a browser to find a folder to put tests into
+     * Opens a browser to find a folder to put tests into
+     *
      * @param event
      */
     @FXML
@@ -44,14 +50,17 @@ public class ExportController {
         DirectoryChooser folderChooser = new DirectoryChooser();
         folderChooser.setTitle("Choose a folder to save graded files");
         //Set initial directory to users Desktop
-        folderChooser.setInitialDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator")+ "Desktop"));
+        folderChooser.setInitialDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
         File pdf = folderChooser.showDialog(((Node) event.getSource()).getScene().getWindow());
-        folderPath = Paths.get(pdf.getPath());
-        folderPathText.setText(folderPath.toString());
+        if (pdf != null) {
+            folderPath = Paths.get(pdf.getPath());
+            folderPathText.setText(folderPath.toString());
+        }
     }
 
     /**
      * Opens a new file chooser for saving a statistics file
+     *
      * @param event
      */
     @FXML
@@ -61,39 +70,63 @@ public class ExportController {
         fileChooser.getExtensionFilters().add(pdfFilter);
         fileChooser.setTitle("Choose a location to save statistics overview");
         //Set initial directory to users Desktop
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator")+ "Desktop"));
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
         if (workingTest != null) {
             fileChooser.setInitialFileName(workingTest.getName() + "_statistics.pdf");
-        } else{
+        } else {
             fileChooser.setInitialFileName("grade_statistics.pdf");
         }
         File pdf = fileChooser.showSaveDialog(((Node) event.getSource()).getScene().getWindow());
-        statisticsPath = Paths.get(pdf.getPath());
-        filePathText.setText(statisticsPath.toString());
+        if (pdf != null) {
+            statisticsPath = Paths.get(pdf.getPath());
+            filePathText.setText(statisticsPath.toString());
+        }
     }
 
     /**
-     * exports files when export button is pressed
+     * Exports files when export button is pressed
+     *
      * @param event
      */
     @FXML
     private void exportFiles(ActionEvent event) throws IOException {
-        if (statisticsPath == null || folderPath == null){
+        if (statisticsPath == null || folderPath == null) {
             String errorMessage = "";
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Path has not been set");
-            if (statisticsPath == null){
+            if (statisticsPath == null) {
                 errorMessage = "Please find a location for the statistics file.\n\n";
             }
-            if (folderPath == null){
+            if (folderPath == null) {
                 errorMessage += "Please find a folder for graded files.";
             }
             alert.setContentText(errorMessage);
             alert.showAndWait();
             return;
         }
+        exportStats();
         System.out.println("Exported statistics");
+
+        //TODO: catch error when the tests cant be fully exported because of file replacement issue, show error on screen
+        exportTests();
+        System.out.println("Exported students tests");
+
+        //open dialog, return to home
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Finished Exporting");
+        alert.setHeaderText("Files exported.");
+        alert.setContentText("Statistics exported to \n" + statisticsPath.toString() + "\n\nFiles exported to \n" + folderPath.toString());
+        alert.showAndWait();
+
+        try {
+            PDFGrader.SwitchScene("home.fxml");
+        } catch (IOException e) {
+            System.exit(0);
+        }
+    }
+
+    private void exportStats() throws IOException {
         PDDocument statsDoc = new PDDocument();
         statsDoc.addPage(new PDPage());
         int curPage = 0;
@@ -110,7 +143,7 @@ public class ExportController {
         contentStream.setLineWidth(1);
 
         int initX = 50;
-        int initY = pageHeight-50;
+        int initY = pageHeight - 50;
         int cellHeight = 30;
         int cellWidth = 100;
         int tableCounter = 1;
@@ -119,6 +152,7 @@ public class ExportController {
         int mean = 0;
         double median;
 
+        int colCount = workingTest.getQuestions().size() + 2;
         int rowCount = workingTest.getTakenTests().length;
 
         contentStream.beginText();
@@ -195,7 +229,7 @@ public class ExportController {
         contentStream.addRect(initX, initY, cellWidth, -cellHeight);
         initX += cellWidth;
 
-        contentStream.addRect(initX, initY, cellWidth, -cellHeight);
+        contentStream.addRect(initX, initY, cellWidth+20, -cellHeight);
 
         contentStream.beginText();
         contentStream.newLineAtOffset(initX + 10, initY - cellHeight + 10);
@@ -203,11 +237,11 @@ public class ExportController {
 
         sort(pointArray);
 
-//        if (workingTest.getTakenTests().length % 2 == 0) {
-//            median = (pointArray[workingTest.getTakenTests().length/2-1] + pointArray[workingTest.getTakenTests().length/2])/2;
-//        } else {
-//            median = pointArray[(workingTest.getTakenTests().length+1) - 1];
-//        }
+        //        if (workingTest.getTakenTests().length % 2 == 0) {
+        //            median = (pointArray[workingTest.getTakenTests().length/2-1] + pointArray[workingTest.getTakenTests().length/2])/2;
+        //        } else {
+        //            median = pointArray[(workingTest.getTakenTests().length+1) - 1];
+        //        }
         if(workingTest.getTakenTests().length%2==1)
         {
             median=pointArray[(workingTest.getTakenTests().length+1)/2-1];
@@ -224,21 +258,6 @@ public class ExportController {
         contentStream.close();
         statsDoc.save(statisticsPath.toString());
         statsDoc.close();
-
-        System.out.println("Exported students tests");
-
-        //open dialog, return to home
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Finished Exporting");
-        alert.setHeaderText("Files exported.");
-        alert.setContentText("Statistics exported to \n" + statisticsPath.toString() + "\n\nFiles exported to \n" + folderPath.toString());
-        alert.showAndWait();
-
-        try {
-            PDFGrader.SwitchScene("home.fxml");
-        } catch (IOException e) {
-            System.exit(0);
-        }
     }
 
     void sort(double arr[]) {
@@ -257,4 +276,147 @@ public class ExportController {
             arr[j + 1] = key;
         }
     }
+
+    /**
+     * Exports the tests to folderPath
+     * @throws IOException
+     */
+    private void exportTests() throws IOException {
+        int testsNumber = 1;
+        //for each student
+        for (TakenTest test : workingTest.getTakenTests()) {
+            System.out.println("Total tests: " + workingTest.getTakenTests().length);
+            System.out.println("Working on: " + testsNumber);
+            //create a new test that is wider than original
+            //TODO: Consider A3 page size, eg double wide 8.5x11
+            //Our pages right now are ~800x600 pts
+            PDDocument studentTest = new PDDocument();
+            //for each page
+            for (int i = 0; i < workingTest.getPagesPerTest(); i++) {
+                studentTest.addPage(new PDPage());
+                PDPage page = studentTest.getPage(i);
+
+                PDPageContentStream contentStream = new PDPageContentStream(studentTest, page);
+
+                //add original image of page to left side
+                System.out.println("Render Page " + (i + (workingTest.getPagesPerTest() * testsNumber - workingTest.getPagesPerTest())) + " of Original pdf");
+                Image pageRenderedImage = test.getTest().renderPageImage(i + (workingTest.getPagesPerTest() * testsNumber - workingTest.getPagesPerTest()));
+                BufferedImage bufferedImage = SwingFXUtils.fromFXImage(pageRenderedImage, null);
+                PDImageXObject img = LosslessFactory.createFromImage(studentTest, bufferedImage);
+                int scale = 20; // alter this value to set the image size
+                contentStream.setStrokingColor(Color.lightGray);
+                //these magic numbers are 8.5 * 2 by 11 * 2 to get 17 by 22, an int instead of float
+                contentStream.addRect(20 - 3, 330 - 3, 17 * scale + 6, 22 * scale + 6);
+                contentStream.closeAndStroke();
+                contentStream.drawImage(img, 20, 330, 17 * scale, 22 * scale);
+
+                int yOffset = 0;
+                int pageQuestionNumber = 0;
+                //for each question on page
+                for (Question q : workingTest.getQuestions()) {
+                    //show feedback on right
+                    if (q.getPageNum() == i + 1) {
+                        int spacer = (pageQuestionNumber) * 10;
+                        pageQuestionNumber++;
+                        //generate box does the work of creating a feedback box with all the necessary info
+                        yOffset = yOffset - generateBox(contentStream, 380, 772 - yOffset - spacer, 220, test, q);
+                    }
+                }
+
+                contentStream.close();
+            }
+            //save file to path
+            studentTest.save(folderPath.toString() + "\\test_" + testsNumber + ".pdf");
+            testsNumber++;
+        }
+    }
+
+    /**
+     * Everything involved with generating box for feedback
+     *
+     * @param contentStream
+     * @param x
+     * @param y
+     * @param width
+     * @param test
+     * @param question
+     * @return height taken by box, so we can move the next box below it
+     * @throws IOException
+     */
+    private int generateBox(PDPageContentStream contentStream, int x, int y, int width, TakenTest test, Question question) throws IOException {
+        int boxHeight = -40;
+        ArrayList<String> lines = new ArrayList<>();
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA, 10);
+        contentStream.newLineAtOffset(x + 3, y - 10 - 3);
+        contentStream.setLeading(13F);
+
+        //sum all feedbacks for a point total on the question, this could be refactored into takenTest
+        float totalPoints = 0;
+        for (Feedback f : test.GetQuestionFeedbacks(question.getQNum() - 1)) {
+            totalPoints += Float.parseFloat(f.getPoints());
+        }
+
+        //initial info line
+        contentStream.showText("Question: " + question.getQNum() + "           " + totalPoints + "/" + question.getPointsPossible());
+        contentStream.newLine();
+
+        //loops through each feedback on the question and splits it into lines
+        for (int i = 0; i < test.GetQuestionFeedbacks(question.getQNum() - 1).size(); i++) {
+            lines.addAll(splitString("(" + test.GetQuestionFeedbacks(question.getQNum() - 1).get(i).getPoints() + ") " + test.GetQuestionFeedbacks(question.getQNum() - 1).get(i).getExplanation(), (float) width - 3));
+            lines.add(" ");
+        }
+        //loops through lines and prints them to the page, expanding the box as we go
+        for (String s : lines) {
+            contentStream.showText(s);
+            contentStream.newLine();
+            boxHeight -= 10;
+        }
+        contentStream.endText();
+        contentStream.addRect(x, y, width, boxHeight);
+        contentStream.closeAndStroke();
+        return boxHeight;
+    }
+
+    /**
+     * Splits string to arraylist based on width of string
+     * https://stackoverflow.com/questions/19635275/how-to-generate-multiple-lines-in-pdf-using-apache-pdfbox
+     *
+     * @param text  The text that should be split
+     * @param width The width of the box
+     * @return Arraylist of the split strings
+     * @throws IOException
+     */
+    private ArrayList<String> splitString(String text, float width) throws IOException {
+        ArrayList<String> lines = new ArrayList<String>();
+        int lastSpace = -1;
+        while (text.length() > 0) {
+            int spaceIndex = text.indexOf(' ', lastSpace + 1);
+            if (spaceIndex < 0) {
+                spaceIndex = text.length();
+            }
+            String subString = text.substring(0, spaceIndex);
+            PDType1Font pdfFont = PDType1Font.HELVETICA;
+            float size = 10 * pdfFont.getStringWidth(subString) / 1000;
+            //System.out.printf("'%s' - %f of %f\n", subString, size, width);
+            if (size > width) {
+                if (lastSpace < 0) {
+                    lastSpace = spaceIndex;
+                }
+                subString = text.substring(0, lastSpace);
+                lines.add(subString);
+                text = text.substring(lastSpace).trim();
+                //System.out.printf("'%s' is line\n", subString);
+                lastSpace = -1;
+            } else if (spaceIndex == text.length()) {
+                lines.add(text);
+                //System.out.printf("'%s' is line\n", text);
+                text = "";
+            } else {
+                lastSpace = spaceIndex;
+            }
+        }
+        return lines;
+    }
+
 }

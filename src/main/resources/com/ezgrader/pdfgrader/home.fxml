@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.web.WebView?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
 <?import java.net.URL?>
-<?import javafx.scene.text.TextFlow?>
-<?import javafx.scene.text.Text?>
-<?import javafx.collections.FXCollections?>
-<?import com.ezgrader.pdfgrader.Feedback?>
-<?import com.ezgrader.pdfgrader.AwesomeIcon?>
-
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <GridPane id="root" maxWidth="Infinity" maxHeight="Infinity" xmlns:fx="http://javafx.com/fxml" fx:controller="com.ezgrader.pdfgrader.HomeController">
     <stylesheets>
@@ -28,8 +19,12 @@
         <Separator styleClass="vert-spacer"/>
         <VBox style="-fx-alignment: center">
             <Label styleClass="h3">Recent Tests</Label>
-            <TableView styleClass="prettyTable, noheader" style="-fx-max-width: 500px">
+            <TableView fx:id="recentTable" styleClass="prettyTable, noheader" style="-fx-max-width: 500px">
                 <placeholder><Label text="No recent PDFs"/></placeholder>
+                <columns>
+                    <TableColumn fx:id="nameCol" text="Files" style="-fx-pref-width: 200px; -fx-alignment: baseline-center; -fx-font-family: 'Quicksand Bold';"></TableColumn>
+                    <TableColumn fx:id="pathCol" text="Files" style="-fx-alignment: baseline-center; -fx-font-family: 'Quicksand Bold'; -fx-text-fill: #777777"></TableColumn>
+                </columns>
             </TableView>
         </VBox>
     </VBox>

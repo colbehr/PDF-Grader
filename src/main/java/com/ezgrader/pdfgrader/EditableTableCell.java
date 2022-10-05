@@ -1,7 +1,5 @@
 package com.ezgrader.pdfgrader;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -152,7 +150,7 @@ public class EditableTableCell<S, T> extends TextFieldTableCell<S, T> {
                 event.consume();
             } else if (event.getCode() == KeyCode.TAB) {
                 getTableView().requestFocus();
-                getTableView().getFocusModel().focusRightCell();
+                getTableView().getFocusModel().focusBelowCell();
                 event.consume();
             }
         });

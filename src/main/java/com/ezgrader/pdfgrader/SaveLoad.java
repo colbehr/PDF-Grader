@@ -1,18 +1,22 @@
 package com.ezgrader.pdfgrader;
 
-import javafx.collections.ObservableList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.*;
 
 
 public class SaveLoad {
+
+    public static final String RECENTS_FILENAME = "pdfgrader-recents.txt";
+    public static Set<String> recents;
+
     public static void SaveTest(Test test, String filepath, int currentQuestion, int currentTakenTest) {
         JSONArray wrapperJSArr = new JSONArray();
         JSONObject testJSObj = new JSONObject();
@@ -80,6 +84,8 @@ public class SaveLoad {
             FileWriter writer = new FileWriter(filepath);
             writer.write(wrapperJSArr.toString());
             writer.close();
+
+            PutTestInRecent(filepath);
         } catch (IOException e) {
             System.out.println("An error occurred while writing file");
         }
@@ -133,6 +139,45 @@ public class SaveLoad {
             }
             takenTests[i] = takenTest;
         }
+
+        PutTestInRecent(testFile.getAbsolutePath());
+
         return test;
+    }
+
+    private static void LoadRecentTestsFromFile() throws IOException {
+        if (recents == null) {
+            recents = new LinkedHashSet<>();
+            File recentsFile = new File(RECENTS_FILENAME);
+            recentsFile.createNewFile(); // does nothing if already exists
+            Scanner scanner = new Scanner(recentsFile);
+            while (scanner.hasNextLine()) {
+                recents.add(scanner.nextLine());
+            }
+            scanner.close();
+        }
+    }
+
+    private static void PutTestInRecent(String absPath) throws IOException {
+        LoadRecentTestsFromFile();
+        if (recents.contains(absPath)) recents.remove(absPath);
+        recents.add(absPath);
+
+        List<String> recentsList = GetRecentTests();
+        Collections.reverse(recentsList); // need to reverse back for writing, so order is right in initial set fill
+        FileWriter writer = new FileWriter(RECENTS_FILENAME, false);
+        for (String testPath : recentsList) {
+            writer.write(testPath + "\n");
+        }
+        writer.close();
+    }
+
+    public static List<String> GetRecentTests() throws IOException {
+        LoadRecentTestsFromFile();
+        List<String> recentsList = new ArrayList<>();
+        recentsList.addAll(recents);
+        Collections.reverse(recentsList); // sort by most recent first
+        System.out.println(recentsList);
+        return recentsList;
     }
 }

@@ -67,6 +67,10 @@
     -fx-background-color: #404e7c;
 }
 
+.button:focused {
+    -fx-effect: dropshadow(gaussian, #251F4766, 10, 0.2, 0, 7);
+}
+
 .small-button {
     -fx-padding: 1px;
     -fx-pref-width: 15px;

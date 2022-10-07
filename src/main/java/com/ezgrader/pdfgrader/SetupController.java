@@ -2,10 +2,14 @@ package com.ezgrader.pdfgrader;
 
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
@@ -15,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static com.ezgrader.pdfgrader.PDFGrader.getStage;
 import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
 
 /**
@@ -59,6 +64,8 @@ public class SetupController {
         startGradingButton.setDisable(true);
 
         setNewPDF(workingTest.getPath().toFile());
+
+        Platform.runLater(this::setupKeyboardShortcuts);
     }
 
     /**
@@ -253,5 +260,18 @@ public class SetupController {
         int columnIndex = questionTable.getVisibleLeafIndex(column);
         int newColumnIndex = columnIndex + offset;
         return questionTable.getVisibleLeafColumn(newColumnIndex);
+    }
+
+    private void setupKeyboardShortcuts() {
+        getStage().getScene().addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            final KeyCombination ctrlN = new KeyCodeCombination(KeyCode.N,
+                    KeyCombination.CONTROL_DOWN);
+            public void handle(KeyEvent ke) {
+                if (ctrlN.match(ke)) {
+                    addQuestion();
+                    ke.consume();
+                }
+            }
+        });
     }
 }

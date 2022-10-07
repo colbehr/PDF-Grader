@@ -1,5 +1,6 @@
 package com.ezgrader.pdfgrader;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,9 +10,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.stage.FileChooser;
 import org.apache.pdfbox.contentstream.operator.state.Save;
 
@@ -20,6 +19,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import static com.ezgrader.pdfgrader.PDFGrader.getStage;
+import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
 
 public class HomeController {
     @FXML
@@ -54,6 +56,8 @@ public class HomeController {
                 }
             }
         });
+
+        Platform.runLater(this::setupKeyboardShortcuts);
     }
 
     @FXML
@@ -125,5 +129,31 @@ public class HomeController {
             PDFGrader.workingTest = SaveLoad.LoadTest(new File(testFile.getAbsolutePath()));
             PDFGrader.SwitchScene("grading.fxml", false);
         }
+    }
+
+    private void setupKeyboardShortcuts() {
+        getStage().getScene().addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            final KeyCombination ctrlN = new KeyCodeCombination(KeyCode.N,
+                    KeyCombination.CONTROL_DOWN);
+            final KeyCombination ctrlO = new KeyCodeCombination(KeyCode.O,
+                    KeyCombination.CONTROL_DOWN);
+            public void handle(KeyEvent ke) {
+                if (ctrlN.match(ke)) {
+                    try {
+                        GoToSetup();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    ke.consume();
+                } else if (ctrlO.match(ke)) {
+                    try {
+                        OpenTest();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    ke.consume();
+                }
+            }
+        });
     }
 }

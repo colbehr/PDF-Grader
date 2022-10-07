@@ -1,0 +1,18 @@
+---HOME---
+ctrl-n --> New
+ctrl-o --> Open
+
+---SETUP---
+ctrl-n --> new question
+
+---GRADING---
+ctrl-s --> save
+ctrl-rightarrow --> next test
+ctrl-leftarrow --> prev test
+ctrl-shift-rightarrow --> next question
+ctrl-shift-leftarrow --> prev question
+[ --> previous pdf page
+] --> next pdf page
+ctrl-{1-9} --> add reusable feedback #1-9
+ctrl-enter --> confirm current typed feedback
+ctrl-n --> move focus to new feedback points

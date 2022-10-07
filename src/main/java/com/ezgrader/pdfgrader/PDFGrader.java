@@ -41,8 +41,12 @@ public class PDFGrader extends Application {
     }
 
     public static void main(String[] args) {
-        Font.loadFont(PDFGrader.class.getResource("/fa/fontawesome-webfont.ttf").toExternalForm(), 10); // Icon Support
-        launch(args);
+        try {
+            Font.loadFont(PDFGrader.class.getResource("/fa/fontawesome-webfont.ttf").toExternalForm(), 10); // Icon Support
+            launch(args);
+        }catch(NullPointerException e)   {
+            System.out.println("NullPointerException error has occured");
+        }
     }
 
     /**
@@ -65,18 +69,23 @@ public class PDFGrader extends Application {
      * @throws IOException
      */
     public static void SwitchScene(String sceneName, boolean maintainSize) throws IOException {
-        GridPane newRoot = FXMLLoader.load(PDFGrader.class.getResource(sceneName));
-        MakeStretchy(newRoot);
+        try {
+            GridPane newRoot = FXMLLoader.load(PDFGrader.class.getResource(sceneName));
+            MakeStretchy(newRoot);
 
-        if (maintainSize || stage.isMaximized()) {
-            // force maintaining window size
-            newRoot.setMinSize(stage.getWidth(), stage.getHeight());
-            newRoot.setMaxSize(stage.getWidth(), stage.getHeight());
+            if (maintainSize || stage.isMaximized()) {
+                // force maintaining window size
+                newRoot.setMinSize(stage.getWidth(), stage.getHeight());
+                newRoot.setMaxSize(stage.getWidth(), stage.getHeight());
+            }
+            stage.setScene(new Scene(newRoot));
+            // set back
+            newRoot.setMinSize(MIN_WIDTH, MIN_HEIGHT);
+            newRoot.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        }catch(NullPointerException e){
+            System.out.println("NullPointerException error has occured");
         }
-        stage.setScene(new Scene(newRoot));
-        // set back
-        newRoot.setMinSize(MIN_WIDTH, MIN_HEIGHT);
-        newRoot.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
     }
 
     public static void SwitchScene(String sceneName) throws IOException {
@@ -93,8 +102,7 @@ public class PDFGrader extends Application {
         fileChooser.setTitle(title);
         //Set initial directory to users downloads
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator")+ "Downloads"));
-        File file = fileChooser.showOpenDialog(PDFGrader.getStage().getScene().getWindow());
-        return file;
+        return fileChooser.showOpenDialog(PDFGrader.getStage().getScene().getWindow());
     }
 
     public static void SetWorkingTest(Path path) {

@@ -1,91 +1,102 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.ezgrader.pdfgrader.AwesomeIcon?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import javafx.scene.layout.*?>
-<?import java.net.URL?>
-<GridPane id="root" maxWidth="Infinity" maxHeight="Infinity" xmlns:fx="http://javafx.com/fxml" fx:controller="com.ezgrader.pdfgrader.SetupController">
-    <stylesheets>
-        <URL value="@./setup.css"/>
-        <URL value="@./shared.css"/>
-    </stylesheets>
-    <SplitPane fx:id="sideSplit">
-        <VBox>
-            <VBox VBox.vgrow="ALWAYS" />
-            <Pagination fx:id="pagination" prefHeight="66.0" prefWidth="354.0" />
-        </VBox>
-        <VBox styleClass="mainContainer" prefHeight="900" prefWidth="500">
-            <HBox styleClass="iconAndText" style="-fx-spacing: 10px">
-                <Label styleClass="fa-icon, h1"><AwesomeIcon fx:constant="PENCIL"/></Label>
-                <TextField fx:id="testNameField" styleClass="h1, stealthTextField" promptText="New Test"></TextField>
-            </HBox>
-            <Separator styleClass="vert-spacer"></Separator>
-            <HBox styleClass="fileSelectionBox">
-                <Button onAction="#browseForPDF">
-                    <graphic><BorderPane>
-                        <left>
-                            <Label styleClass="fa-icon" style="-fx-text-fill: white">
-                                <AwesomeIcon fx:constant="FILE"/>
-                            </Label>
-                        </left>
-                        <center>
-                            <Label style="-fx-text-fill: white">Choose PDF</Label>
-                        </center>
-                    </BorderPane></graphic>
-                </Button>
-                <Label fx:id="pdfFilename" styleClass="bubbleTextDark">No file selected yet</Label>
-            </HBox>
-            <Separator styleClass="vert-spacer"></Separator>
-            <HBox styleClass="spacedCenteredBox">
-                <Label styleClass="h3">Pages Per Test</Label>
-                <TextField fx:id="pagesField" onKeyTyped="#updatePages" styleClass="numberField"></TextField>
-                <HBox HBox.hgrow="ALWAYS" />
-                <Label styleClass="h4">Total Tests</Label>
-                <Label styleClass="h4, bubbleNumber" fx:id="totalTests">0</Label>
-            </HBox>
-            <Separator styleClass="vert-spacer"></Separator>
-            <HBox styleClass="spacedCenteredBox">
-                <Label styleClass="h3">Questions</Label>
-                <Button styleClass="fa-icon" fx:id="addQuestionButton" onAction="#addQuestion"><text><AwesomeIcon fx:constant="PLUS"/></text></Button>
-                <HBox HBox.hgrow="ALWAYS" />
-                <Label styleClass="h4">Total Points</Label>
-                <Label styleClass="h4, bubbleNumber" fx:id="totalPoints">0</Label>
-            </HBox>
-            <TableView fx:id="questionTable" styleClass="prettyTable">
-                <placeholder><Label text="No Questions yet"/></placeholder>
-                <columns>
-                    <TableColumn fx:id="qNumberCol" text="#" style="-fx-font-family: 'Quicksand Bold'">
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="780.0" stylesheets="@setup.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ezgrader.pdfgrader.SetupController">
+   <children>
+      <MenuBar prefHeight="25.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <menus>
+            <Menu mnemonicParsing="false">
+               <graphic>
+                  <ImageView fitHeight="21.0" fitWidth="69.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/logo.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Menu>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="New" />
+              <MenuItem mnemonicParsing="false" text="Open" />
+                  <MenuItem mnemonicParsing="false" text="Save" />
+                  <MenuItem mnemonicParsing="false" text="Settings" />
+                  <MenuItem mnemonicParsing="false" text="Exit" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="Edit">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Cut" />
+                  <MenuItem mnemonicParsing="false" text="Copy" />
+                  <MenuItem mnemonicParsing="false" text="Paste" />
+               </items>
+            </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+                  <MenuItem mnemonicParsing="false" text="Github" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <SplitPane dividerPositions="0.48494983277591974" layoutY="25.0" prefHeight="528.0" prefWidth="728.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <Pagination fx:id="pagination" layoutY="7.0" prefHeight="523.0" prefWidth="453.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <TextField fx:id="testNameField" layoutX="103.0" layoutY="57.0" prefHeight="35.0" prefWidth="285.0" promptText="e.g. CS 101 Test 1" AnchorPane.leftAnchor="103.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="57.0" />
+                  <Button layoutX="295.0" layoutY="9.0" mnemonicParsing="false" onAction="#browseForPDF" prefHeight="35.0" prefWidth="90.0" text="Choose PDF" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                  <Label fx:id="pdfFilename" layoutX="16.0" layoutY="14.0" prefHeight="25.0" prefWidth="268.0" text="PDFName.pdf" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="114.0" AnchorPane.topAnchor="14.0" />
+                  <Label layoutX="14.0" layoutY="109.0" text="Pages Per Test" />
+                  <Label layoutX="277.0" layoutY="109.0" text="Total Tests" />
+                  <Label fx:id="totalTests" layoutX="356.0" layoutY="109.0" text="1" />
+                  <TextField fx:id="pagesField" layoutX="103.0" layoutY="100.0" onKeyTyped="#updatePages" prefHeight="35.0" prefWidth="90.0" promptText="Pages" />
+                  <Label layoutX="14.0" layoutY="147.0" text="Questions" />
+                  <Button fx:id="addQuestionButton" layoutX="103.0" layoutY="143.0" mnemonicParsing="false" onAction="#addQuestion" prefHeight="25.0" prefWidth="90.0" text="Add Question" />
+                  <Label layoutX="277.0" layoutY="147.0" text="Total Points" />
+                  <Label fx:id="totalPoints" layoutX="356.0" layoutY="147.0" text="0" />
+                  <Label layoutX="14.0" layoutY="66.0" text="Test Nickname" />
+                  <TableView fx:id="questionTable" layoutX="3.0" layoutY="185.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="185.0">
+                    <placeholder><Label text="No Questions yet" /></placeholder>
+                    <columns>
+                      <TableColumn fx:id="qNumberCol" prefWidth="29.0" text="#">
                         <cellValueFactory>
-                            <PropertyValueFactory property="qNum" />
+                          <PropertyValueFactory property="qNum" />
                         </cellValueFactory>
-                    </TableColumn>
-                    <TableColumn fx:id="pointsPossibleCol" text="Points">
+                      </TableColumn>
+                      <TableColumn fx:id="pointsPossibleCol" prefWidth="131.0" text="Points">
                         <cellValueFactory>
-                            <PropertyValueFactory property="pointsPossible" />
+                          <PropertyValueFactory property="pointsPossible" />
                         </cellValueFactory>
-                    </TableColumn>
-                    <TableColumn fx:id="pageNumCol" text="Page">
+                      </TableColumn>
+                      <TableColumn fx:id="pageNumCol" text="Page">
                         <cellValueFactory>
-                            <PropertyValueFactory property="pageNum" />
+                          <PropertyValueFactory property="pageNum" />
                         </cellValueFactory>
-                    </TableColumn>
-                </columns>
-            </TableView>
-            <HBox style="-fx-alignment: center">
-                <Button fx:id="startGradingButton" onAction="#StartGrading">
-                    <graphic><BorderPane>
-                        <center>
-                            <Label style="-fx-text-fill: white">Confirm &amp; Grade</Label>
-                        </center>
-                        <right>
-                            <Label styleClass="fa-icon" style="-fx-text-fill: white">
-                                <AwesomeIcon fx:constant="ARROW_RIGHT"/>
-                            </Label>
-                        </right>
-                    </BorderPane></graphic>
-                </Button>
-            </HBox>
-        </VBox>
-    </SplitPane>
-</GridPane>
+                      </TableColumn>
+                    </columns>
+                  </TableView>
+                  <Button fx:id="startGradingButton" layoutX="276.0" layoutY="497.0" mnemonicParsing="false" onAction="#StartGrading" text="Confirm and Grade" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

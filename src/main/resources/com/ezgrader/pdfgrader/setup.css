@@ -1,13 +1,8 @@
-#pagesField {
-    -fx-pref-columns: 6;
-    -fx-max-width: 100px;
-    -fx-text-alignment: center;
-    -fx-alignment: center;
+.pagination{
+    -fx-page-information-visible:false;
+    -fx-alignment:center;
 }
 
-#addQuestionButton {
-    -fx-max-width: 30px;
-    -fx-max-height: 30px;
-    -fx-font-size: 10pt;
-    -fx-padding: 10px;
+.pagination .page {
+ /* this is where styling for a pagination page would go if it had good css */
 }

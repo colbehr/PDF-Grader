@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane minHeight="50.0" prefHeight="71.0" prefWidth="621.0" style="-fx-background-color: #eee;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="testNameLabel" prefHeight="71.0" prefWidth="263.0" text="Test Name" />
+            <Label fx:id="testLocationLabel" layoutX="10.0" layoutY="10.0" prefHeight="71.0" prefWidth="250.0" text="C:\file.pdf" />
+            <Label fx:id="testDateLabel" alignment="CENTER" layoutX="112.0" layoutY="10.0" prefHeight="71.0" prefWidth="102.0" text="2/2/2020" />
+         </children>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="5.0" />
+   </padding>
+   <cursor>
+      <Cursor fx:constant="HAND" />
+   </cursor>
+</AnchorPane>

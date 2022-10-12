@@ -12,16 +12,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.input.*;
 import javafx.stage.FileChooser;
-import org.apache.pdfbox.contentstream.operator.state.Save;
 
-import java.awt.dnd.DropTarget;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static com.ezgrader.pdfgrader.PDFGrader.getStage;
-import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
 
 public class HomeController {
     @FXML

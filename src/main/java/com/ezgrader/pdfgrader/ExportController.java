@@ -419,4 +419,20 @@ public class ExportController {
         return lines;
     }
 
+
+    /**
+     * sends user back to grading with current test
+     */
+    @FXML
+    private void backToGrading(){
+            File file = new File(PDFGrader.GetWorkingTest().toAbsolutePath().toString().replace(".pdf", ".json"));
+        try {
+            PDFGrader.workingTest = SaveLoad.LoadTest(file);
+            PDFGrader.SwitchScene("grading.fxml", false);
+        } catch (IOException e) {
+            System.err.println("Error loading recent test");
+            System.err.println(e);
+            e.printStackTrace();
+        }
+    }
 }

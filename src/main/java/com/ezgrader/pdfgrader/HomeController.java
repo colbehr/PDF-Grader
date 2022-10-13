@@ -54,14 +54,13 @@ public class HomeController {
             }
         });
 
+        // Run AFTER stage is created (which is after this init method)
         Platform.runLater(this::setupKeyboardShortcuts);
+        Platform.runLater(this::setupDragNDrop);
     }
 
-    @FXML
-    private void DragNDrop() {
-        Group root = new Group();
-        Scene scene = recentTable.getScene();
-        scene.setOnDragOver(new EventHandler<DragEvent>() {
+    private void setupDragNDrop() {
+        PDFGrader.getStage().getScene().setOnDragOver(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
                 Dragboard db = event.getDragboard();
@@ -74,7 +73,7 @@ public class HomeController {
         });
 
         // Dropping over surface
-        scene.setOnDragDropped(new EventHandler<DragEvent>() {
+        PDFGrader.getStage().getScene().setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
                 Dragboard db = event.getDragboard();
@@ -105,6 +104,7 @@ public class HomeController {
             }
         });
     }
+
     @FXML
     private void GoToSetup() throws IOException {
         FileChooser.ExtensionFilter pdfFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf", "*.PDF");
@@ -129,7 +129,7 @@ public class HomeController {
     }
 
     private void setupKeyboardShortcuts() {
-        getStage().getScene().addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+        PDFGrader.getStage().getScene().addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             final KeyCombination ctrlN = new KeyCodeCombination(KeyCode.N,
                     KeyCombination.CONTROL_DOWN);
             final KeyCombination ctrlO = new KeyCodeCombination(KeyCode.O,

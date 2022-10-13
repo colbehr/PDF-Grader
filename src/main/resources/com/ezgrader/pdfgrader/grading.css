@@ -112,7 +112,7 @@
     -fx-background-color: transparent;
 }
 #feedbackTable:focused .table-row-cell:selected {
-    -fx-background-color: #ffffff55;
+    -fx-background-color: #0008;
     -fx-background-radius: 15px;
 }
 

@@ -1,5 +1,6 @@
 package com.ezgrader.pdfgrader;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -20,11 +21,24 @@ public class EditableTableCell<S, T> extends TextFieldTableCell<S, T> {
     private TextField textField;
     private boolean escapePressed = false;
     private TablePosition<S, ?> tablePos = null;
+    private TextFormatter filter;
     private String filterRegex;
+    private Runnable onCommitMethod;
 
     public EditableTableCell(final StringConverter<T> converter, String filterRegex) {
         super(converter);
         this.filterRegex = filterRegex;
+    }
+
+    public EditableTableCell(final StringConverter<T> converter, Runnable onCommitMethod) {
+        super(converter);
+        this.onCommitMethod = onCommitMethod;
+    }
+
+    public EditableTableCell(final StringConverter<T> converter, TextFormatter filter, Runnable onCommitMethod) {
+        super(converter);
+        this.filter = filter;
+        this.onCommitMethod = onCommitMethod;
     }
 
     public static <S> Callback<TableColumn<S, String>, TableCell<S, String>> forTableColumn() {
@@ -34,6 +48,16 @@ public class EditableTableCell<S, T> extends TextFieldTableCell<S, T> {
     public static <S, T> Callback<TableColumn<S, T>, TableCell<S, T>> forTableColumn(
             final StringConverter<T> converter, String filterRegex) {
         return list -> new EditableTableCell<S, T>(converter, filterRegex);
+    }
+
+    public static <S, T> Callback<TableColumn<S, T>, TableCell<S, T>> forTableColumn(
+            final StringConverter<T> converter, TextFormatter filter, Runnable onCommitMethod) {
+        return list -> new EditableTableCell<S, T>(converter, filter, onCommitMethod);
+    }
+
+    public static <S, T> Callback<TableColumn<S, T>, TableCell<S, T>> forTableColumn(
+            final StringConverter<T> converter, Runnable onCommitMethod) {
+        return list -> new EditableTableCell<S, T>(converter, onCommitMethod);
     }
 
     @Override
@@ -72,6 +96,9 @@ public class EditableTableCell<S, T> extends TextFieldTableCell<S, T> {
         super.cancelEdit(); // this fires an invalid EditCancelEvent.
         // update the item within this cell, so that it represents the new value
         updateItem(newValue, false);
+
+        if (onCommitMethod != null) Platform.runLater(() -> onCommitMethod.run());
+
         if (table != null) {
             // reset the editing cell on the TableView
             table.edit(-1, null);
@@ -155,7 +182,11 @@ public class EditableTableCell<S, T> extends TextFieldTableCell<S, T> {
             }
         });
 
-        textField.setTextFormatter(TextFilters.MakeFilter(filterRegex));
+        if (filter != null) {
+            textField.setTextFormatter(new TextFormatter<>(filter.getFilter()));
+        } else if (filterRegex != null) {
+            textField.setTextFormatter(TextFilters.MakeFilter(filterRegex));
+        }
 
         return textField;
     }

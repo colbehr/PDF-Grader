@@ -16,6 +16,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
+import javafx.util.converter.DoubleStringConverter;
+import javafx.util.converter.DefaultStringConverter;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,6 +49,8 @@ public class GradingController {
     @FXML
     private TableColumn pointsCol;
     @FXML
+    private TableColumn explanationCol;
+    @FXML
     private TextField feedbackNewPoints;
     @FXML
     private TextField feedbackNewDesc;
@@ -70,6 +74,7 @@ public class GradingController {
     private int currentQuestion;
     private int currentTakenTest;
     private ObservableList<Feedback> feedbacks;
+    private TextFormatter pointsFilter;
 
     @FXML
     public void initialize() {
@@ -82,12 +87,11 @@ public class GradingController {
         pointsGivenField.setTextFormatter(TextFilters.GetDoubleFilter());
 
         // For feedback points, allow + or - followed by a decimal number
-        UnaryOperator<TextFormatter.Change> filter = c -> {
+         UnaryOperator<TextFormatter.Change> filter = c -> {
             if (c.getText().equals("")) {
                 return c;
             }
-            String patternString = "([+-]?)((\\d+)\\.?(\\d)*)?";
-            Pattern p = Pattern.compile(patternString);
+            Pattern p = Pattern.compile(TextFilters.pointsRegex);
             Matcher m = p.matcher(c.getControlNewText());
             if (!m.matches()) {
                 c.setText("");
@@ -101,8 +105,9 @@ public class GradingController {
                 }
             }
             return c;
-        };
-        feedbackNewPoints.setTextFormatter(new TextFormatter<>(filter));
+         };
+         pointsFilter = new TextFormatter<>(filter);
+         feedbackNewPoints.setTextFormatter(pointsFilter);
         // -------------
 
         // Grading setup
@@ -128,6 +133,7 @@ public class GradingController {
         testNameText.setText(workingTest.getName());
         questionsTotalText.setText(workingTest.getQuestions().size() + "");
         totalTestsText.setText(workingTest.getTakenTests().length + "");
+        setTableEditable();
         addButtonToReuseFeedbacksTable();
 
         Platform.runLater(this::setupKeyboardShortcuts);
@@ -172,7 +178,7 @@ public class GradingController {
     private void addFeedback(Feedback f) {
         feedbackTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        feedbacks.add(f);
+        feedbacks.add(f.copy());
 
         feedbackNewPoints.setText("");
         feedbackNewDesc.setText("");
@@ -328,10 +334,10 @@ public class GradingController {
         Set<String> usedFeedbackExplanations = new HashSet<>();
         for (TakenTest t : workingTest.getTakenTests()) {
             for (Feedback f : t.GetQuestionFeedbacks(currentQuestion)) {
-                if (!usedFeedbackExplanations.contains(f.getExplanation())) {
+                if (!usedFeedbackExplanations.contains(f.getPoints() + f.getExplanation())) {
                     usedFeedbacks.add(f);
                 }
-                usedFeedbackExplanations.add(f.getExplanation());
+                usedFeedbackExplanations.add(f.getPoints() + f.getExplanation());
             }
         }
         reuseFeedbackTable.setItems(usedFeedbacks);
@@ -388,6 +394,63 @@ public class GradingController {
         };
         colBtn.setCellFactory(cellFactory);
         reuseFeedbackTable.getColumns().add(colBtn);
+    }
+
+    private void setTableEditable() {
+        feedbackTable.setEditable(true);
+
+        feedbackTable.setOnKeyPressed(event -> {
+            if (event.getCode().isDigitKey()) {
+                editFocusedCell();
+            } else if (event.getCode() == KeyCode.DELETE) {
+                deleteFeedback(event);
+            }
+        });
+        feedbackTable.getFocusModel().focusedCellProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                TablePosition selectedCellPosition = feedbackTable.getFocusModel().getFocusedCell();
+                Platform.runLater(() -> feedbackTable.edit(selectedCellPosition.getRow(), selectedCellPosition.getTableColumn()));
+            }
+        });
+        // This is the only property I could find where this triggers at the right
+        // time, seems fine to do
+        feedbackTable.focusedProperty().addListener(event -> {
+            autoTotal();
+        });
+        // use custom editable cells
+        pointsCol.setCellFactory(EditableTableCell.<Feedback, String>forTableColumn(new DefaultStringConverter(), pointsFilter, this::updateFeedbackField));
+        explanationCol.setCellFactory(EditableTableCell.<Feedback, String>forTableColumn(new DefaultStringConverter(), this::updateFeedbackField));
+        // No sorting columns
+        pointsCol.setSortable(false);
+        explanationCol.setSortable(false);
+    }
+
+    /**
+     * Allows a change made in the table through user editing to be reflected in the ObservableList
+     * the table is based on.
+     */
+    private void updateFeedbackField() {
+        TablePosition pos = feedbackTable.getFocusModel().getFocusedCell();
+        TableColumn col = pos.getTableColumn();
+        int row = pos.getRow();
+
+        System.out.println("Updating: " + ((String) col.getCellData(row)));
+
+        if (col == pointsCol) {
+            String newPoints = (String) col.getCellData(row);
+            ((Feedback) feedbackTable.getItems().get(row)).setPoints(newPoints);
+        } else if (col == explanationCol) {
+            String newExp = (String) col.getCellData(row);
+            ((Feedback) feedbackTable.getItems().get(row)).setExplanation(newExp);
+        }
+        //Feedback newFeedback
+    }
+
+    @SuppressWarnings("unchecked")
+    private void editFocusedCell() {
+        final TablePosition<Question, ?> focusedCell = (TablePosition<Question, ?>) ((TableView.TableViewFocusModel)feedbackTable
+                .focusModelProperty().get()).focusedCellProperty().get();
+        feedbackTable.edit(focusedCell.getRow(), focusedCell.getTableColumn());
     }
 
     private void setupKeyboardShortcuts() {

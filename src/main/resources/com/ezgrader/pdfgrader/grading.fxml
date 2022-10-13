@@ -69,7 +69,7 @@
                                 <PropertyValueFactory property="points" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn text="Explanation" style="-fx-alignment: baseline-left; -fx-pref-width: 9999px">
+                        <TableColumn fx:id="explanationCol" text="Explanation" style="-fx-alignment: baseline-left; -fx-pref-width: 9999px">
                             <cellValueFactory>
                                 <PropertyValueFactory property="Explanation" />
                             </cellValueFactory>

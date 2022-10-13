@@ -41,14 +41,15 @@
 }
 
 
+.menu-bar{
+-fx-background-color: #333;
+}
 .menu .label{
     -fx-text-fill: #fff;
 }
-
 .menu:hover{
     -fx-background-color: #222;
 }
-
 .menu:showing  {
     -fx-background-color: #222;
 }
@@ -63,6 +64,10 @@
 .menu-item:showing {
        -fx-background-color: #ccc;
 }
+.menu-item:focused {
+       -fx-background-color: #ccc;
+}
+
 
 .button{
     -fx-background-color:#333;

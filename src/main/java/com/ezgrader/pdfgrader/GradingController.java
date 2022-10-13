@@ -2,6 +2,8 @@ package com.ezgrader.pdfgrader;
 
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,8 +18,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
-import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.DefaultStringConverter;
+import javafx.util.converter.DoubleStringConverter;
+import javafx.util.converter.IntegerStringConverter;
 
 import java.io.File;
 import java.io.IOException;
@@ -74,7 +77,6 @@ public class GradingController {
     private int currentQuestion;
     private int currentTakenTest;
     private ObservableList<Feedback> feedbacks;
-    private TextFormatter pointsFilter;
 
     @FXML
     public void initialize() {
@@ -87,11 +89,12 @@ public class GradingController {
         pointsGivenField.setTextFormatter(TextFilters.GetDoubleFilter());
 
         // For feedback points, allow + or - followed by a decimal number
-         UnaryOperator<TextFormatter.Change> filter = c -> {
+        UnaryOperator<TextFormatter.Change> filter = c -> {
             if (c.getText().equals("")) {
                 return c;
             }
-            Pattern p = Pattern.compile(TextFilters.pointsRegex);
+            String patternString = TextFilters.pointsRegex;
+            Pattern p = Pattern.compile(patternString);
             Matcher m = p.matcher(c.getControlNewText());
             if (!m.matches()) {
                 c.setText("");
@@ -105,9 +108,8 @@ public class GradingController {
                 }
             }
             return c;
-         };
-         pointsFilter = new TextFormatter<>(filter);
-         feedbackNewPoints.setTextFormatter(pointsFilter);
+        };
+        feedbackNewPoints.setTextFormatter(new TextFormatter<>(filter));
         // -------------
 
         // Grading setup
@@ -133,8 +135,8 @@ public class GradingController {
         testNameText.setText(workingTest.getName());
         questionsTotalText.setText(workingTest.getQuestions().size() + "");
         totalTestsText.setText(workingTest.getTakenTests().length + "");
-        setTableEditable();
         addButtonToReuseFeedbacksTable();
+        setTableEditable();
 
         Platform.runLater(this::setupKeyboardShortcuts);
 
@@ -156,7 +158,7 @@ public class GradingController {
             String firstSign = feedbacks.get(0).getPoints().length() > 0 ?
                     feedbacks.get(0).getPoints().substring(0, 1) : "+";
             // If the first feedback is subtractive (rather than additive), begin from full points
-            total = firstSign.equals("+") ? 0 : workingTest.getQuestions().get(currentQuestion).getPointsPossible();
+            total = firstSign.equals("-") ? workingTest.getQuestions().get(currentQuestion).getPointsPossible() : 0;
             for (Feedback feedback : feedbacks) {
                 if (feedback.getPoints().length() > 0) {
                     total += Double.parseDouble(feedback.getPoints().replace("+", ""));
@@ -301,8 +303,8 @@ public class GradingController {
         currentTestText.setText(currentTakenTest + 1 + "");
 
         getUsedFeedbacks();
-
         UpdatePagination();
+        Platform.runLater(() -> feedbackNewPoints.requestFocus());
     }
 
     private void setCurrentQuestion(int q) {
@@ -341,6 +343,7 @@ public class GradingController {
             }
         }
         reuseFeedbackTable.setItems(usedFeedbacks);
+        reuseFeedbackTable.refresh();
     }
 
     private void UpdatePagination() {
@@ -406,44 +409,25 @@ public class GradingController {
                 deleteFeedback(event);
             }
         });
-        feedbackTable.getFocusModel().focusedCellProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
+        // Update total after edits
+        feedbackTable.editingCellProperty().addListener((observableValue, o, t1) -> autoTotal());
+
+        // START EDIT EVENT
+        feedbackTable.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2 && (feedbackTable.getFocusModel().getFocusedIndex() > -1) ) {
                 TablePosition selectedCellPosition = feedbackTable.getFocusModel().getFocusedCell();
                 Platform.runLater(() -> feedbackTable.edit(selectedCellPosition.getRow(), selectedCellPosition.getTableColumn()));
+                autoTotal();
             }
         });
-        // This is the only property I could find where this triggers at the right
-        // time, seems fine to do
-        feedbackTable.focusedProperty().addListener(event -> {
-            autoTotal();
-        });
+
         // use custom editable cells
-        pointsCol.setCellFactory(EditableTableCell.<Feedback, String>forTableColumn(new DefaultStringConverter(), pointsFilter, this::updateFeedbackField));
-        explanationCol.setCellFactory(EditableTableCell.<Feedback, String>forTableColumn(new DefaultStringConverter(), this::updateFeedbackField));
-        // No sorting columns
+        pointsCol.setCellFactory(EditableTableCell.<Question, String>forTableColumn(new DefaultStringConverter(), TextFilters.pointsRegex));
+        explanationCol.setCellFactory(EditableTableCell.<Question, String>forTableColumn(new DefaultStringConverter(), TextFilters.anyRegex));
+
+        // No sorting columns except Question Number
         pointsCol.setSortable(false);
         explanationCol.setSortable(false);
-    }
-
-    /**
-     * Allows a change made in the table through user editing to be reflected in the ObservableList
-     * the table is based on.
-     */
-    private void updateFeedbackField() {
-        TablePosition pos = feedbackTable.getFocusModel().getFocusedCell();
-        TableColumn col = pos.getTableColumn();
-        int row = pos.getRow();
-
-        System.out.println("Updating: " + ((String) col.getCellData(row)));
-
-        if (col == pointsCol) {
-            String newPoints = (String) col.getCellData(row);
-            ((Feedback) feedbackTable.getItems().get(row)).setPoints(newPoints);
-        } else if (col == explanationCol) {
-            String newExp = (String) col.getCellData(row);
-            ((Feedback) feedbackTable.getItems().get(row)).setExplanation(newExp);
-        }
-        //Feedback newFeedback
     }
 
     @SuppressWarnings("unchecked")

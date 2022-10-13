@@ -71,7 +71,7 @@
                         </TableColumn>
                         <TableColumn fx:id="explanationCol" text="Explanation" style="-fx-alignment: baseline-left; -fx-pref-width: 9999px">
                             <cellValueFactory>
-                                <PropertyValueFactory property="Explanation" />
+                                <PropertyValueFactory property="explanation" />
                             </cellValueFactory>
                         </TableColumn>
                     </columns>

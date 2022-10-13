@@ -8,8 +8,8 @@ import javafx.beans.property.StringProperty;
  * Stores a string with the number of points added or removed and an explanation
  */
 public class Feedback {
-    private SimpleStringProperty points;
-    private SimpleStringProperty explanation;
+    private final SimpleStringProperty points;
+    private final SimpleStringProperty explanation;
 
 
     public Feedback(String points, String explanation) {
@@ -18,7 +18,7 @@ public class Feedback {
     }
 
     public Feedback copy() {
-        return new Feedback(points.getValue(), explanation.getValue());
+        return new Feedback(points.get(), explanation.get());
     }
 
     /*
@@ -39,13 +39,5 @@ public class Feedback {
 
     public StringProperty explanationProperty() {
         return explanation;
-    }
-
-    public void setPoints(String points) {
-        this.points.set(points);
-    }
-
-    public void setExplanation(String explanation) {
-        this.explanation.set(explanation);
     }
 }

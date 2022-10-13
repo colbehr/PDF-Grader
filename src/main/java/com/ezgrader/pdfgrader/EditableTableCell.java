@@ -1,6 +1,5 @@
 package com.ezgrader.pdfgrader;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -14,6 +13,9 @@ import javafx.util.Callback;
 import javafx.util.StringConverter;
 import javafx.util.converter.DefaultStringConverter;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 // Modified from Dan Newton's original code, found at https://lankydan.dev/2017/02/11/editable-tables-in-javafx
 
 public class EditableTableCell<S, T> extends TextFieldTableCell<S, T> {
@@ -21,24 +23,11 @@ public class EditableTableCell<S, T> extends TextFieldTableCell<S, T> {
     private TextField textField;
     private boolean escapePressed = false;
     private TablePosition<S, ?> tablePos = null;
-    private TextFormatter filter;
     private String filterRegex;
-    private Runnable onCommitMethod;
 
     public EditableTableCell(final StringConverter<T> converter, String filterRegex) {
         super(converter);
         this.filterRegex = filterRegex;
-    }
-
-    public EditableTableCell(final StringConverter<T> converter, Runnable onCommitMethod) {
-        super(converter);
-        this.onCommitMethod = onCommitMethod;
-    }
-
-    public EditableTableCell(final StringConverter<T> converter, TextFormatter filter, Runnable onCommitMethod) {
-        super(converter);
-        this.filter = filter;
-        this.onCommitMethod = onCommitMethod;
     }
 
     public static <S> Callback<TableColumn<S, String>, TableCell<S, String>> forTableColumn() {
@@ -48,16 +37,6 @@ public class EditableTableCell<S, T> extends TextFieldTableCell<S, T> {
     public static <S, T> Callback<TableColumn<S, T>, TableCell<S, T>> forTableColumn(
             final StringConverter<T> converter, String filterRegex) {
         return list -> new EditableTableCell<S, T>(converter, filterRegex);
-    }
-
-    public static <S, T> Callback<TableColumn<S, T>, TableCell<S, T>> forTableColumn(
-            final StringConverter<T> converter, TextFormatter filter, Runnable onCommitMethod) {
-        return list -> new EditableTableCell<S, T>(converter, filter, onCommitMethod);
-    }
-
-    public static <S, T> Callback<TableColumn<S, T>, TableCell<S, T>> forTableColumn(
-            final StringConverter<T> converter, Runnable onCommitMethod) {
-        return list -> new EditableTableCell<S, T>(converter, onCommitMethod);
     }
 
     @Override
@@ -84,8 +63,13 @@ public class EditableTableCell<S, T> extends TextFieldTableCell<S, T> {
     public void commitEdit(T newValue) {
         if (!isEditing())
             return;
+
+        // check it still satisfies filter
+        Pattern p = Pattern.compile(filterRegex);
+        Matcher m = p.matcher((String) newValue);
+
         final TableView<S> table = getTableView();
-        if (table != null) {
+        if (table != null && m.matches()) {
             // Inform the TableView of the edit being ready to be committed.
             TableColumn.CellEditEvent editEvent = new TableColumn.CellEditEvent(table, tablePos,
                     TableColumn.editCommitEvent(), newValue);
@@ -94,10 +78,11 @@ public class EditableTableCell<S, T> extends TextFieldTableCell<S, T> {
         }
         // we need to setEditing(false):
         super.cancelEdit(); // this fires an invalid EditCancelEvent.
-        // update the item within this cell, so that it represents the new value
-        updateItem(newValue, false);
 
-        if (onCommitMethod != null) Platform.runLater(() -> onCommitMethod.run());
+        if (m.matches()) {
+            // update the item within this cell, so that it represents the new value
+            updateItem(newValue, false);
+        }
 
         if (table != null) {
             // reset the editing cell on the TableView
@@ -132,8 +117,8 @@ public class EditableTableCell<S, T> extends TextFieldTableCell<S, T> {
     private TextField getTextField() {
 
         final TextField textField = new TextField(getItemText());
-        textField.setPadding(new Insets(2,2,2,2));
-        textField.setAlignment(Pos.CENTER);
+        textField.setPadding(new Insets(1,1,1,1));
+        textField.setAlignment(Pos.CENTER_LEFT);
 
         textField.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -175,6 +160,10 @@ public class EditableTableCell<S, T> extends TextFieldTableCell<S, T> {
                 textField.setText(getConverter().toString(getItem()));
                 cancelEdit();
                 event.consume();
+            } else if (event.isShiftDown() && event.getCode() == KeyCode.TAB) {
+                getTableView().requestFocus();
+                getTableView().getFocusModel().focusAboveCell();
+                event.consume();
             } else if (event.getCode() == KeyCode.TAB) {
                 getTableView().requestFocus();
                 getTableView().getFocusModel().focusBelowCell();
@@ -182,11 +171,7 @@ public class EditableTableCell<S, T> extends TextFieldTableCell<S, T> {
             }
         });
 
-        if (filter != null) {
-            textField.setTextFormatter(new TextFormatter<>(filter.getFilter()));
-        } else if (filterRegex != null) {
-            textField.setTextFormatter(TextFilters.MakeFilter(filterRegex));
-        }
+        textField.setTextFormatter(TextFilters.MakeFilter(filterRegex));
 
         return textField;
     }

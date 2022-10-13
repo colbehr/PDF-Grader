@@ -9,8 +9,8 @@ import java.util.regex.Pattern;
 public class TextFilters {
     public static final String intRegex = "(\\d*)";
     public static final String doubleRegex = "(\\d+)\\.?(\\d)*";
-
     public static final String pointsRegex = "([+-]?)((\\d+)\\.?(\\d)*)?";
+    public static final String anyRegex = ".*";
 
     public static TextFormatter GetIntFilter() {
         return MakeFilter(intRegex);

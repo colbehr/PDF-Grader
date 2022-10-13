@@ -13,6 +13,9 @@ import javafx.util.Callback;
 import javafx.util.StringConverter;
 import javafx.util.converter.DefaultStringConverter;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 // Modified from Dan Newton's original code, found at https://lankydan.dev/2017/02/11/editable-tables-in-javafx
 
 public class EditableTableCell<S, T> extends TextFieldTableCell<S, T> {
@@ -60,8 +63,13 @@ public class EditableTableCell<S, T> extends TextFieldTableCell<S, T> {
     public void commitEdit(T newValue) {
         if (!isEditing())
             return;
+
+        // check it still satisfies filter
+        Pattern p = Pattern.compile(filterRegex);
+        Matcher m = p.matcher((String) newValue);
+
         final TableView<S> table = getTableView();
-        if (table != null) {
+        if (table != null && m.matches()) {
             // Inform the TableView of the edit being ready to be committed.
             TableColumn.CellEditEvent editEvent = new TableColumn.CellEditEvent(table, tablePos,
                     TableColumn.editCommitEvent(), newValue);
@@ -70,8 +78,12 @@ public class EditableTableCell<S, T> extends TextFieldTableCell<S, T> {
         }
         // we need to setEditing(false):
         super.cancelEdit(); // this fires an invalid EditCancelEvent.
-        // update the item within this cell, so that it represents the new value
-        updateItem(newValue, false);
+
+        if (m.matches()) {
+            // update the item within this cell, so that it represents the new value
+            updateItem(newValue, false);
+        }
+
         if (table != null) {
             // reset the editing cell on the TableView
             table.edit(-1, null);
@@ -105,8 +117,8 @@ public class EditableTableCell<S, T> extends TextFieldTableCell<S, T> {
     private TextField getTextField() {
 
         final TextField textField = new TextField(getItemText());
-        textField.setPadding(new Insets(2,2,2,2));
-        textField.setAlignment(Pos.CENTER);
+        textField.setPadding(new Insets(1,1,1,1));
+        textField.setAlignment(Pos.CENTER_LEFT);
 
         textField.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -147,6 +159,10 @@ public class EditableTableCell<S, T> extends TextFieldTableCell<S, T> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 textField.setText(getConverter().toString(getItem()));
                 cancelEdit();
+                event.consume();
+            } else if (event.isShiftDown() && event.getCode() == KeyCode.TAB) {
+                getTableView().requestFocus();
+                getTableView().getFocusModel().focusAboveCell();
                 event.consume();
             } else if (event.getCode() == KeyCode.TAB) {
                 getTableView().requestFocus();

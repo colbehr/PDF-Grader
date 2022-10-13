@@ -17,6 +17,10 @@ public class Feedback {
         this.explanation = new SimpleStringProperty(this, "explanation", explanation);
     }
 
+    public Feedback copy() {
+        return new Feedback(points.get(), explanation.get());
+    }
+
     /*
     * Getters and Setters
     * */

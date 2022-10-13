@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="300.0" minWidth="660.0" prefHeight="500.0" prefWidth="760.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ezgrader.pdfgrader.HomeController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="300.0" minWidth="660.0" prefHeight="500.0" prefWidth="760.0" stylesheets="@shared.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ezgrader.pdfgrader.HomeController">
    <children>
       <VBox prefHeight="500.0" prefWidth="110.0" style="-fx-background-color: #333;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -95,14 +95,14 @@
       </VBox>
       <AnchorPane layoutX="195.0" prefHeight="400.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="195.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <TextField layoutX="307.0" layoutY="19.0" prefHeight="35.0" prefWidth="169.0" promptText="Search" style="-fx-background-color: #fff;" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="19.0">
+            <TextField layoutX="307.0" layoutY="19.0" prefHeight="35.0" prefWidth="169.0" promptText="Search" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="19.0">
                <padding>
                   <Insets left="32.0" />
                </padding>
                <cursor>
                   <Cursor fx:constant="TEXT" />
                </cursor></TextField>
-            <TableView fx:id="recentTable" prefHeight="401.0" prefWidth="548.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="98.0">
+            <TableView fx:id="recentTable" prefHeight="401.0" prefWidth="548.0" styleClass="prettyTable" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="98.0">
               <columns>
                 <TableColumn fx:id="nameCol" prefWidth="190.0" text="Name" />
                 <TableColumn fx:id="pathCol" prefWidth="374.0" text="Path" />

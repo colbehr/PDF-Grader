@@ -103,4 +103,10 @@ public class PDFGrader extends Application {
         if (workingTest != null) workingTest.CloseDocument();
         workingTest = new Test(path);
     }
+
+    public static Path GetWorkingTest() {
+        return workingTest.getPath();
+    }
+
+
 }

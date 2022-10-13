@@ -146,6 +146,7 @@
                   <Label fx:id="questionNumberText" layoutX="60.0" layoutY="45.0" text="1" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="45.0" />
                   <Label fx:id="questionsTotalText" layoutX="90.0" layoutY="45.0" text="1" AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="45.0" />
                   <CheckBox fx:id="autoTotalCheckbox" layoutX="277.0" layoutY="76.0" mnemonicParsing="false" onAction="#ToggleAutoTotal" text="Auto-Total" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="76.0" />
+                  <Button layoutX="298.0" layoutY="15.0" mnemonicParsing="false" onAction="#finishedGrading" text="Export" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                </children></AnchorPane>
         </items>
       </SplitPane>

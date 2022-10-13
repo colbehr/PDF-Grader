@@ -66,7 +66,7 @@ public class EditableTableCell<S, T> extends TextFieldTableCell<S, T> {
 
         // check it still satisfies filter
         Pattern p = Pattern.compile(filterRegex);
-        Matcher m = p.matcher((String) newValue);
+        Matcher m = p.matcher("" + newValue);
 
         final TableView<S> table = getTableView();
         if (table != null && m.matches()) {

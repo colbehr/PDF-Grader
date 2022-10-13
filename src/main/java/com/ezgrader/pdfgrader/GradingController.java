@@ -13,7 +13,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 
@@ -55,9 +54,9 @@ public class GradingController {
     @FXML
     private Pagination pagination;
     @FXML
-    private Text currentTestText;
+    private Label currentTestText;
     @FXML
-    private Text totalTestsText;
+    private Label totalTestsText;
     @FXML
     private Button nextQuestionButton;
     @FXML

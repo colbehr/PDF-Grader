@@ -2,6 +2,7 @@
 
 <?import java.lang.String?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -54,17 +55,17 @@
           </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="512.0" prefWidth="375.0">
                <children>
-                  <Label layoutX="38.0" layoutY="14.0" prefHeight="15.0" prefWidth="213.0" text="Nickname" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="10.0" />
+                  <Label fx:id="testNameText" layoutX="38.0" layoutY="14.0" prefHeight="15.0" prefWidth="213.0" text="Nickname" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="10.0" />
                   <ImageView fitHeight="25.0" fitWidth="28.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <image>
                         <Image url="@img/file-earmark-plus.png" />
                      </image>
                   </ImageView>
-                  <Label layoutX="16.0" layoutY="55.0" text="Question 1" />
-                  <Label layoutX="78.0" layoutY="55.0" prefHeight="17.0" prefWidth="58.0" text="of 3" />
-                  <TextField layoutX="15.0" layoutY="78.0" prefHeight="25.0" prefWidth="42.0" text="0.0" />
+                  <Label layoutX="16.0" layoutY="55.0" text="Question" />
+                  <Label layoutX="78.0" layoutY="55.0" prefHeight="17.0" prefWidth="16.0" text="of" />
+                  <TextField fx:id="pointsGivenField" layoutX="15.0" layoutY="78.0" prefHeight="25.0" prefWidth="42.0" text="0.0" />
                   <Label layoutX="66.0" layoutY="82.0" text="out of" />
-                  <Label layoutX="120.0" layoutY="82.0" text="0" />
+                  <Label fx:id="pointsTotalText" layoutX="120.0" layoutY="82.0" text="0" />
                    <TableView fx:id="feedbackTable" layoutY="146.0" onKeyPressed="#deleteFeedback" prefHeight="139.0" prefWidth="375.0">
                        <placeholder><Label text="No Feedback yet" /></placeholder>
                        <columns>
@@ -84,9 +85,9 @@
                         <String fx:value="prettyTable" />
                      </styleClass>
                    </TableView>
-                  <TextField layoutX="9.0" layoutY="116.0" prefHeight="25.0" prefWidth="42.0" promptText="+1" />
-                  <TextField layoutX="61.0" layoutY="116.0" prefHeight="25.0" prefWidth="213.0" promptText="Reasons for giving/taking points" />
-                  <Button layoutX="292.0" layoutY="116.0" mnemonicParsing="false" text="+" />
+                  <TextField fx:id="feedbackNewPoints" layoutX="9.0" layoutY="116.0" prefHeight="25.0" prefWidth="42.0" promptText="+1" />
+                  <TextField fx:id="feedbackNewDesc" layoutX="61.0" layoutY="116.0" onAction="#addFeedback" prefHeight="25.0" prefWidth="213.0" promptText="Reasons for giving/taking points" />
+                  <Button layoutX="292.0" layoutY="116.0" mnemonicParsing="false" onAction="#addFeedback" text="+" />
                    <TableView fx:id="reuseFeedbackTable" layoutY="312.0" onKeyPressed="#deleteFeedback" prefHeight="126.0" prefWidth="375.0" styleClass="prettyTable, noheader">
                        <placeholder><Label text="No Feedbacks written for this question" /></placeholder>
                        <columns>
@@ -103,11 +104,17 @@
                        </columns>
                    </TableView>
                   <Label layoutX="7.0" layoutY="289.0" text="Reuse Other Feedback" />
-                  <Button layoutX="95.0" layoutY="455.0" mnemonicParsing="false" text="&lt;" />
-                  <Button layoutX="271.0" layoutY="455.0" mnemonicParsing="false" text="&gt;" />
-                  <Button layoutX="10.0" layoutY="511.0" mnemonicParsing="false" text="Previous Question" />
-                  <Button layoutX="271.0" layoutY="511.0" mnemonicParsing="false" text="Next Question" />
-                  <Label layoutX="168.0" layoutY="459.0" text="Test 1 of 2" />
+                  <Button fx:id="prevTestButton" layoutX="95.0" layoutY="455.0" mnemonicParsing="false" onAction="#prevTest" text="&lt;" />
+                  <Button fx:id="nextTestButton" layoutX="271.0" layoutY="455.0" mnemonicParsing="false" onAction="#nextTest" text="&gt;" />
+                  <Button fx:id="prevQuestionButton" layoutX="10.0" layoutY="511.0" mnemonicParsing="false" onAction="#prevQuestion" text="Previous Question" />
+                  <Button fx:id="nextQuestionButton" layoutX="271.0" layoutY="511.0" mnemonicParsing="false" onAction="#nextQuestion" text="Next Question" />
+                  <Label layoutX="157.0" layoutY="459.0" text="Test" />
+                  <Label fx:id="questionNumberText" layoutX="67.0" layoutY="55.0" text="1" />
+                  <Label fx:id="questionsTotalText" layoutX="95.0" layoutY="55.0" text="1" />
+                  <Label fx:id="currentTestText" layoutX="188.0" layoutY="459.0" text="0" />
+                  <Label layoutX="201.0" layoutY="459.0" text="of" />
+                  <Label fx:id="totalTestsText" layoutX="221.0" layoutY="459.0" text="1" />
+                  <CheckBox fx:id="autoTotalCheckbox" layoutX="165.0" layoutY="82.0" mnemonicParsing="false" onAction="#ToggleAutoTotal" text="Auto-Total" />
                </children></AnchorPane>
         </items>
       </SplitPane>

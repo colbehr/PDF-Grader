@@ -16,10 +16,13 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="779.0" stylesheets="@setup.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ezgrader.pdfgrader.GradingController">
    <children>
-      <MenuBar prefHeight="25.0" prefWidth="779.0">
+      <MenuBar prefHeight="25.0" prefWidth="779.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
           <Menu mnemonicParsing="false" text="ezgrader" />
           <Menu mnemonicParsing="false" text="File">
@@ -55,66 +58,94 @@
           </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="512.0" prefWidth="375.0">
                <children>
-                  <Label fx:id="testNameText" layoutX="38.0" layoutY="14.0" prefHeight="15.0" prefWidth="213.0" text="Nickname" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="10.0" />
+                  <Label fx:id="testNameText" layoutX="38.0" layoutY="14.0" prefHeight="17.0" prefWidth="323.0" text="Nickname" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0" />
                   <ImageView fitHeight="25.0" fitWidth="28.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <image>
                         <Image url="@img/file-earmark-plus.png" />
                      </image>
                   </ImageView>
-                  <Label layoutX="16.0" layoutY="55.0" text="Question" />
-                  <Label layoutX="78.0" layoutY="55.0" prefHeight="17.0" prefWidth="16.0" text="of" />
-                  <TextField fx:id="pointsGivenField" layoutX="15.0" layoutY="78.0" prefHeight="25.0" prefWidth="42.0" text="0.0" />
-                  <Label layoutX="66.0" layoutY="82.0" text="out of" />
-                  <Label fx:id="pointsTotalText" layoutX="120.0" layoutY="82.0" text="0" />
-                   <TableView fx:id="feedbackTable" layoutY="146.0" onKeyPressed="#deleteFeedback" prefHeight="139.0" prefWidth="375.0">
-                       <placeholder><Label text="No Feedback yet" /></placeholder>
-                       <columns>
-                           <TableColumn fx:id="pointsCol" prefWidth="52.0" style="-fx-pref-width: 40px; -fx-alignment: baseline-center; -fx-font-family: 'Quicksand Bold';" text="Points">
-                               <cellValueFactory>
-                                   <PropertyValueFactory property="points" />
-                               </cellValueFactory>
-                           </TableColumn>
-                           <TableColumn maxWidth="9994.0" prefWidth="334.0" style="-fx-alignment: baseline-left;" text="Explanation">
-                               <cellValueFactory>
-                                   <PropertyValueFactory property="Explanation" />
-                               </cellValueFactory>
-                           </TableColumn>
-                       </columns>
-                     <styleClass>
-                        <String fx:value="noheader" />
-                        <String fx:value="prettyTable" />
-                     </styleClass>
-                   </TableView>
-                  <TextField fx:id="feedbackNewPoints" layoutX="9.0" layoutY="116.0" prefHeight="25.0" prefWidth="42.0" promptText="+1" />
-                  <TextField fx:id="feedbackNewDesc" layoutX="61.0" layoutY="116.0" onAction="#addFeedback" prefHeight="25.0" prefWidth="213.0" promptText="Reasons for giving/taking points" />
-                  <Button layoutX="292.0" layoutY="116.0" mnemonicParsing="false" onAction="#addFeedback" text="+" />
-                   <TableView fx:id="reuseFeedbackTable" layoutY="312.0" onKeyPressed="#deleteFeedback" prefHeight="126.0" prefWidth="375.0" styleClass="prettyTable, noheader">
-                       <placeholder><Label text="No Feedbacks written for this question" /></placeholder>
-                       <columns>
-                           <TableColumn prefWidth="101.0" style="-fx-alignment: baseline-center; -fx-font-family: 'Quicksand Bold'; -fx-pref-width: 40px;" text="Points">
-                               <cellValueFactory>
-                                   <PropertyValueFactory property="points" />
-                               </cellValueFactory>
-                           </TableColumn>
-                           <TableColumn minWidth="0.0" prefWidth="270.0" style="-fx-alignment: baseline-left" text="Explanation">
-                               <cellValueFactory>
-                                   <PropertyValueFactory property="Explanation" />
-                               </cellValueFactory>
-                           </TableColumn>
-                       </columns>
-                   </TableView>
-                  <Label layoutX="7.0" layoutY="289.0" text="Reuse Other Feedback" />
-                  <Button fx:id="prevTestButton" layoutX="95.0" layoutY="455.0" mnemonicParsing="false" onAction="#prevTest" text="&lt;" />
-                  <Button fx:id="nextTestButton" layoutX="271.0" layoutY="455.0" mnemonicParsing="false" onAction="#nextTest" text="&gt;" />
-                  <Button fx:id="prevQuestionButton" layoutX="10.0" layoutY="511.0" mnemonicParsing="false" onAction="#prevQuestion" text="Previous Question" />
-                  <Button fx:id="nextQuestionButton" layoutX="271.0" layoutY="511.0" mnemonicParsing="false" onAction="#nextQuestion" text="Next Question" />
-                  <Label layoutX="157.0" layoutY="459.0" text="Test" />
-                  <Label fx:id="questionNumberText" layoutX="67.0" layoutY="55.0" text="1" />
-                  <Label fx:id="questionsTotalText" layoutX="95.0" layoutY="55.0" text="1" />
-                  <Label fx:id="currentTestText" layoutX="188.0" layoutY="459.0" text="0" />
-                  <Label layoutX="201.0" layoutY="459.0" text="of" />
-                  <Label fx:id="totalTestsText" layoutX="221.0" layoutY="459.0" text="1" />
-                  <CheckBox fx:id="autoTotalCheckbox" layoutX="165.0" layoutY="82.0" mnemonicParsing="false" onAction="#ToggleAutoTotal" text="Auto-Total" />
+                  <Label layoutX="5.0" layoutY="45.0" text="Question" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="45.0" />
+                  <Label layoutX="73.0" layoutY="45.0" prefHeight="17.0" prefWidth="16.0" text="of" AnchorPane.leftAnchor="73.0" AnchorPane.topAnchor="45.0" />
+                  <TextField fx:id="pointsGivenField" layoutX="5.0" layoutY="72.0" prefHeight="25.0" prefWidth="42.0" text="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="76.0" />
+                  <Label layoutX="57.0" layoutY="76.0" text="out of" AnchorPane.leftAnchor="57.0" AnchorPane.topAnchor="76.0" />
+                  <Label fx:id="pointsTotalText" layoutX="97.0" layoutY="76.0" text="0" AnchorPane.topAnchor="76.0" />
+                  <VBox layoutY="146.0" prefHeight="317.0" prefWidth="375.0" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
+                     <children>
+                         <TableView fx:id="feedbackTable" onKeyPressed="#deleteFeedback" prefHeight="1000.0" prefWidth="375.0">
+                             <placeholder>
+                              <Label text="No Feedback yet" />
+                           </placeholder>
+                             <columns>
+                                 <TableColumn fx:id="pointsCol" prefWidth="52.0" style="-fx-pref-width: 60px; -fx-alignment: baseline-center; -fx-font-family: 'Quicksand Bold';" text="Points">
+                                     <cellValueFactory>
+                                         <PropertyValueFactory property="points" />
+                                     </cellValueFactory>
+                                 </TableColumn>
+                                 <TableColumn maxWidth="9994.0" prefWidth="314.0" style="-fx-alignment: baseline-left;" text="Explanation">
+                                     <cellValueFactory>
+                                         <PropertyValueFactory property="Explanation" />
+                                     </cellValueFactory>
+                                 </TableColumn>
+                             </columns>
+                           <styleClass>
+                              <String fx:value="noheader" />
+                              <String fx:value="prettyTable" />
+                           </styleClass>
+                         </TableView>
+                        <AnchorPane prefHeight="1000.0" prefWidth="375.0">
+                           <children>
+                               <TableView fx:id="reuseFeedbackTable" layoutY="-119.0" onKeyPressed="#deleteFeedback" prefHeight="136.0" prefWidth="375.0" styleClass="prettyTable, noheader" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+                                   <placeholder>
+                                    <Label text="No Feedbacks written for this question" />
+                                 </placeholder>
+                                   <columns>
+                                       <TableColumn prefWidth="101.0" style="-fx-alignment: baseline-center; -fx-font-family: 'Quicksand Bold'; -fx-pref-width: 60px;" text="Points">
+                                           <cellValueFactory>
+                                               <PropertyValueFactory property="points" />
+                                           </cellValueFactory>
+                                       </TableColumn>
+                                       <TableColumn minWidth="0.0" prefWidth="270.0" style="-fx-alignment: baseline-left" text="Explanation">
+                                           <cellValueFactory>
+                                               <PropertyValueFactory property="Explanation" />
+                                           </cellValueFactory>
+                                       </TableColumn>
+                                   </columns>
+                               </TableView>
+                              <Label layoutX="5.0" text="Reuse Other Feedback" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </VBox>
+                  <TextField fx:id="feedbackNewPoints" layoutX="9.0" layoutY="116.0" prefHeight="25.0" prefWidth="42.0" promptText="+1" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="116.0" />
+                  <TextField fx:id="feedbackNewDesc" layoutX="52.0" layoutY="116.0" onAction="#addFeedback" prefHeight="25.0" prefWidth="287.0" promptText="Reasons for giving/taking points" AnchorPane.leftAnchor="52.0" AnchorPane.rightAnchor="36.0" AnchorPane.topAnchor="116.0" />
+                  <Button layoutX="292.0" layoutY="116.0" mnemonicParsing="false" onAction="#addFeedback" text="+" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="116.0" />
+                  <Button fx:id="prevTestButton" layoutX="95.0" layoutY="455.0" mnemonicParsing="false" onAction="#prevTest" text="&lt;" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="5.0" />
+                  <Button fx:id="nextTestButton" layoutX="274.0" layoutY="464.0" mnemonicParsing="false" onAction="#nextTest" text="&gt;" AnchorPane.bottomAnchor="45.0" AnchorPane.rightAnchor="5.0" />
+                  <Button fx:id="prevQuestionButton" layoutX="10.0" layoutY="511.0" mnemonicParsing="false" onAction="#prevQuestion" text="Previous Question" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" />
+                  <Button fx:id="nextQuestionButton" layoutX="271.0" layoutY="511.0" mnemonicParsing="false" onAction="#nextQuestion" text="Next Question" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" />
+                  <HBox alignment="CENTER" layoutX="50.0" layoutY="483.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0">
+                     <children>
+                        <AnchorPane prefHeight="17.0" prefWidth="81.0">
+                           <children>
+                              <Label text="Test" />
+                              <Label fx:id="currentTestText" layoutX="30.0" text="0">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="46.0" text="of" />
+                              <Label fx:id="totalTestsText" layoutX="63.0" text="1">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </HBox>
+                  <Label fx:id="questionNumberText" layoutX="60.0" layoutY="45.0" text="1" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="45.0" />
+                  <Label fx:id="questionsTotalText" layoutX="90.0" layoutY="45.0" text="1" AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="45.0" />
+                  <CheckBox fx:id="autoTotalCheckbox" layoutX="277.0" layoutY="76.0" mnemonicParsing="false" onAction="#ToggleAutoTotal" text="Auto-Total" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="76.0" />
                </children></AnchorPane>
         </items>
       </SplitPane>

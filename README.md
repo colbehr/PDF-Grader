@@ -25,24 +25,12 @@ Note: I am running Java 17 with javafx 17.0.1
   - The main class should autopopulate, if it does not there may be a problem.
 - Add a name at the top and hit Apply or OK.
 - The project should now run.
-
+- Download [SceneBuilder](https://gluonhq.com/products/scene-builder/) for adjusting UI elements.
 
 #### Troubleshooting tips:
 - On the far right there is a 'Maven' tab, within that tab there is `pdfgrader>lifecycle>install` this should install everything in the pom.xml file.
 - Sometimes a convenient little Maven icon pops up in the top right when looking at `pom.xml` click that if possible. 
 
-#### (OLD) For IntelliJ IDEA:
-
-- Add the repo URL and directory and clone the project from `File>New>Project From Version Control`
-- Once cloned, open `File>Project Structure>Libraries` and remove all the Maven related libraries.
-- Add your javafx library location (lib folder)
-  e.g.  `C:\Files\javafx-sdk-17.0.2\lib`
-- Hit Apply or OK
-- Add a new 'Application configuration under `Run>Edit Configurations...`
-- Choose the Main class and add these program arguments (on Windows)
-  `--module-path "\path\to\javafx-sdk-17.0.2\lib" --add-modules javafx.controls,javafx.fxml`
-- Add a name at the top and hit Apply or OK.
-- The project should now run.
 
 For more info go to the openjfx docs:
 https://openjfx.io/openjfx-docs/#IDE-Intellij
@@ -52,9 +40,16 @@ https://openjfx.io/openjfx-docs/#IDE-Intellij
 ## Release History
 
 
-* 0.0.1
-  * Work in progress
-
+* 0.1
+  * All pages implemented
+  * No Export Functionality
+* 0.8
+  * Added test exporting
+  * Added statistics template exporting (unfinished)
+  * Added file save and load
+* 1.0
+  * Pages stay sized throughout application.
+  * Exporting now comes with statistics.
 
 <!---
 ## Meta

@@ -1,51 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane id="root" maxHeight="Infinity" maxWidth="Infinity" xmlns:fx="http://javafx.com/fxml" fx:controller="com.ezgrader.pdfgrader.ExportController">
-    <stylesheets>
-        <URL value="@./shared.css" />
-        <URL value="@./setup.css" />
-    </stylesheets>
-    <VBox prefHeight="600" prefWidth="800" style="-fx-alignment: center; -fx-spacing: 20px" styleClass="mainContainer" VBox.vgrow="ALWAYS">
-        <Label styleClass="h1" text="Export" />
-        <VBox style="-fx-alignment: center; -fx-spacing: 8px">
-            <Label text="Choose a folder for outputting individual tests.">
-            <font>
-               <Font size="14.0" />
-            </font></Label>
-            <HBox style="-fx-alignment: center; -fx-spacing: 15px">
-              <Button mnemonicParsing="false" onAction="#browseForTestFolder" text="Select Folder" />
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="411.0" prefWidth="600.0" stylesheets="@shared.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ezgrader.pdfgrader.ExportController">
+   <children>
+      <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <menus>
+            <Menu mnemonicParsing="false" text="ezgrader" />
+            <Menu mnemonicParsing="false" text="File">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="New" />
+                  <MenuItem mnemonicParsing="false" text="Open" />
+                  <MenuItem mnemonicParsing="false" text="Save" />
+                  <MenuItem mnemonicParsing="false" text="Settings" />
+                  <MenuItem mnemonicParsing="false" text="Exit" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Edit">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Cut" />
+                  <MenuItem mnemonicParsing="false" text="Copy" />
+                  <MenuItem mnemonicParsing="false" text="Paste" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="About" />
+                  <MenuItem mnemonicParsing="false" text="Github" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+      <VBox alignment="CENTER" layoutY="80.0" prefHeight="256.0" prefWidth="600.0" spacing="20.0" AnchorPane.bottomAnchor="64.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="80.0">
+         <children>
+            <HBox alignment="CENTER">
+               <children>
+                  
+                        <Label text="Export">
+                     <font>
+                        <Font size="23.0" />
+                     </font>
+                  </Label>
+               </children>
             </HBox>
-         <Label fx:id="folderPathText" textFill="#434343" />
-        </VBox>
-        <VBox style="-fx-alignment: center; -fx-spacing: 8px">
-            <Label text="Choose a file to output test overview.">
-            <font>
-               <Font size="14.0" />
-            </font></Label>
-            <HBox style="-fx-alignment: center; -fx-spacing: 15px">
-              <Button mnemonicParsing="false" onAction="#browseForStatistics" text="Select File" />
+            <HBox alignment="CENTER" prefHeight="75.0" prefWidth="600.0">
+               <children>
+                  <AnchorPane prefHeight="75.0" prefWidth="433.0">
+                     <children>
+                        <Button layoutX="174.0" layoutY="25.0" mnemonicParsing="false" onAction="#browseForTestFolder" text="Select Folder" />
+                        <Label layoutX="93.0" text="Choose a folder for outputting individual tests." />
+                        <Label fx:id="folderPathText" alignment="CENTER" layoutX="85.0" layoutY="61.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+               </children>
             </HBox>
-         <Label fx:id="filePathText" layoutX="298.0" layoutY="10.0" textFill="#434343" />
-        </VBox>
-        <Separator styleClass="vert-spacer" />
-        <Button id="newButton" mnemonicParsing="false" onAction="#exportFiles" text="Export" />
-      <Button mnemonicParsing="false" onAction="#backToGrading" prefHeight="41.0" prefWidth="212.0" text="Back to Grading" />
-    </VBox>
-   <columnConstraints>
-      <ColumnConstraints />
-   </columnConstraints>
-   <rowConstraints>
-      <RowConstraints />
-   </rowConstraints>
-</GridPane>
+            <HBox alignment="CENTER">
+               <children>
+                  <AnchorPane prefHeight="77.0" prefWidth="383.0">
+                     <children>
+                        <Label alignment="CENTER" text="Choose a file to a output test overview." AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <Button layoutX="157.0" layoutY="26.0" mnemonicParsing="false" onAction="#browseForStatistics" text="Select File" />
+                        <Label fx:id="filePathText" alignment="CENTER" layoutX="62.0" layoutY="56.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <Button layoutX="14.0" layoutY="35.0" mnemonicParsing="false" onAction="#backToGrading" text="Back to Grading" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="30.0" />
+      <HBox alignment="CENTER" layoutX="265.0" layoutY="345.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#exportFiles" text="Export Files" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

@@ -1,138 +1,154 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.ezgrader.pdfgrader.*?>
-<?import javafx.scene.control.*?>
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import java.net.URL?>
-<GridPane id="root" maxWidth="Infinity" maxHeight="Infinity" xmlns:fx="http://javafx.com/fxml" fx:controller="com.ezgrader.pdfgrader.GradingController">
-    <stylesheets>
-        <URL value="@./shared.css"/>
-        <URL value="@./grading.css"/>
-    </stylesheets>
-    <SplitPane id="side-split">
-        <VBox>
-            <VBox VBox.vgrow="ALWAYS" />
-            <Pagination fx:id="pagination" prefHeight="66.0" prefWidth="354.0" />
-        </VBox>
-        <VBox id="grading-side" prefWidth="200">
-            <HBox id="grading-top">
-                <HBox styleClass="iconAndText">
-                    <Label styleClass="fa-icon" style="-fx-font-size: 14pt"><AwesomeIcon fx:constant="FILE"/></Label>
-                    <Label fx:id="testNameText">CSCI492 SP22 - Example Test</Label>
-                </HBox>
-                <HBox HBox.hgrow="ALWAYS" />
-                <Button fx:id="saveButton" styleClass="fa-icon" onAction="#SaveTest"><text><AwesomeIcon fx:constant="SAVE"/></text></Button>
-                <Button fx:id="doneButton" onAction="#finishedGrading">
-                    <graphic><BorderPane>
-                        <center>
-                            <Label style="-fx-text-fill: white">Done</Label>
-                        </center>
-                        <right>
-                            <Label styleClass="fa-icon" style="-fx-text-fill: white">
-                                <AwesomeIcon fx:constant="CHECK_CIRCLE"/>
-                            </Label>
-                        </right>
-                    </BorderPane></graphic>
-                </Button>
-            </HBox>
-            <VBox id="grading-middle">
-                <HBox id="question-header">
-                    <HBox styleClass="h2" style="-fx-spacing: 12px">
-                        <Label>Question</Label><Label fx:id="questionNumberText">1</Label>
-                    </HBox>
-                    <HBox id="total-questions" style="-fx-spacing: 5px; -fx-alignment: center-left">
-                        <Label style="-fx-padding: 0 0 0 5px">of</Label><Label fx:id="questionsTotalText">10</Label>
-                    </HBox>
-                </HBox>
-                <Separator styleClass="vert-spacer"></Separator>
-                <HBox id="q-score">
-                    <TextField styleClass="numberField" fx:id="pointsGivenField"></TextField>
-                    <Label id="score-outof"> out of </Label>
-                    <Label fx:id="pointsTotalText" styleClass="score-num">10</Label>
-                    <CheckBox fx:id="autoTotalCheckbox" text="Auto-Total" onAction="#ToggleAutoTotal"></CheckBox>
-                </HBox>
-                <Separator styleClass="vert-spacer"></Separator>
-                <Label styleClass="h3">Feedback</Label>
-                <HBox style="-fx-spacing: 10px">
-                    <TextField fx:id="feedbackNewPoints" promptText="+1"></TextField>
-                    <HBox HBox.hgrow="ALWAYS"><TextField fx:id="feedbackNewDesc" promptText="Reasoning for giving/taking points" onAction="#addFeedback"></TextField></HBox>
-                    <Button styleClass="fa-icon" id="add-feedback" onAction="#addFeedback"><text><AwesomeIcon fx:constant="PLUS"/></text></Button>
-                </HBox>
-                <HBox styleClass="space-box"></HBox>
-                <TableView fx:id="feedbackTable" styleClass="noheader" onKeyPressed="#deleteFeedback">
-                    <placeholder><Label text="No Feedback yet"/></placeholder>
-                    <columns>
-                        <TableColumn fx:id="pointsCol" text="Points" style="-fx-pref-width: 40px; -fx-alignment: baseline-center; -fx-font-family: 'Quicksand Bold';">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="points" />
-                            </cellValueFactory>
-                        </TableColumn>
-                        <TableColumn fx:id="explanationCol" text="Explanation" style="-fx-alignment: baseline-left; -fx-pref-width: 9999px">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="explanation" />
-                            </cellValueFactory>
-                        </TableColumn>
-                    </columns>
-                </TableView>
-                <Label styleClass="h3">Reuse Other Feedback</Label>
-                <TableView fx:id="reuseFeedbackTable" styleClass="prettyTable, noheader" onKeyPressed="#deleteFeedback">
-                    <placeholder><Label text="No Feedbacks written for this question"/></placeholder>
-                    <columns>
-                        <TableColumn text="Points" style="-fx-pref-width: 40px; -fx-alignment: baseline-center; -fx-font-family: 'Quicksand Bold';">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="points" />
-                            </cellValueFactory>
-                        </TableColumn>
-                        <TableColumn text="Explanation" style="-fx-alignment: baseline-left">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="Explanation" />
-                            </cellValueFactory>
-                        </TableColumn>
-                    </columns>
-                </TableView>
-                <Separator styleClass="vert-spacer"></Separator>
-            </VBox>
-            <HBox id="grading-bottom">
-                <Button fx:id="prevTestButton" onAction="#prevTest" styleClass="fa-icon"><text><AwesomeIcon fx:constant="ARROW_LEFT"/></text></Button>
-                <Button fx:id="nextTestButton" onAction="#nextTest" styleClass="fa-icon"><text><AwesomeIcon fx:constant="ARROW_RIGHT"/></text></Button>
-            </HBox>
-            <TextFlow id="test-counter">
-                <Text text="Test "/>
-                <Text fx:id="currentTestText" text="1" style="-fx-font-family: 'Quicksand Bold'"/>
-                <Text text=" of "/>
-                <Text fx:id="totalTestsText" text="22" style="-fx-font-family: 'Quicksand Bold'"/>
-            </TextFlow>
-            <VBox VBox.vgrow="ALWAYS"></VBox>
-            <HBox fx:id="questionNav">
-                <Button fx:id="prevQuestionButton" onAction="#prevQuestion">
-                    <graphic><BorderPane>
-                        <left>
-                            <Label styleClass="fa-icon" style="-fx-text-fill: white">
-                                <AwesomeIcon fx:constant="ARROW_CIRCLE_LEFT"/>
-                            </Label>
-                        </left>
-                        <center>
-                            <Label style="-fx-text-fill: white">Prev Question</Label>
-                        </center>
-                    </BorderPane></graphic>
-                </Button>
-                <HBox HBox.hgrow="ALWAYS"></HBox>
-                <Button fx:id="nextQuestionButton" onAction="#nextQuestion">
-                    <graphic><BorderPane>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-                        <center>
-                            <Label style="-fx-text-fill: white">Next Question</Label>
-                        </center>
-                        <right>
-                            <Label styleClass="fa-icon" style="-fx-text-fill: white">
-                                <AwesomeIcon fx:constant="ARROW_CIRCLE_RIGHT"/>
-                            </Label>
-                        </right>
-                    </BorderPane></graphic>
-                </Button>
-            </HBox>
-        </VBox>
-    </SplitPane>
-</GridPane>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="779.0" stylesheets="@shared.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ezgrader.pdfgrader.GradingController">
+   <children>
+      <MenuBar prefHeight="25.0" prefWidth="779.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="ezgrader" />
+          <Menu mnemonicParsing="false" text="File">
+              <items>
+                  <MenuItem mnemonicParsing="false" text="New" />
+                  <MenuItem mnemonicParsing="false" text="Open" />
+                  <MenuItem mnemonicParsing="false" text="Save" />
+                  <MenuItem mnemonicParsing="false" text="Settings" />
+                  <MenuItem mnemonicParsing="false" text="Exit" />
+              </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+              <items>
+                  <MenuItem mnemonicParsing="false" text="Cut" />
+                  <MenuItem mnemonicParsing="false" text="Copy" />
+                  <MenuItem mnemonicParsing="false" text="Paste" />
+              </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+                <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                    <MenuItem mnemonicParsing="false" text="Github" />
+                </items>
+            </Menu>
+        </menus>
+      </MenuBar>
+      <SplitPane dividerPositions="0.5135135135135135" layoutY="25.0" prefHeight="376.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+              <children>
+                  <Pagination fx:id="pagination" layoutY="7.0" prefHeight="523.0" prefWidth="453.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+              </children>
+          </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="512.0" prefWidth="375.0">
+               <children>
+                  <Label fx:id="testNameText" layoutX="38.0" layoutY="14.0" prefHeight="17.0" prefWidth="323.0" text="Nickname" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0" />
+                  <ImageView fitHeight="25.0" fitWidth="28.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+                     <image>
+                        <Image url="@img/file-earmark-plus.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="5.0" layoutY="45.0" text="Question" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="45.0" />
+                  <Label layoutX="73.0" layoutY="45.0" prefHeight="17.0" prefWidth="16.0" text="of" AnchorPane.leftAnchor="73.0" AnchorPane.topAnchor="45.0" />
+                  <TextField fx:id="pointsGivenField" layoutX="5.0" layoutY="72.0" prefHeight="25.0" prefWidth="42.0" text="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="76.0" />
+                  <Label layoutX="57.0" layoutY="76.0" text="out of" AnchorPane.leftAnchor="57.0" AnchorPane.topAnchor="76.0" />
+                  <Label fx:id="pointsTotalText" layoutX="97.0" layoutY="76.0" text="0" AnchorPane.topAnchor="76.0" />
+                  <VBox layoutY="146.0" prefHeight="317.0" prefWidth="375.0" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
+                     <children>
+                         <TableView fx:id="feedbackTable" onKeyPressed="#deleteFeedback" prefHeight="1000.0" prefWidth="375.0">
+                             <placeholder>
+                              <Label text="No Feedback yet" />
+                           </placeholder>
+                             <columns>
+                                 <TableColumn fx:id="pointsCol" prefWidth="52.0" style="-fx-pref-width: 60px; -fx-alignment: baseline-center; -fx-font-family: 'Quicksand Bold';" text="Points">
+                                     <cellValueFactory>
+                                         <PropertyValueFactory property="points" />
+                                     </cellValueFactory>
+                                 </TableColumn>
+                                 <TableColumn maxWidth="9994.0" prefWidth="314.0" style="-fx-alignment: baseline-left;" text="Explanation">
+                                     <cellValueFactory>
+                                         <PropertyValueFactory property="Explanation" />
+                                     </cellValueFactory>
+                                 </TableColumn>
+                             </columns>
+                           <styleClass>
+                              <String fx:value="noheader" />
+                              <String fx:value="prettyTable" />
+                           </styleClass>
+                         </TableView>
+                        <AnchorPane prefHeight="1000.0" prefWidth="375.0">
+                           <children>
+                               <TableView fx:id="reuseFeedbackTable" layoutY="-119.0" onKeyPressed="#deleteFeedback" prefHeight="136.0" prefWidth="375.0" styleClass="prettyTable, noheader" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+                                   <placeholder>
+                                    <Label text="No Feedbacks written for this question" />
+                                 </placeholder>
+                                   <columns>
+                                       <TableColumn prefWidth="101.0" style="-fx-alignment: baseline-center; -fx-font-family: 'Quicksand Bold'; -fx-pref-width: 60px;" text="Points">
+                                           <cellValueFactory>
+                                               <PropertyValueFactory property="points" />
+                                           </cellValueFactory>
+                                       </TableColumn>
+                                       <TableColumn minWidth="0.0" prefWidth="270.0" style="-fx-alignment: baseline-left" text="Explanation">
+                                           <cellValueFactory>
+                                               <PropertyValueFactory property="Explanation" />
+                                           </cellValueFactory>
+                                       </TableColumn>
+                                   </columns>
+                               </TableView>
+                              <Label layoutX="5.0" text="Reuse Other Feedback" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </VBox>
+                  <TextField fx:id="feedbackNewPoints" layoutX="9.0" layoutY="116.0" prefHeight="25.0" prefWidth="42.0" promptText="+1" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="116.0" />
+                  <TextField fx:id="feedbackNewDesc" layoutX="52.0" layoutY="116.0" onAction="#addFeedback" prefHeight="25.0" prefWidth="287.0" promptText="Reasons for giving/taking points" AnchorPane.leftAnchor="52.0" AnchorPane.rightAnchor="36.0" AnchorPane.topAnchor="116.0" />
+                  <Button layoutX="292.0" layoutY="116.0" mnemonicParsing="false" onAction="#addFeedback" text="+" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="116.0" />
+                  <Button fx:id="prevTestButton" layoutX="95.0" layoutY="455.0" mnemonicParsing="false" onAction="#prevTest" text="&lt;" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="5.0" />
+                  <Button fx:id="nextTestButton" layoutX="274.0" layoutY="464.0" mnemonicParsing="false" onAction="#nextTest" text="&gt;" AnchorPane.bottomAnchor="45.0" AnchorPane.rightAnchor="5.0" />
+                  <Button fx:id="prevQuestionButton" layoutX="10.0" layoutY="511.0" mnemonicParsing="false" onAction="#prevQuestion" text="Previous Question" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" />
+                  <Button fx:id="nextQuestionButton" layoutX="271.0" layoutY="511.0" mnemonicParsing="false" onAction="#nextQuestion" text="Next Question" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" />
+                  <HBox alignment="CENTER" layoutX="50.0" layoutY="483.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0">
+                     <children>
+                        <AnchorPane prefHeight="17.0" prefWidth="81.0">
+                           <children>
+                              <Label text="Test" />
+                              <Label fx:id="currentTestText" layoutX="30.0" text="0">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="46.0" text="of" />
+                              <Label fx:id="totalTestsText" layoutX="63.0" text="1">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </HBox>
+                  <Label fx:id="questionNumberText" layoutX="60.0" layoutY="45.0" text="1" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="45.0" />
+                  <Label fx:id="questionsTotalText" layoutX="90.0" layoutY="45.0" text="1" AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="45.0" />
+                  <CheckBox fx:id="autoTotalCheckbox" layoutX="277.0" layoutY="76.0" mnemonicParsing="false" onAction="#ToggleAutoTotal" text="Auto-Total" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="76.0" />
+                  <Button layoutX="298.0" layoutY="15.0" mnemonicParsing="false" onAction="#finishedGrading" text="Export" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+               </children></AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

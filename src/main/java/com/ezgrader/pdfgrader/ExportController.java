@@ -420,12 +420,13 @@ public class ExportController {
     }
 
 
+
     /**
      * sends user back to grading with current test
      */
     @FXML
     private void backToGrading(){
-            File file = new File(PDFGrader.GetWorkingTest().toAbsolutePath().toString().replace(".pdf", ".json"));
+        File file = new File(PDFGrader.GetWorkingTest().toAbsolutePath().toString().replace(".pdf", ".json"));
         try {
             PDFGrader.workingTest = SaveLoad.LoadTest(file);
             PDFGrader.SwitchScene("grading.fxml", false);
@@ -435,4 +436,5 @@ public class ExportController {
             e.printStackTrace();
         }
     }
+
 }

@@ -4,6 +4,7 @@ package com.ezgrader.pdfgrader;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -63,8 +64,8 @@ public class PDFGrader extends Application {
      */
     public static void SwitchScene(String sceneName, boolean maintainSize) throws IOException {
         try {
-            GridPane newRoot = FXMLLoader.load(PDFGrader.class.getResource(sceneName));
-            MakeStretchy(newRoot);
+            AnchorPane newRoot = FXMLLoader.load(PDFGrader.class.getResource(sceneName));
+//            MakeStretchy(newRoot);
 
             if (maintainSize || stage.isMaximized()) {
                 // force maintaining window size
@@ -102,7 +103,10 @@ public class PDFGrader extends Application {
         if (workingTest != null) workingTest.CloseDocument();
         workingTest = new Test(path);
     }
+
     public static Path GetWorkingTest() {
         return workingTest.getPath();
     }
+
+
 }

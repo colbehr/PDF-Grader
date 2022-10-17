@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 
 import static com.ezgrader.pdfgrader.PDFGrader.getStage;
 
@@ -152,5 +153,14 @@ public class HomeController {
                 }
             }
         });
+    }
+
+    @FXML
+    private void ShowShortcutDialog() {
+        HashMap<String, String> shortcuts = new HashMap<>();
+        shortcuts.put("Ctrl+N", "New");
+        shortcuts.put("Ctrl+O"," Open");
+
+        PDFGrader.ShowShortcutDialog(shortcuts, "Grading Shortcuts");
     }
 }

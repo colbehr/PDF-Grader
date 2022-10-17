@@ -2,18 +2,24 @@ package com.ezgrader.pdfgrader;
 
 
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Map;
 
 public class PDFGrader extends Application {
 
@@ -106,5 +112,33 @@ public class PDFGrader extends Application {
         return workingTest.getPath();
     }
 
+    public static void ShowShortcutDialog(Map<String, String> shortcuts, String title) {
 
+        ObservableList<ShortcutDef> data = FXCollections.observableArrayList();
+        for (String key : shortcuts.keySet()) {
+            data.add(new ShortcutDef(key, shortcuts.get(key)));
+        }
+
+        TableView<ShortcutDef> table = new TableView<ShortcutDef>();
+        TableColumn keyComboCol = new TableColumn("Key Combo");
+        keyComboCol.setCellValueFactory(
+                new PropertyValueFactory<ShortcutDef, String>("keyCombo"));
+        TableColumn actionCol = new TableColumn("Action");
+        actionCol.setCellValueFactory(
+                new PropertyValueFactory<ShortcutDef, String>("action"));
+        table.setItems(data);
+        table.getColumns().addAll(keyComboCol, actionCol);
+
+        final Stage dialog = new Stage();
+        dialog.setTitle(title);
+        dialog.initModality(Modality.WINDOW_MODAL);
+        dialog.initOwner(getStage());
+        VBox dialogVbox = new VBox(50);
+        dialogVbox.getChildren().add(table);
+        dialogVbox.autosize();
+        Scene dialogScene = new Scene(dialogVbox);
+        dialog.setScene(dialogScene);
+        dialog.show();
+    }
 }
+

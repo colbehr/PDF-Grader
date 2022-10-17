@@ -25,7 +25,9 @@
               <MenuItem mnemonicParsing="false" text="New" />
               <MenuItem mnemonicParsing="false" text="Open" />
               <MenuItem mnemonicParsing="false" text="Save" />
-              <MenuItem mnemonicParsing="false" text="Settings" />
+                <Menu mnemonicParsing="false" text="Settings" >
+                    <MenuItem mnemonicParsing="false" text="Shortcuts" onAction="#ShowShortcutDialog" />
+                </Menu>
               <MenuItem mnemonicParsing="false" text="Exit" />
             </items>
           </Menu>

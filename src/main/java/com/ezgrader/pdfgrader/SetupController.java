@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 
 import static com.ezgrader.pdfgrader.PDFGrader.getStage;
 import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
@@ -273,5 +274,13 @@ public class SetupController {
                 }
             }
         });
+    }
+
+    @FXML
+    private void ShowShortcutDialog() {
+        HashMap<String, String> shortcuts = new HashMap<>();
+        shortcuts.put("Ctrl+N", "New Question");
+
+        PDFGrader.ShowShortcutDialog(shortcuts, "Setup Shortcuts");
     }
 }

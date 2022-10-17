@@ -24,6 +24,7 @@ import javafx.util.converter.IntegerStringConverter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.UnaryOperator;
@@ -496,5 +497,22 @@ public class GradingController {
                 }
             }
         });
+    }
+
+    @FXML
+    private void ShowShortcutDialog() {
+        HashMap<String, String> shortcuts = new HashMap<>();
+        shortcuts.put("Ctrl+S", "Save");
+        shortcuts.put("Ctrl+Right"," Next Test");
+        shortcuts.put("Ctrl+Left", "Prev Test");
+        shortcuts.put("Ctrl+Shift+Right", "Next Question");
+        shortcuts.put("Ctrl+Shit+Left", "Previous Question");
+        shortcuts.put("[", "Next Test");
+        shortcuts.put("]", "Next Test");
+        shortcuts.put("Ctrl+{0-9}", "Add reusable feedback #1-9");
+        shortcuts.put("Ctrl+Enter", "Add written feedback");
+        shortcuts.put("Ctrl+N", "Focus to new feedback points");
+
+        PDFGrader.ShowShortcutDialog(shortcuts, "Grading Shortcuts");
     }
 }

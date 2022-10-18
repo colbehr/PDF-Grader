@@ -161,6 +161,6 @@ public class HomeController {
         shortcuts.put(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN), "New");
         shortcuts.put(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN)," Open");
 
-        PDFGrader.ShowShortcutDialog(shortcuts, "Grading Shortcuts");
+        //Shortcuts.ShowShortcutDialog(shortcuts, "Grading Shortcuts");
     }
 }

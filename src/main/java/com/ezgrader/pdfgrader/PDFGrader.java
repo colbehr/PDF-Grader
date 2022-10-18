@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
@@ -22,6 +23,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -114,80 +116,6 @@ public class PDFGrader extends Application {
 
     public static Path GetWorkingTest() {
         return workingTest.getPath();
-    }
-
-    public static void ShowShortcutDialog(Map<KeyCombination, String> shortcuts, String title) {
-
-        ObservableList<ShortcutDef> data = FXCollections.observableArrayList();
-        for (KeyCombination key : shortcuts.keySet()) {
-            data.add(new ShortcutDef(key, shortcuts.get(key)));
-        }
-
-        TableView<ShortcutDef> table = new TableView<>();
-        TableColumn keyComboCol = new TableColumn("Key Combo");
-        keyComboCol.setCellValueFactory(
-                new PropertyValueFactory<ShortcutDef, KeyCombination>("keyCombo"));
-        TableColumn actionCol = new TableColumn("Action");
-        actionCol.setCellValueFactory(
-                new PropertyValueFactory<ShortcutDef, String>("action"));
-        table.setItems(data);
-        table.getColumns().addAll(keyComboCol, actionCol);
-
-        final Stage window = new Stage();
-        window.setTitle(title);
-        window.initModality(Modality.WINDOW_MODAL);
-        window.initOwner(getStage());
-        VBox windowVbox = new VBox(50);
-        windowVbox.getChildren().add(table);
-        windowVbox.autosize();
-        Scene dialogScene = new Scene(windowVbox);
-        window.setScene(dialogScene);
-        window.show();
-
-        final Stage reassignDialog = new Stage();
-        //reassignDialog.setTitle();
-        reassignDialog.initModality(Modality.APPLICATION_MODAL);
-        reassignDialog.initOwner(window);
-        VBox dialogVbox = new VBox(50);
-        dialogVbox.getChildren().add(new Text("Press new key. Esc to cancel."));
-        dialogVbox.autosize();
-        Scene reassignScene = new Scene(dialogVbox);
-        reassignDialog.setScene(reassignScene);
-
-        table.setOnMouseClicked(mouseEvent -> {
-            if (mouseEvent.getClickCount() == 2) {
-                reassignDialog.show();
-            }
-        });
-
-        reassignScene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, ke -> {
-            ArrayList<KeyCombination.Modifier> modifiers = new ArrayList<>();
-            if (ke.isShiftDown()) modifiers.add(KeyCombination.SHIFT_DOWN);
-            if (ke.isControlDown()) modifiers.add(KeyCombination.CONTROL_DOWN);
-            if (ke.isAltDown()) modifiers.add(KeyCombination.ALT_DOWN);
-
-            if (ke.getCode() == KeyCode.ESCAPE) {
-                reassignDialog.close();
-            } else {
-                KeyCombination newCombo;
-                try { // Annoyingly throws exception, but works perfectly fine
-                    newCombo = new KeyCodeCombination(ke.getCode());
-                } catch (IllegalArgumentException e) {
-
-                }
-                if (modifiers.size() > 0) {
-                    KeyCombination.Modifier[] modArr = modifiers.toArray(new KeyCombination.Modifier[0]);
-                    try {
-                        newCombo = new KeyCodeCombination(ke.getCode(), modArr);
-                    } catch (IllegalArgumentException e) {
-
-                    }
-                }
-
-                table.getSelectionModel().getSelectedItem().setKeyCombo(newCombo);
-                reassignDialog.close();
-            }
-        });
     }
 }
 

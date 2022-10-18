@@ -281,6 +281,6 @@ public class SetupController {
         HashMap<KeyCombination, String> shortcuts = new HashMap<>();
         shortcuts.put(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN), "New Question");
 
-        PDFGrader.ShowShortcutDialog(shortcuts, "Setup Shortcuts");
+        //Shortcuts.ShowShortcutDialog(shortcuts, "Setup Shortcuts");
     }
 }

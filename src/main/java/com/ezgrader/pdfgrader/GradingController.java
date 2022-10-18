@@ -454,14 +454,14 @@ public class GradingController {
             final KeyCombination ctrlEnter = new KeyCodeCombination(KeyCode.ENTER,
                     KeyCombination.CONTROL_DOWN);
             public void handle(KeyEvent ke) {
-                if (ctrlS.match(ke)) {
+                if (Shortcuts.get("gradingSave").match(ke)) {
                     // TODO: add some logic so that if a file was previously saved in a custom directory/name, that one gets saved over as opposed to the default.
                     SaveTestWithoutDialog();
                     ke.consume();
-                } else if (ctrlRight.match(ke)) {
+                } else if (Shortcuts.get("gradingNextTest").match(ke)) {
                     nextTest();
                     ke.consume(); // <-- stops passing the event to next node
-                } else if (ctrlLeft.match(ke)) {
+                } else if (Shortcuts.get("gradingPrevTest").match(ke)) {
                     prevTest();
                     ke.consume();
                 } else if (ctrlShiftRight.match(ke)) {
@@ -501,18 +501,7 @@ public class GradingController {
 
     @FXML
     private void ShowShortcutDialog() {
-        HashMap<KeyCombination, String> shortcuts = new HashMap<>();
-        shortcuts.put(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN), "Save");
-        shortcuts.put(new KeyCodeCombination(KeyCode.RIGHT, KeyCombination.CONTROL_DOWN)," Next Test");
-//        shortcuts.put("Ctrl+Left", "Prev Test");
-//        shortcuts.put("Ctrl+Shift+Right", "Next Question");
-//        shortcuts.put("Ctrl+Shit+Left", "Previous Question");
-//        shortcuts.put("[", "Next Test");
-//        shortcuts.put("]", "Next Test");
-//        shortcuts.put("Ctrl+{0-9}", "Add reusable feedback #1-9");
-//        shortcuts.put("Ctrl+Enter", "Add written feedback");
-//        shortcuts.put("Ctrl+N", "Focus to new feedback points");
-
-        PDFGrader.ShowShortcutDialog(shortcuts, "Grading Shortcuts");
+        String[] shortcuts = {"gradingSave", "gradingNextTest", "gradingPrevTest"};
+        Shortcuts.ShowShortcutDialog(shortcuts, "Grading Shortcuts");
     }
 }

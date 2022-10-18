@@ -438,59 +438,43 @@ public class GradingController {
     }
 
     private void setupKeyboardShortcuts() {
-        getStage().getScene().addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-            final KeyCombination ctrlRight = new KeyCodeCombination(KeyCode.RIGHT,
-                    KeyCombination.CONTROL_DOWN);
-            final KeyCombination ctrlShiftRight = new KeyCodeCombination(KeyCode.RIGHT,
-                    KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN);
-            final KeyCombination ctrlLeft = new KeyCodeCombination(KeyCode.LEFT,
-                    KeyCombination.CONTROL_DOWN);
-            final KeyCombination ctrlShiftLeft = new KeyCodeCombination(KeyCode.LEFT,
-                    KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN);
-            final KeyCombination ctrlS = new KeyCodeCombination(KeyCode.S,
-                    KeyCombination.CONTROL_DOWN);
-            final KeyCombination ctrlN = new KeyCodeCombination(KeyCode.N,
-                    KeyCombination.CONTROL_DOWN);
-            final KeyCombination ctrlEnter = new KeyCodeCombination(KeyCode.ENTER,
-                    KeyCombination.CONTROL_DOWN);
-            public void handle(KeyEvent ke) {
-                if (Shortcuts.get("gradingSave").match(ke)) {
-                    // TODO: add some logic so that if a file was previously saved in a custom directory/name, that one gets saved over as opposed to the default.
-                    SaveTestWithoutDialog();
-                    ke.consume();
-                } else if (Shortcuts.get("gradingNextTest").match(ke)) {
-                    nextTest();
-                    ke.consume(); // <-- stops passing the event to next node
-                } else if (Shortcuts.get("gradingPrevTest").match(ke)) {
-                    prevTest();
-                    ke.consume();
-                } else if (ctrlShiftRight.match(ke)) {
-                    nextQuestion();
-                    ke.consume();
-                } else if (ctrlShiftLeft.match(ke)) {
-                    prevQuestion();
-                    ke.consume();
-                } else if (ctrlN.match(ke)) {
-                    feedbackNewPoints.requestFocus();
-                    ke.consume();
-                } else if (ctrlEnter.match(ke)) {
-                    addFeedback();
-                    ke.consume();
-                } else if (ke.getCode() == KeyCode.OPEN_BRACKET) {
-                    int index = pagination.getCurrentPageIndex() - 1;
-                    pagination.setCurrentPageIndex(Math.max(index, 0));
-                } else if (ke.getCode() == KeyCode.CLOSE_BRACKET) {
-                    int index = pagination.getCurrentPageIndex() + 1;
-                    pagination.setCurrentPageIndex(Math.min(index, workingTest.getTotalPages() - 1));
-                } else {
-                    // REUSE FEEDBACKS
-                    for (int i = 1; i <= 9; i++) {
-                        if (ke.isControlDown() && ke.getCode() == KeyCode.getKeyCode("" + i)) {
-                            if (i-1 < reuseFeedbackTable.getItems().size()) {
-                                Feedback f = (Feedback) reuseFeedbackTable.getItems().get(i - 1);
-                                if (!feedbacks.contains(f)) {
-                                    addFeedback(f);
-                                }
+        getStage().getScene().addEventFilter(KeyEvent.KEY_PRESSED, ke -> {
+            if (Shortcuts.get("gradingSave").match(ke)) {
+                // TODO: add some logic so that if a file was previously saved in a custom directory/name, that one gets saved over as opposed to the default.
+                SaveTestWithoutDialog();
+                ke.consume();
+            } else if (Shortcuts.get("gradingNextTest").match(ke)) {
+                nextTest();
+                ke.consume(); // <-- stops passing the event to next node
+            } else if (Shortcuts.get("gradingPrevTest").match(ke)) {
+                prevTest();
+                ke.consume();
+            } else if (Shortcuts.get("gradingNextQuestion").match(ke)) {
+                nextQuestion();
+                ke.consume();
+            } else if (Shortcuts.get("gradingPrevQuestion").match(ke)) {
+                prevQuestion();
+                ke.consume();
+            } else if (Shortcuts.get("gradingGotoPoints").match(ke)) {
+                feedbackNewPoints.requestFocus();
+                ke.consume();
+            } else if (Shortcuts.get("gradingAddFeedback").match(ke)) {
+                addFeedback();
+                ke.consume();
+            } else if (Shortcuts.get("prevPage").match(ke)) {
+                int index = pagination.getCurrentPageIndex() - 1;
+                pagination.setCurrentPageIndex(Math.max(index, 0));
+            } else if (Shortcuts.get("nextPage").match(ke)) {
+                int index = pagination.getCurrentPageIndex() + 1;
+                pagination.setCurrentPageIndex(Math.min(index, workingTest.getTotalPages() - 1));
+            } else {
+                // REUSE FEEDBACKS
+                for (int i = 1; i <= 9; i++) {
+                    if (ke.isControlDown() && ke.getCode() == KeyCode.getKeyCode("" + i)) {
+                        if (i-1 < reuseFeedbackTable.getItems().size()) {
+                            Feedback f = (Feedback) reuseFeedbackTable.getItems().get(i - 1);
+                            if (!feedbacks.contains(f)) {
+                                addFeedback(f);
                             }
                         }
                     }
@@ -501,7 +485,7 @@ public class GradingController {
 
     @FXML
     private void ShowShortcutDialog() {
-        String[] shortcuts = {"gradingSave", "gradingNextTest", "gradingPrevTest"};
-        Shortcuts.ShowShortcutDialog(shortcuts, "Grading Shortcuts");
+        String[] keywords = { "grading", "page" };
+        Shortcuts.ShowShortcutDialog(keywords, "Grading Shortcuts");
     }
 }

@@ -130,37 +130,28 @@ public class HomeController {
     }
 
     private void setupKeyboardShortcuts() {
-        PDFGrader.getStage().getScene().addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-            final KeyCombination ctrlN = new KeyCodeCombination(KeyCode.N,
-                    KeyCombination.CONTROL_DOWN);
-            final KeyCombination ctrlO = new KeyCodeCombination(KeyCode.O,
-                    KeyCombination.CONTROL_DOWN);
-            public void handle(KeyEvent ke) {
-                if (ctrlN.match(ke)) {
-                    try {
-                        GoToSetup();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    ke.consume();
-                } else if (ctrlO.match(ke)) {
-                    try {
-                        OpenTest();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    ke.consume();
+        PDFGrader.getStage().getScene().addEventFilter(KeyEvent.KEY_PRESSED, ke -> {
+            if (Shortcuts.get("homeNew").match(ke)) {
+                try {
+                    GoToSetup();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
+                ke.consume();
+            } else if (Shortcuts.get("homeOpen").match(ke)) {
+                try {
+                    OpenTest();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                ke.consume();
             }
         });
     }
 
     @FXML
     private void ShowShortcutDialog() {
-        HashMap<KeyCombination, String> shortcuts = new HashMap<>();
-        shortcuts.put(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN), "New");
-        shortcuts.put(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN)," Open");
-
-        //Shortcuts.ShowShortcutDialog(shortcuts, "Grading Shortcuts");
+        String[] keywords = { "home", "page" };
+        Shortcuts.ShowShortcutDialog(keywords, "Home Shortcuts");
     }
 }

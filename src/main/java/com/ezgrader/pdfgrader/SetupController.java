@@ -264,23 +264,23 @@ public class SetupController {
     }
 
     private void setupKeyboardShortcuts() {
-        getStage().getScene().addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-            final KeyCombination ctrlN = new KeyCodeCombination(KeyCode.N,
-                    KeyCombination.CONTROL_DOWN);
-            public void handle(KeyEvent ke) {
-                if (ctrlN.match(ke)) {
-                    addQuestion();
-                    ke.consume();
-                }
+        getStage().getScene().addEventFilter(KeyEvent.KEY_PRESSED, ke -> {
+            if (Shortcuts.get("setupNewQuestion").match(ke)) {
+                addQuestion();
+                ke.consume();
+            } else if (Shortcuts.get("prevPage").match(ke)) {
+                int index = pagination.getCurrentPageIndex() - 1;
+                pagination.setCurrentPageIndex(Math.max(index, 0));
+            } else if (Shortcuts.get("nextPage").match(ke)) {
+                int index = pagination.getCurrentPageIndex() + 1;
+                pagination.setCurrentPageIndex(Math.min(index, workingTest.getTotalPages() - 1));
             }
         });
     }
 
     @FXML
     private void ShowShortcutDialog() {
-        HashMap<KeyCombination, String> shortcuts = new HashMap<>();
-        shortcuts.put(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN), "New Question");
-
-        //Shortcuts.ShowShortcutDialog(shortcuts, "Setup Shortcuts");
+        String[] keywords = { "setup", "page" };
+        Shortcuts.ShowShortcutDialog(keywords, "Setup Shortcuts");
     }
 }

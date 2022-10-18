@@ -278,8 +278,8 @@ public class SetupController {
 
     @FXML
     private void ShowShortcutDialog() {
-        HashMap<String, String> shortcuts = new HashMap<>();
-        shortcuts.put("Ctrl+N", "New Question");
+        HashMap<KeyCombination, String> shortcuts = new HashMap<>();
+        shortcuts.put(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN), "New Question");
 
         PDFGrader.ShowShortcutDialog(shortcuts, "Setup Shortcuts");
     }

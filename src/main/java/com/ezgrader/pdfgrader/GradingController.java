@@ -501,17 +501,17 @@ public class GradingController {
 
     @FXML
     private void ShowShortcutDialog() {
-        HashMap<String, String> shortcuts = new HashMap<>();
-        shortcuts.put("Ctrl+S", "Save");
-        shortcuts.put("Ctrl+Right"," Next Test");
-        shortcuts.put("Ctrl+Left", "Prev Test");
-        shortcuts.put("Ctrl+Shift+Right", "Next Question");
-        shortcuts.put("Ctrl+Shit+Left", "Previous Question");
-        shortcuts.put("[", "Next Test");
-        shortcuts.put("]", "Next Test");
-        shortcuts.put("Ctrl+{0-9}", "Add reusable feedback #1-9");
-        shortcuts.put("Ctrl+Enter", "Add written feedback");
-        shortcuts.put("Ctrl+N", "Focus to new feedback points");
+        HashMap<KeyCombination, String> shortcuts = new HashMap<>();
+        shortcuts.put(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN), "Save");
+        shortcuts.put(new KeyCodeCombination(KeyCode.RIGHT, KeyCombination.CONTROL_DOWN)," Next Test");
+//        shortcuts.put("Ctrl+Left", "Prev Test");
+//        shortcuts.put("Ctrl+Shift+Right", "Next Question");
+//        shortcuts.put("Ctrl+Shit+Left", "Previous Question");
+//        shortcuts.put("[", "Next Test");
+//        shortcuts.put("]", "Next Test");
+//        shortcuts.put("Ctrl+{0-9}", "Add reusable feedback #1-9");
+//        shortcuts.put("Ctrl+Enter", "Add written feedback");
+//        shortcuts.put("Ctrl+N", "Focus to new feedback points");
 
         PDFGrader.ShowShortcutDialog(shortcuts, "Grading Shortcuts");
     }

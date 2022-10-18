@@ -157,9 +157,9 @@ public class HomeController {
 
     @FXML
     private void ShowShortcutDialog() {
-        HashMap<String, String> shortcuts = new HashMap<>();
-        shortcuts.put("Ctrl+N", "New");
-        shortcuts.put("Ctrl+O"," Open");
+        HashMap<KeyCombination, String> shortcuts = new HashMap<>();
+        shortcuts.put(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN), "New");
+        shortcuts.put(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN)," Open");
 
         PDFGrader.ShowShortcutDialog(shortcuts, "Grading Shortcuts");
     }

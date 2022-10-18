@@ -1,18 +1,30 @@
 package com.ezgrader.pdfgrader;
 
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.input.KeyCombination;
 
 // For viewing shortcuts within app
 public class ShortcutDef {
+
+
+    private SimpleObjectProperty<KeyCombination> keyCombo;
+    private SimpleStringProperty action;
+
+    public ShortcutDef(KeyCombination keyCombo, String action) {
+        this.keyCombo = new SimpleObjectProperty<>(keyCombo);
+        this.action = new SimpleStringProperty(action);
+    }
+
     public String getKeyCombo() {
-        return keyCombo.get();
+        return keyCombo.get().getName();
     }
 
     public String getAction() {
         return action.get();
     }
 
-    public void setKeyCombo(String keyCombo) {
+    public void setKeyCombo(KeyCombination keyCombo) {
         this.keyCombo.set(keyCombo);
     }
 
@@ -20,19 +32,11 @@ public class ShortcutDef {
         this.action.set(action);
     }
 
-    public SimpleStringProperty keyComboProperty() {
+    public SimpleObjectProperty keyComboProperty() {
         return keyCombo;
     }
 
     public SimpleStringProperty actionProperty() {
         return action;
-    }
-
-    private SimpleStringProperty keyCombo;
-    private SimpleStringProperty action;
-
-    public ShortcutDef(String keyCombo, String action) {
-        this.keyCombo = new SimpleStringProperty(keyCombo);
-        this.action = new SimpleStringProperty(action);
     }
 }

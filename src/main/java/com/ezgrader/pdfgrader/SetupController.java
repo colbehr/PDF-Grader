@@ -29,7 +29,7 @@ import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
 public class SetupController {
 
     @FXML
-    private Pagination pagination;
+    private ZoomPanPagination pagination;
     @FXML
     private TextField testNameField;
     @FXML
@@ -91,8 +91,7 @@ public class SetupController {
             //initial page update
             updatePages();
             //set up pagination page grabbing
-            pagination.setPageCount(workingTest.getTotalPages());
-            pagination.setPageFactory(pageNumber -> new ImageView(workingTest.renderPageImage(pageNumber)));
+            pagination.reSetup();
 
             // set default test name, unless one has already been entered
             if (testNameField.getText().equals("")) {

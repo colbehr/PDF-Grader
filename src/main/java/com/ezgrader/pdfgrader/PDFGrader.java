@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -23,6 +24,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.Map;
@@ -32,11 +34,13 @@ public class PDFGrader extends Application {
     private static final int MIN_WIDTH = 300;
     private static final int MIN_HEIGHT = 500;
 
+    private static PDFGrader instance;
     public static Test workingTest;
     private static Stage stage;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+        instance = this;
         stage = primaryStage;
         stage.setTitle("PDF Grader");
         stage.setMinWidth(MIN_WIDTH);
@@ -44,6 +48,8 @@ public class PDFGrader extends Application {
         SwitchScene("home.fxml", false);
         primaryStage.show();
     }
+
+    public static PDFGrader getInstance() { return instance; }
 
     public static void main(String[] args) {
         try {
@@ -89,7 +95,6 @@ public class PDFGrader extends Application {
         }catch(NullPointerException e){
             System.out.println("NullPointerException error has occured");
         }
-
     }
 
     public static void SwitchScene(String sceneName) throws IOException {
@@ -107,6 +112,35 @@ public class PDFGrader extends Application {
         //Set initial directory to users downloads
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator")+ "Downloads"));
         return fileChooser.showOpenDialog(PDFGrader.getStage().getScene().getWindow());
+    }
+
+    public static void GoToSetup() throws IOException {
+        FileChooser.ExtensionFilter pdfFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf", "*.PDF");
+
+        File pdf = PDFGrader.OpenFileChooser("Choose PDF", pdfFilter);
+        if (pdf != null) {
+            PDFGrader.workingTest = new Test(Paths.get(pdf.getPath()));
+            PDFGrader.SwitchScene("setup.fxml", false);
+        }
+    }
+
+    public static void OpenTest() throws IOException {
+        FileChooser.ExtensionFilter jsonFilter = new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json", "*.JSON");
+        //Set initial directory to users downloads
+        File testFile = PDFGrader.OpenFileChooser("Choose Previously Created Test", jsonFilter);
+        if (testFile != null) {
+            System.out.println(testFile.getAbsolutePath());
+            PDFGrader.workingTest = SaveLoad.LoadTest(new File(testFile.getAbsolutePath()));
+            PDFGrader.SwitchScene("grading.fxml", false);
+        }
+    }
+
+    public static void Exit() {
+        stage.close();
+    }
+
+    public static void OpenGithub() {
+        PDFGrader.getInstance().getHostServices().showDocument("https://github.com/colbehr/PDF-Grader");
     }
 
     public static void SetWorkingTest(Path path) {

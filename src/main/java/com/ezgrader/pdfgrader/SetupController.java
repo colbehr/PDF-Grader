@@ -283,4 +283,14 @@ public class SetupController {
         String[] keywords = { "setup", "page" };
         Shortcuts.ShowShortcutDialog(keywords, "Setup Shortcuts");
     }
+
+    // Utility functions that are visible to FXML file
+    @FXML
+    public void OpenTest() throws IOException { PDFGrader.OpenTest(); }
+    @FXML
+    public void GoToSetup() throws IOException { PDFGrader.GoToSetup(); }
+    @FXML
+    private void Exit() { PDFGrader.Exit(); }
+    @FXML
+    private void OpenGithub() { PDFGrader.OpenGithub(); }
 }

@@ -2,30 +2,25 @@ package com.ezgrader.pdfgrader;
 
 
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import javafx.util.converter.DefaultStringConverter;
-import javafx.util.converter.DoubleStringConverter;
-import javafx.util.converter.IntegerStringConverter;
+import javafx.beans.value.ChangeListener;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.function.UnaryOperator;
 import java.util.regex.Matcher;
@@ -77,13 +72,17 @@ public class GradingController {
     private int currentQuestion;
     private int currentTakenTest;
     private ObservableList<Feedback> feedbacks;
+    private Double zoomLevel = 1.0;
+    private Double zoomSensitivity = 0.005;
+    private Double lastDragX = 0.0;
+    private Double lastDragY = 0.0;
+    private Double panX = 0.0;
+    private Double panY = 0.0;
+    private List<ImageView> pageImages = new ArrayList<>();
 
     @FXML
     public void initialize() {
-        if (workingTest != null) {
-            pagination.setPageCount(workingTest.getTotalPages());
-            pagination.setPageFactory(n -> new ImageView(workingTest.renderPageImage(n)));
-        }
+        setupPagination();
 
         // INPUT SANITIZING
         pointsGivenField.setTextFormatter(TextFilters.GetDoubleFilter());
@@ -139,7 +138,6 @@ public class GradingController {
         setTableEditable();
 
         Platform.runLater(this::setupKeyboardShortcuts);
-
     }
 
     @FXML
@@ -399,6 +397,77 @@ public class GradingController {
         reuseFeedbackTable.getColumns().add(colBtn);
     }
 
+    private void setupPagination() {
+        if (workingTest != null) {
+            for (int i = 0; i < workingTest.getTotalPages(); i++) {
+                ImageView imageView = new ImageView(workingTest.renderPageImage(i));
+                pageImages.add(imageView);
+            }
+            // PANNING
+            pagination.setOnMousePressed((e) -> {
+                lastDragX = e.getX();
+                lastDragY = e.getY();
+            });
+            pagination.setOnMouseDragged((e) -> {
+                int page = pagination.getCurrentPageIndex();
+                Double deltaX = e.getX() - lastDragX;
+                Double deltaY = e.getY() - lastDragY;
+                panX = Double.min(Double.max(panX + deltaX, -pagination.getWidth()), pagination.getWidth());
+                panY = Double.min(Double.max(panY + deltaY, -pagination.getHeight()), pagination.getHeight());
+                pageImages.get(page).setTranslateX(panX);
+                pageImages.get(page).setTranslateY(panY);
+
+                lastDragX = e.getX();
+                lastDragY = e.getY();
+            });
+            // ZOOM
+            pagination.setOnScroll((e) -> {
+                int page = pagination.getCurrentPageIndex();
+                zoomLevel = Double.min(Double.max(zoomLevel + e.getDeltaY() * zoomSensitivity, 0.5), 4.0);
+                pageImages.get(page).setScaleX(zoomLevel);
+                pageImages.get(page).setScaleY(zoomLevel);
+            });
+            // Set zoom to fill panel when switching to new page, and reset pan
+            pagination.currentPageIndexProperty().addListener((observable, oldValue, newValue) -> {
+                int page = (int) newValue;
+                pageAutoZoom(page);
+                pageResetPan(page);
+            });
+            // Reset zoom and pan when scaling the window
+            ChangeListener<Number> resetPageZoomPan = (obs, oldVal, newVal) -> {
+                int page = pagination.getCurrentPageIndex();
+                pageAutoZoom(page);
+                pageResetPan(page);
+            };
+            getStage().widthProperty().addListener(resetPageZoomPan);
+            getStage().heightProperty().addListener(resetPageZoomPan);
+            getStage().maximizedProperty().addListener((e) -> {
+                int page = pagination.getCurrentPageIndex();
+                Platform.runLater(() -> pageAutoZoom(page)); // Doesn't always work, idk if there is a more consistent way
+                pageResetPan(page);
+            });
+            // Setup pagination data
+            pagination.setPageCount(workingTest.getTotalPages());
+            pagination.setPageFactory(n -> pageImages.get(n));
+            // Auto zoom AFTER view is created
+            Platform.runLater(() -> pageAutoZoom(pagination.getCurrentPageIndex()));
+        }
+    }
+
+    private void pageAutoZoom(int page) {
+        ImageView imgView = pageImages.get(page);
+        zoomLevel = Double.min(pagination.getWidth(), pagination.getHeight()) / Double.max(imgView.getImage().getWidth(), imgView.getImage().getHeight());
+        pageImages.get(page).setScaleX(zoomLevel);
+        pageImages.get(page).setScaleY(zoomLevel);
+    }
+
+    private void pageResetPan(int page) {
+        panX = 0.0;
+        panY = 0.0;
+        pageImages.get(page).setTranslateX(panX);
+        pageImages.get(page).setTranslateY(panY);
+    }
+
     private void setTableEditable() {
         feedbackTable.setEditable(true);
 
@@ -488,4 +557,14 @@ public class GradingController {
         String[] keywords = { "grading", "page" };
         Shortcuts.ShowShortcutDialog(keywords, "Grading Shortcuts");
     }
+
+    // Utility functions that are visible to FXML file
+    @FXML
+    public void OpenTest() throws IOException { PDFGrader.OpenTest(); }
+    @FXML
+    public void GoToSetup() throws IOException { PDFGrader.GoToSetup(); }
+    @FXML
+    private void Exit() { PDFGrader.Exit(); }
+    @FXML
+    private void OpenGithub() { PDFGrader.OpenGithub(); }
 }

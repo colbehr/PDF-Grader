@@ -17,35 +17,34 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="780.0" stylesheets="@shared.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="com.ezgrader.pdfgrader.SetupController">
    <children>
-      <MenuBar prefHeight="25.0" prefWidth="780.0"  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <menus>
-            <Menu mnemonicParsing="false" text="ezgrader" />
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="New" />
-              <MenuItem mnemonicParsing="false" text="Open" />
-              <MenuItem mnemonicParsing="false" text="Save" />
-                <Menu mnemonicParsing="false" text="Settings" >
-                    <MenuItem mnemonicParsing="false" text="Shortcuts" onAction="#ShowShortcutDialog" />
-                </Menu>
-              <MenuItem mnemonicParsing="false" text="Exit" />
-            </items>
-          </Menu>
-            <Menu mnemonicParsing="false" text="Edit">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="Cut" />
-                  <MenuItem mnemonicParsing="false" text="Copy" />
-                  <MenuItem mnemonicParsing="false" text="Paste" />
-               </items>
-            </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-                  <MenuItem mnemonicParsing="false" text="Github" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
+       <MenuBar prefHeight="25.0" prefWidth="779.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+           <menus>
+               <Menu mnemonicParsing="false" text="ezgrader"/>
+               <Menu mnemonicParsing="false" text="File">
+                   <items>
+                       <MenuItem mnemonicParsing="false" text="New" onAction="#GoToSetup"/>
+                       <MenuItem mnemonicParsing="false" text="Open" onAction="#OpenTest"/>
+                       <Menu mnemonicParsing="false" text="Settings" >
+                           <MenuItem mnemonicParsing="false" text="Shortcuts" onAction="#ShowShortcutDialog" />
+                       </Menu>
+                       <MenuItem mnemonicParsing="false" text="Exit" onAction="#Exit"/>
+                   </items>
+               </Menu>
+               <Menu mnemonicParsing="false" text="Edit">
+                   <items>
+                       <MenuItem mnemonicParsing="false" text="Cut" />
+                       <MenuItem mnemonicParsing="false" text="Copy" />
+                       <MenuItem mnemonicParsing="false" text="Paste" />
+                   </items>
+               </Menu>
+               <Menu mnemonicParsing="false" text="Help">
+                   <items>
+                       <MenuItem mnemonicParsing="false" text="About" />
+                       <MenuItem mnemonicParsing="false" text="Github" onAction="#OpenGithub"/>
+                   </items>
+               </Menu>
+           </menus>
+       </MenuBar>
       <SplitPane dividerPositions="0.48494983277591974" layoutY="25.0" prefHeight="528.0" prefWidth="728.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">

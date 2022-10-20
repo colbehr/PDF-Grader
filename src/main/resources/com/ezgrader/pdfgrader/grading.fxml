@@ -11,16 +11,16 @@
    <children>
       <MenuBar prefHeight="25.0" prefWidth="779.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
-          <Menu mnemonicParsing="false" text="ezgrader" />
+          <Menu mnemonicParsing="false" text="ezgrader"/>
           <Menu mnemonicParsing="false" text="File">
               <items>
-                  <MenuItem mnemonicParsing="false" text="New" />
-                  <MenuItem mnemonicParsing="false" text="Open" />
-                  <MenuItem mnemonicParsing="false" text="Save" />
+                  <MenuItem mnemonicParsing="false" text="New" onAction="#GoToSetup"/>
+                  <MenuItem mnemonicParsing="false" text="Open" onAction="#OpenTest"/>
+                  <MenuItem mnemonicParsing="false" text="Save" onAction="#SaveTestWithoutDialog"/>
                   <Menu mnemonicParsing="false" text="Settings" >
                       <MenuItem mnemonicParsing="false" text="Shortcuts" onAction="#ShowShortcutDialog" />
                   </Menu>
-                  <MenuItem mnemonicParsing="false" text="Exit" />
+                  <MenuItem mnemonicParsing="false" text="Exit" onAction="#Exit"/>
               </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
@@ -33,7 +33,7 @@
             <Menu mnemonicParsing="false" text="Help">
                 <items>
                     <MenuItem mnemonicParsing="false" text="About" />
-                    <MenuItem mnemonicParsing="false" text="Github" />
+                    <MenuItem mnemonicParsing="false" text="Github" onAction="#OpenGithub"/>
                 </items>
             </Menu>
         </menus>

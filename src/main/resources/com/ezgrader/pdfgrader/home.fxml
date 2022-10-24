@@ -103,7 +103,8 @@
                   <Cursor fx:constant="TEXT" />
                </cursor></TextField>
             <TableView fx:id="recentTable" prefHeight="401.0" prefWidth="548.0" styleClass="prettyTable" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="98.0">
-              <columns>
+               <placeholder><Label text="No recent tests" /></placeholder>
+               <columns>
                 <TableColumn fx:id="nameCol" prefWidth="190.0" text="Name" />
                 <TableColumn fx:id="pathCol" prefWidth="374.0" text="Path" />
               </columns>

@@ -6,7 +6,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -20,7 +19,7 @@ public class SaveLoad {
     public static void SaveTest(Test test, String filepath, int currentQuestion, int currentTakenTest) {
         JSONArray wrapperJSArr = new JSONArray();
         JSONObject testJSObj = new JSONObject();
-        testJSObj.put("path", test.getPath());
+        testJSObj.put("path", test.getPdfPath());
         testJSObj.put("pagesPerTest", test.getPagesPerTest());
         testJSObj.put("name", test.getName());
         // Save where grading left off
@@ -87,7 +86,7 @@ public class SaveLoad {
 
             PutTestInRecent(filepath);
         } catch (IOException e) {
-            System.out.println("An error occurred while writing file");
+            System.err.println("An error occurred while writing file");
         }
     }
 
@@ -103,6 +102,7 @@ public class SaveLoad {
         // Set where grading left off
         JSONObject savedPlaceJSObj = testJSObj.getJSONObject("savedPlace");
         test.setSavedPlace(savedPlaceJSObj.getInt("question"), savedPlaceJSObj.getInt("takenTest"));
+        test.savePath = testFile.toPath();
 
         // Retrieve Questions
         for (Object q : testJSObj.getJSONArray("questions")) {

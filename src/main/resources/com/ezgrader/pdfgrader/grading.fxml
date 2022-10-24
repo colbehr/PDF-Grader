@@ -17,7 +17,11 @@
               <items>
                   <MenuItem mnemonicParsing="false" text="New" onAction="#GoToSetup"/>
                   <MenuItem mnemonicParsing="false" text="Open" onAction="#OpenTest"/>
-                  <MenuItem mnemonicParsing="false" text="Save" onAction="#SaveTestWithoutDialog"/>
+                  <CustomMenuItem mnemonicParsing="false" onAction="#SaveTest">
+                      <content>
+                          <HBox styleClass="menuHbox"><Text>Save</Text><Text fx:id="gradingSaveMenuText" styleClass="menuShortcutText"> </Text></HBox>
+                      </content>
+                  </CustomMenuItem>
                   <Menu mnemonicParsing="false" text="Settings" >
                       <MenuItem mnemonicParsing="false" text="Shortcuts" onAction="#ShowShortcutDialog" />
                   </Menu>

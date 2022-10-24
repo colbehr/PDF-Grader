@@ -19,7 +19,7 @@ import java.nio.file.Path;
 public class Test {
     private PDDocument document;
     private PDFRenderer renderer;
-    private Path path;
+    private Path pdfPath;
     private int totalPages;
     private int pagesPerTest;
     private String name;
@@ -29,19 +29,21 @@ public class Test {
     // For a saved then reloaded test, where grading left off
     // [0] = question number, [1] = taken test number
     private int savedPlace[];
+    public Path savePath;
 
     /**
      * Initializes a document and renderer for the PDF at path.
-     * @param path
+     * @param pdfPath
      */
-    public Test(Path path){
-        this.path = path;
+    public Test(Path pdfPath){
+        this.pdfPath = pdfPath;
         try {
-            document = PDDocument.load(path.toFile());
+            document = PDDocument.load(pdfPath.toFile());
             this.totalPages = document.getNumberOfPages();
             renderer = new PDFRenderer(document);
         } catch (IOException e) {
-            throw new UncheckedIOException("Issue loading " + path, e);
+            Toast.Error("Error loading PDF");
+            throw new UncheckedIOException("Issue loading " + pdfPath, e);
         }
         questions = FXCollections.observableArrayList();
         savedPlace = new int[2]; // default to question 0, taken test 0
@@ -141,8 +143,8 @@ public class Test {
         return name;
     }
 
-    public Path getPath() {
-        return path;
+    public Path getPdfPath() {
+        return pdfPath;
     }
 
     public void setSavedPlace(int question, int takenTest) {

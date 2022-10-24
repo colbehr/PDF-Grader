@@ -136,3 +136,12 @@
     -fx-background-color: #00000033;
     -fx-background-radius: 3px;
 }
+
+.menuHbox {
+    -fx-spacing: 10px;
+}
+
+ .menuShortcutText {
+    -fx-fill: #444;
+    -fx-opacity: 0.5;
+}

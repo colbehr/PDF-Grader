@@ -10,10 +10,10 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import javafx.util.converter.DefaultStringConverter;
-import javafx.beans.value.ChangeListener;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +30,8 @@ import static com.ezgrader.pdfgrader.PDFGrader.getStage;
 import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
 
 public class GradingController {
+    @FXML
+    public Text gradingSaveMenuText;
     @FXML
     private Label testNameText;
     @FXML
@@ -222,26 +224,33 @@ public class GradingController {
 
     @FXML
     public void SaveTest() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("JSON Files", "*.json", "*.JSON"));
-        //get parent folder of original pdf
-        File f = new File(workingTest.getPath().toFile().getAbsoluteFile().toString());
-        String path = f.getParentFile().getAbsolutePath();
-        String currentPath = Paths.get(path).toAbsolutePath().normalize().toString();
-        //set initial folder to current pdf directory
-        fileChooser.setInitialDirectory(new File(currentPath));
-        fileChooser.setInitialFileName(workingTest.getName() + ".json");
-        File outFile = fileChooser.showSaveDialog(PDFGrader.getStage().getScene().getWindow());
-        if (outFile != null) {
-            SaveLoad.SaveTest(workingTest, outFile.getPath(), currentQuestion, currentTakenTest);
+        if (workingTest.savePath == null) {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Save");
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("JSON Files", "*.json", "*.JSON"));
+            //get parent folder of original pdf
+            File f = new File(workingTest.getPdfPath().toFile().getAbsoluteFile().toString());
+            String path = f.getParentFile().getAbsolutePath();
+            String currentPath = Paths.get(path).toAbsolutePath().normalize().toString();
+            //set initial folder to current pdf directory
+            fileChooser.setInitialDirectory(new File(currentPath));
+            fileChooser.setInitialFileName(workingTest.getName() + ".json");
+            File outFile = fileChooser.showSaveDialog(PDFGrader.getStage().getScene().getWindow());
+            if (outFile != null) {
+                SaveLoad.SaveTest(workingTest, outFile.getPath(), currentQuestion, currentTakenTest);
+                workingTest.savePath = outFile.toPath();
+                Toast.Notification("Saved " + outFile.getName());
+            }
+        } else {
+            SaveLoad.SaveTest(workingTest, workingTest.savePath.toString(), currentQuestion, currentTakenTest);
+            Toast.Notification("Saved " + workingTest.savePath.getFileName());
         }
     }
 
     @FXML
-    public void SaveTestWithoutDialog() {
+    public void SaveTestAsDefault() {
         //get parent folder of original pdf
-        File f = new File(workingTest.getPath().toFile().getAbsoluteFile().toString());
+        File f = new File(workingTest.getPdfPath().toFile().getAbsoluteFile().toString());
         String path = removeExtention(f.getAbsolutePath()) + ".json";
         System.out.println("Saved: " + path);
         String currentPath = Paths.get(path).toAbsolutePath().normalize().toString() + "";
@@ -352,7 +361,11 @@ public class GradingController {
 
     public void finishedGrading(ActionEvent event) throws IOException {
         //save the file before going to export, so we can go back if needed.
-        SaveTestWithoutDialog();
+        if (workingTest.savePath == null) {
+            SaveTestAsDefault(); // quietly save backup if user never saved
+        } else {
+            SaveTest();
+        }
         //finish grading and go to export page
         PDFGrader.SwitchScene("export.fxml");
     }
@@ -436,10 +449,11 @@ public class GradingController {
     }
 
     private void setupKeyboardShortcuts() {
+        UpdateShortcutMenuText();
+
         getStage().getScene().addEventFilter(KeyEvent.KEY_PRESSED, ke -> {
             if (Shortcuts.get("gradingSave").match(ke)) {
-                // TODO: add some logic so that if a file was previously saved in a custom directory/name, that one gets saved over as opposed to the default.
-                SaveTestWithoutDialog();
+                SaveTest();
                 ke.consume();
             } else if (Shortcuts.get("gradingNextTest").match(ke)) {
                 nextTest();
@@ -479,6 +493,10 @@ public class GradingController {
                 }
             }
         });
+    }
+
+    private void UpdateShortcutMenuText() {
+        gradingSaveMenuText.setText(Shortcuts.get("gradingSave").getName());
     }
 
     @FXML

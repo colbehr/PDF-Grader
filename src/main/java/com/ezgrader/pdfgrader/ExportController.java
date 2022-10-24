@@ -45,7 +45,7 @@ public class ExportController {
      * @param event
      */
     @FXML
-    private void browseForTestFolder(ActionEvent event) {
+    public void browseForTestFolder(ActionEvent event) {
         //open a FileChooser when ChoosePDF is clicked
         DirectoryChooser folderChooser = new DirectoryChooser();
         folderChooser.setTitle("Choose a folder to save graded files");

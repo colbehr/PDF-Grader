@@ -30,9 +30,11 @@ public class HomeController {
     private TableColumn<String, String> nameCol;
     private ObservableList<String> recentTests;
 
+
     @FXML
     public void initialize() throws IOException {
 
+        getStage().setMinWidth(660);
         recentTests = FXCollections.observableArrayList();
         recentTests.addAll(SaveLoad.GetRecentTests());
         pathCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));

@@ -37,6 +37,13 @@
                     <MenuItem mnemonicParsing="false" text="Github" onAction="#OpenGithub"/>
                 </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="Export">
+                <items>
+                    <MenuItem mnemonicParsing="false" text="Select Folder" onAction="#browseForTestFolder"/>
+                    <MenuItem mnemonicParsing="false" text="Select File" onAction="#browseForStatistics"/>
+                    <MenuItem mnemonicParsing="false" text="Export Files" onAction="#exportFiles"/>
+                </items>
+            </Menu>
         </menus>
       </MenuBar>
       <SplitPane dividerPositions="0.5135135135135135" layoutY="25.0" prefHeight="376.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">

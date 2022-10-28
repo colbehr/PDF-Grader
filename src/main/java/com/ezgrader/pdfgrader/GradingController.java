@@ -226,25 +226,30 @@ public class GradingController {
     @FXML
     public void SaveTest() {
         if (workingTest.savePath == null) {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Save");
-            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("JSON Files", "*.json", "*.JSON"));
-            //get parent folder of original pdf
-            File f = new File(workingTest.getPdfPath().toFile().getAbsoluteFile().toString());
-            String path = f.getParentFile().getAbsolutePath();
-            String currentPath = Paths.get(path).toAbsolutePath().normalize().toString();
-            //set initial folder to current pdf directory
-            fileChooser.setInitialDirectory(new File(currentPath));
-            fileChooser.setInitialFileName(workingTest.getName() + ".json");
-            File outFile = fileChooser.showSaveDialog(PDFGrader.getStage().getScene().getWindow());
-            if (outFile != null) {
-                SaveLoad.SaveTest(workingTest, outFile.getPath(), currentQuestion, currentTakenTest);
-                workingTest.savePath = outFile.toPath();
-                Toast.Notification("Saved " + outFile.getName());
-            }
+            SaveTestAs();
         } else {
             SaveLoad.SaveTest(workingTest, workingTest.savePath.toString(), currentQuestion, currentTakenTest);
             Toast.Notification("Saved " + workingTest.savePath.getFileName());
+        }
+    }
+
+    @FXML
+    public void SaveTestAs() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("JSON Files", "*.json", "*.JSON"));
+        //get parent folder of original pdf
+        File f = new File(workingTest.getPdfPath().toFile().getAbsoluteFile().toString());
+        String path = f.getParentFile().getAbsolutePath();
+        String currentPath = Paths.get(path).toAbsolutePath().normalize().toString();
+        //set initial folder to current pdf directory
+        fileChooser.setInitialDirectory(new File(currentPath));
+        fileChooser.setInitialFileName(workingTest.getName() + ".json");
+        File outFile = fileChooser.showSaveDialog(PDFGrader.getStage().getScene().getWindow());
+        if (outFile != null) {
+            SaveLoad.SaveTest(workingTest, outFile.getPath(), currentQuestion, currentTakenTest);
+            workingTest.savePath = outFile.toPath();
+            Toast.Notification("Saved " + outFile.getName());
         }
     }
 

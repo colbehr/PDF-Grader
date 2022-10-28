@@ -62,6 +62,9 @@ public class SetupController {
         setNewPDF(workingTest.getPdfPath().toFile());
 
         Platform.runLater(() -> getStage().setTitle("PDF Grader")); // reset title
+        if (PDFGrader.getCmdLinePageCount() > -1) {
+            Platform.runLater(() -> pagesField.setText("" + PDFGrader.getCmdLinePageCount()));
+        }
         Platform.runLater(this::setupKeyboardShortcuts);
     }
 

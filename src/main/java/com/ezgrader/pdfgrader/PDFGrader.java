@@ -25,6 +25,8 @@ public class PDFGrader extends Application {
     private static PDFGrader instance;
     public static Test workingTest;
     private static Stage stage;
+    private static String cmdLineStartMode;
+    private static int cmdLinePageCount = -1;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -33,13 +35,49 @@ public class PDFGrader extends Application {
         stage.setTitle("PDF Grader");
         stage.setMinWidth(MIN_WIDTH);
         stage.setMinHeight(MIN_HEIGHT);
-        SwitchScene("home.fxml", false);
+        if (cmdLineStartMode == null) {
+            SwitchScene("home.fxml", false);
+        } else if (cmdLineStartMode == "new") {
+            SwitchScene("setup.fxml");
+        } else if (cmdLineStartMode == "open") {
+            PDFGrader.SwitchScene("grading.fxml", false);
+        }
         primaryStage.show();
     }
 
     public static PDFGrader getInstance() { return instance; }
 
     public static void main(String[] args) {
+        // Process command line arguments, if any
+        if (args.length >= 1) {
+            if (args[0].equals("-n")) {
+                if (args.length >= 3) {
+                    File pdf = new File(args[1]);
+                    if (pdf.exists() && args[1].contains(".pdf")) {
+                        workingTest = new Test(Path.of(args[1]));
+                        cmdLineStartMode = "new";
+                        cmdLinePageCount = Integer.parseInt(args[2]);
+                    } else {
+                        System.err.println("ERROR: File does not exist or is not a pdf");
+                    }
+                } else {
+                    System.out.println("Usage: pdfgrader -n <file path> <pages per test>");
+                }
+            } else if (args[0].equals("-o")) {
+                if (args.length >= 2) {
+                    try {
+                        PDFGrader.workingTest = SaveLoad.LoadTest(new File(args[1]));
+                        cmdLineStartMode = "open";
+                    } catch (IOException e) {
+                        System.err.println("ERROR: Could not open " + args[1]);
+                    }
+                } else {
+                    System.out.println("Usage: pdfgrader -o <file path>");
+                }
+            }
+        }
+
+        // Launch app
         try {
             launch(args);
         }catch(NullPointerException e)   {
@@ -168,6 +206,10 @@ public class PDFGrader extends Application {
 
     public static Path GetWorkingTest() {
         return workingTest.getPdfPath();
+    }
+
+    public static int getCmdLinePageCount() {
+        return cmdLinePageCount;
     }
 }
 

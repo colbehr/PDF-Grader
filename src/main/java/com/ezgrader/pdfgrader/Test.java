@@ -43,7 +43,7 @@ public class Test {
             renderer = new PDFRenderer(document);
         } catch (IOException e) {
             Toast.Error("Error loading PDF");
-            throw new UncheckedIOException("Issue loading " + pdfPath, e);
+            //throw new UncheckedIOException("Issue loading " + pdfPath, e);
         }
         questions = FXCollections.observableArrayList();
         savedPlace = new int[2]; // default to question 0, taken test 0

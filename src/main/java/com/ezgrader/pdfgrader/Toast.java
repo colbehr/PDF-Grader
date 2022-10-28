@@ -17,6 +17,8 @@ public class Toast {
     }
 
     private static void MakeToast(String text, String style) {
+        if (PDFGrader.getStage() == null) return;
+
         Popup toast = new Popup();
         Label label = new Label(text);
         label.setStyle(style);

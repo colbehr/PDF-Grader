@@ -15,6 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PDFGrader extends Application {
@@ -52,16 +53,39 @@ public class PDFGrader extends Application {
         if (args.length >= 1) {
             if (args[0].equals("-n")) {
                 if (args.length >= 3) {
-                    File pdf = new File(args[1]);
-                    if (pdf.exists() && args[1].contains(".pdf")) {
-                        workingTest = new Test(Path.of(args[1]));
-                        cmdLineStartMode = "new";
-                        cmdLinePageCount = Integer.parseInt(args[2]);
+                    File argFile = new File(args[1]);
+                    boolean validNumber = true;
+                    try {
+                        Integer.parseInt(args[2]);
+                    } catch (NumberFormatException e) {
+                        validNumber = false;
+                    }
+                    if (argFile.exists() && validNumber) {
+                        if (argFile.isDirectory()) {
+                            File[] files = argFile.listFiles();
+                            List<File> pdfs = new ArrayList<>();
+                            for (File file : files) {
+                                if (file.getName().contains(".pdf")) {
+                                    pdfs.add(file);
+                                }
+                            }
+                            if (pdfs.size() > 0) {
+                                workingTest = new Test(MergePDFs(pdfs).toPath());
+                                cmdLineStartMode = "new";
+                                cmdLinePageCount = Integer.parseInt(args[2]);
+                            } else {
+                                System.err.println("No PDFs found in directory");
+                            }
+                        } else if (args[1].contains(".pdf")) {
+                            workingTest = new Test(Path.of(args[1]));
+                            cmdLineStartMode = "new";
+                            cmdLinePageCount = Integer.parseInt(args[2]);
+                        }
                     } else {
-                        System.err.println("ERROR: File does not exist or is not a pdf");
+                        System.err.println("ERROR: File does not exist or is not a pdf, or <pages per test> argument not a number");
                     }
                 } else {
-                    System.out.println("Usage: pdfgrader -n <file path> <pages per test>");
+                    System.out.println("Usage: pdfgrader -n <pdf file path> <pages per test>");
                 }
             } else if (args[0].equals("-o")) {
                 if (args.length >= 2) {
@@ -72,8 +96,13 @@ public class PDFGrader extends Application {
                         System.err.println("ERROR: Could not open " + args[1]);
                     }
                 } else {
-                    System.out.println("Usage: pdfgrader -o <file path>");
+                    System.out.println("Usage: pdfgrader -o <test json file path>");
                 }
+            } else {
+                System.out.println("Usages:");
+                System.out.println("Start:                 pdfgrader");
+                System.out.println("Start with new test:   pdfgrader -n <pdf file path> <pages per test>");
+                System.out.println("Start with saved test: pdfgrader -o <test json file path>");
             }
         }
 

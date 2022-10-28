@@ -17,9 +17,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static com.ezgrader.pdfgrader.PDFGrader.getStage;
+import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
 
 public class HomeController {
     @FXML
@@ -58,6 +61,7 @@ public class HomeController {
         // Run AFTER stage is created (which is after this init method)
         Platform.runLater(this::setupKeyboardShortcuts);
         Platform.runLater(this::setupDragNDrop);
+        Platform.runLater(() -> getStage().setTitle("PDF Grader"));
     }
 
     private void setupDragNDrop() {
@@ -82,22 +86,28 @@ public class HomeController {
                 if (db.hasFiles()) {
                     success = true;
                     String filePath = null;
+                    List<File> pdfs = new ArrayList<>();
                     for (File file:db.getFiles()) {
                         filePath = file.getAbsolutePath();
                         int length = filePath.length();
                         //do the upload thing
                         if (filePath.substring(length - 4, length).equals(".pdf")) {
-                            Path finalPath = Paths.get(filePath);
-                            PDFGrader.workingTest = new Test(finalPath);
-                            try {
-                                PDFGrader.SwitchScene("setup.fxml", false);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
+                            pdfs.add(file);
                         } else {
-                            //need to add a popup that says not a pdf
-                            System.out.println("nah");
+                            Toast.Error("Dragged file was not a pdf");
                         }
+                    }
+                    Path finalPath;
+                    if (pdfs.size() > 1) {
+                        finalPath = PDFGrader.MergePDFs(pdfs).toPath();
+                    } else {
+                        finalPath = Paths.get(filePath);
+                    }
+                    PDFGrader.workingTest = new Test(finalPath);
+                    try {
+                        PDFGrader.SwitchScene("setup.fxml", false);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
                 }
                 event.setDropCompleted(success);

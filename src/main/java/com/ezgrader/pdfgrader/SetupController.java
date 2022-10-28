@@ -61,6 +61,7 @@ public class SetupController {
 
         setNewPDF(workingTest.getPdfPath().toFile());
 
+        Platform.runLater(() -> getStage().setTitle("PDF Grader")); // reset title
         Platform.runLater(this::setupKeyboardShortcuts);
     }
 

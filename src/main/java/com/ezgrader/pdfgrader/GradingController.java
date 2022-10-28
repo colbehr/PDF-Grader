@@ -136,6 +136,7 @@ public class GradingController {
         totalTestsText.setText(workingTest.getTakenTests().length + "");
         addButtonToReuseFeedbacksTable();
         setTableEditable();
+        Platform.runLater(() -> getStage().setTitle("PDF Grader - " + workingTest.getName()));
 
         Platform.runLater(this::setupKeyboardShortcuts);
     }

@@ -7,11 +7,15 @@ import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.pdfbox.io.MemoryUsageSetting;
+import org.apache.pdfbox.multipdf.PDFMergerUtility;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 public class PDFGrader extends Application {
 
@@ -95,7 +99,37 @@ public class PDFGrader extends Application {
         fileChooser.setTitle(title);
         //Set initial directory to users downloads
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator")+ "Downloads"));
-        return fileChooser.showOpenDialog(PDFGrader.getStage().getScene().getWindow());
+        List<File> files = fileChooser.showOpenMultipleDialog(PDFGrader.getStage().getScene().getWindow());
+        if (files == null) {
+            return null;
+        } else if (files.size() == 1) {
+            return files.get(0);
+        } else {
+            return MergePDFs(files);
+        }
+    }
+
+    public static File MergePDFs(List<File> files) {
+        PDFMergerUtility ut = new PDFMergerUtility();
+        for (File pdf : files) {
+            try {
+                ut.addSource(pdf);
+            } catch (FileNotFoundException e) {
+                System.err.println("Couldn't find file to merge, this shouldn't happen.");
+            }
+        }
+        String firstFilePath = files.get(0).getAbsolutePath();
+        firstFilePath = firstFilePath.substring(0, firstFilePath.indexOf("."));
+        String lastFileName = files.get(files.size()-1).getName();
+        lastFileName = lastFileName.substring(0, lastFileName.indexOf("."));
+        String savePath = firstFilePath + "-TO-" + lastFileName + "-MERGED.pdf";
+        ut.setDestinationFileName(savePath);
+        try {
+            ut.mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly());
+        } catch (IOException e) {
+            Toast.Error("Could not merge pdfs");
+        }
+        return new File(savePath);
     }
 
     public static void GoToSetup() throws IOException {

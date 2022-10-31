@@ -3,10 +3,12 @@ package com.ezgrader.pdfgrader;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
+import javafx.stage.Screen;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 
@@ -50,6 +52,9 @@ public class SetupController {
 
     @FXML
     public void initialize() {
+
+
+
         pagesField.setTextFormatter(TextFilters.GetIntFilter());
         //tests are initially 1 page long
         pagesField.setText(1 + "");
@@ -61,11 +66,24 @@ public class SetupController {
 
         setNewPDF(workingTest.getPdfPath().toFile());
 
+
         Platform.runLater(() -> getStage().setTitle("PDF Grader")); // reset title
         if (PDFGrader.getCmdLinePageCount() > -1) {
             Platform.runLater(() -> pagesField.setText("" + PDFGrader.getCmdLinePageCount()));
         }
         Platform.runLater(this::setupKeyboardShortcuts);
+        //        https://stackoverflow.com/questions/6864540/how-to-set-a-javafx-stage-frame-to-maximized
+
+        getStage().setMaximized(true);
+        ObservableList<Screen> screens = Screen.getScreensForRectangle(new Rectangle2D(getStage().getX(), getStage().getY(), getStage().getWidth(), getStage().getHeight()));
+
+        // Change stage properties
+        Rectangle2D bounds = screens.get(0).getVisualBounds();
+        getStage().setX(bounds.getMinX());
+        getStage().setY(bounds.getMinY());
+        getStage().setWidth(bounds.getWidth());
+        getStage().setHeight(bounds.getHeight());
+
     }
 
     /**

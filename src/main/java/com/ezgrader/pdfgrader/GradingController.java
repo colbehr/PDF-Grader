@@ -6,12 +6,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Screen;
 import javafx.util.Callback;
 import javafx.util.converter.DefaultStringConverter;
 
@@ -139,6 +141,17 @@ public class GradingController {
         Platform.runLater(() -> getStage().setTitle("PDF Grader - " + workingTest.getName()));
         getUsedFeedbacks();
         Platform.runLater(this::setupKeyboardShortcuts);
+
+        //        https://stackoverflow.com/questions/6864540/how-to-set-a-javafx-stage-frame-to-maximized
+        getStage().setMaximized(true);
+        ObservableList<Screen> screens = Screen.getScreensForRectangle(new Rectangle2D(getStage().getX(), getStage().getY(), getStage().getWidth(), getStage().getHeight()));
+
+        // Change stage properties
+        Rectangle2D bounds = screens.get(0).getVisualBounds();
+        getStage().setX(bounds.getMinX());
+        getStage().setY(bounds.getMinY());
+        getStage().setWidth(bounds.getWidth());
+        getStage().setHeight(bounds.getHeight());
     }
 
     @FXML

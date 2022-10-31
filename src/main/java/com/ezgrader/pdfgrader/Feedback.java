@@ -40,4 +40,12 @@ public class Feedback {
     public StringProperty explanationProperty() {
         return explanation;
     }
+
+    @Override
+    public String toString() {
+        return "Feedback{" +
+                "points=" + points.get() +
+                ", explanation=" + explanation.get() +
+                '}';
+    }
 }

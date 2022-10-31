@@ -137,7 +137,7 @@ public class GradingController {
         addButtonToReuseFeedbacksTable();
         setTableEditable();
         Platform.runLater(() -> getStage().setTitle("PDF Grader - " + workingTest.getName()));
-
+        getUsedFeedbacks();
         Platform.runLater(this::setupKeyboardShortcuts);
     }
 
@@ -347,12 +347,20 @@ public class GradingController {
         Set<String> usedFeedbackExplanations = new HashSet<>();
         for (TakenTest t : workingTest.getTakenTests()) {
             for (Feedback f : t.GetQuestionFeedbacks(currentQuestion)) {
+
+                //add regular feedback for loading
                 if (!usedFeedbackExplanations.contains(f.getPoints() + f.getExplanation())) {
                     usedFeedbacks.add(f);
                 }
                 usedFeedbackExplanations.add(f.getPoints() + f.getExplanation());
             }
         }
+
+
+        //insert dummy feedbacks for quick grading
+        usedFeedbacks.add(new Feedback("+" + workingTest.getTakenTests()[0].getTest().getQuestions().get(currentQuestion).getPointsPossible(), "Good Job"));
+        usedFeedbacks.add(new Feedback("+" + 0, "No points"));
+
         reuseFeedbackTable.setItems(usedFeedbacks);
         reuseFeedbackTable.refresh();
     }

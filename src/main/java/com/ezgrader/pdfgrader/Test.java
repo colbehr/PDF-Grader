@@ -58,7 +58,7 @@ public class Test {
     public Image renderPageImage(int pageIndex){
         BufferedImage image;
         try{
-            image = renderer.renderImage(pageIndex, 1);
+            image = renderer.renderImage(pageIndex, 2);
         } catch (IOException e) {
             throw new UncheckedIOException("Issue rendering page " + pageIndex, e);
         }

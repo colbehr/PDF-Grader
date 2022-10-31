@@ -51,6 +51,7 @@ public class HomeController {
                     PDFGrader.workingTest = SaveLoad.LoadTest(file);
                     PDFGrader.SwitchScene("grading.fxml", false);
                 } catch (IOException e) {
+                    Toast.Error("Error loading test " + obs.getValue().toString());
                     System.err.println("Error loading recent test");
                     System.err.println(e);
                 }

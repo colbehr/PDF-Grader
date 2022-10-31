@@ -3,9 +3,12 @@ package com.ezgrader.pdfgrader;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
@@ -240,5 +243,23 @@ public class PDFGrader extends Application {
     public static int getCmdLinePageCount() {
         return cmdLinePageCount;
     }
+
+    public static void showAboutPage(){
+
+        final Stage window = new Stage();
+        window.setTitle("About the Project");
+        window.initModality(Modality.WINDOW_MODAL);
+        window.initOwner(PDFGrader.getStage());
+        Scene dialogScene = null;
+        window.setAlwaysOnTop(true);
+        try {
+            dialogScene = new Scene( FXMLLoader.load(PDFGrader.class.getResource("about.fxml")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        window.setScene(dialogScene);
+        window.show();
+    }
+
 }
 

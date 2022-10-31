@@ -145,3 +145,12 @@
     -fx-fill: #444;
     -fx-opacity: 0.5;
 }
+
+
+.hyperlink:visited{
+    -fx-text-fill: white;
+}
+
+.hyperlink{
+    -fx-text-fill: white;
+}

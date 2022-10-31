@@ -151,4 +151,10 @@ public class HomeController {
         String[] keywords = { "home", "page" };
         Shortcuts.ShowShortcutDialog(keywords, "Home Shortcuts");
     }
+
+    @FXML
+    private void showAbout(){
+        PDFGrader.showAboutPage();
+    }
+
 }

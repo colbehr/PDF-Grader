@@ -309,4 +309,6 @@ public class SetupController {
     private void Exit() { PDFGrader.Exit(); }
     @FXML
     private void OpenGithub() { PDFGrader.OpenGithub(); }
+    @FXML
+    private void OpenAbout() { PDFGrader.showAboutPage(); }
 }

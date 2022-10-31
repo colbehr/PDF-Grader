@@ -359,6 +359,7 @@ public class GradingController {
 
         //insert dummy feedbacks for quick grading
         usedFeedbacks.add(new Feedback("+" + workingTest.getTakenTests()[0].getTest().getQuestions().get(currentQuestion).getPointsPossible(), "Good Job"));
+        usedFeedbacks.add(new Feedback("+" + workingTest.getTakenTests()[0].getTest().getQuestions().get(currentQuestion).getPointsPossible()/2, "Needs work"));
         usedFeedbacks.add(new Feedback("+" + 0, "No points"));
 
         reuseFeedbackTable.setItems(usedFeedbacks);

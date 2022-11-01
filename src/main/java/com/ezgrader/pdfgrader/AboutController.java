@@ -14,10 +14,10 @@ public class AboutController {
     }
 
     public void KielGithub() throws URISyntaxException, IOException {
-        Desktop.getDesktop().browse(new URI("https://www.github.com/colbehr"));
+        Desktop.getDesktop().browse(new URI("https://github.com/kielmorris34"));
     }
     public void KielWebsite() throws URISyntaxException, IOException {
-        Desktop.getDesktop().browse(new URI("https://www.colbehr.com"));
+        Desktop.getDesktop().browse(new URI("https://www.kielmorris.dev"));
     }
 
     public void DaneGithub() throws URISyntaxException, IOException {

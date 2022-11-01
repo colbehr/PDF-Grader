@@ -32,7 +32,7 @@
                   </Label>
                   <Hyperlink alignment="CENTER" focusTraversable="false" layoutX="58.0" layoutY="223.0" onAction="#KielWebsite" text="Website" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
                   <Hyperlink alignment="CENTER" focusTraversable="false" layoutX="62.0" layoutY="247.0" onAction="#KielGithub" text="Github" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-                  <Label alignment="CENTER" layoutX="16.0" layoutY="133.0" prefHeight="69.0" prefWidth="141.0" text="Some text" textAlignment="CENTER" textFill="WHITE" wrapText="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <Label alignment="CENTER" layoutX="16.0" layoutY="133.0" prefHeight="69.0" prefWidth="141.0" text="Front-End, UI Logic, Back-End" textAlignment="CENTER" textFill="WHITE" wrapText="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <font>
                         <Font size="14.0" />
                      </font>

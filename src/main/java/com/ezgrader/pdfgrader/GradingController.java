@@ -142,7 +142,7 @@ public class GradingController {
         getUsedFeedbacks();
         Platform.runLater(this::setupKeyboardShortcuts);
 
-        //        https://stackoverflow.com/questions/6864540/how-to-set-a-javafx-stage-frame-to-maximized
+        //https://stackoverflow.com/questions/6864540/how-to-set-a-javafx-stage-frame-to-maximized
         getStage().setMaximized(true);
         ObservableList<Screen> screens = Screen.getScreensForRectangle(new Rectangle2D(getStage().getX(), getStage().getY(), getStage().getWidth(), getStage().getHeight()));
 

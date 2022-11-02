@@ -135,6 +135,10 @@ public class PDFGrader extends Application {
         }
     }
 
+    public static void GoToSettings() {
+
+    }
+
     public static void Exit() {
         stage.close();
     }

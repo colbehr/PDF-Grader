@@ -6,12 +6,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.input.*;
-import javafx.stage.FileChooser;
+import javafx.stage.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -136,6 +139,19 @@ public class HomeController {
                 ke.consume();
             }
         });
+    }
+
+    public void settingsFrame() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("settings.fxml"));
+        Parent root1 = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setTitle("Settings");
+        stage.setScene(new Scene(root1));
+        stage.setX(getStage().getX()+200.0);
+        stage.setY(getStage().getY()+40.0);
+        stage.show();
     }
 
     @FXML

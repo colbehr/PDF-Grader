@@ -88,14 +88,14 @@ public class GradingController {
 
     private int currentQuestion;
     private int currentTakenTest;
-    private Path folderPath;
+    public static Path folderPath;
 
     @FXML
-    private String folderPathText;
+    public static String folderPathText;
 
-    private Path statisticsPath;
+    public static Path statisticsPath;
 
-    private String filePathText;
+    public static String filePathText;
     private ObservableList<Feedback> feedbacks;
     private Double zoomLevel = 1.0;
     private Double zoomSensitivity = 0.005;
@@ -880,6 +880,16 @@ public class GradingController {
         return lines;
     }
 
+
+    public static void setFolderPath(Path newFolder) {
+        folderPath = newFolder;
+        folderPathText = folderPath.toString();
+    }
+
+    public static void setFilePathText(Path newFile){
+        statisticsPath = newFile;
+        filePathText = statisticsPath.toString();
+    }
 
 
     // Utility functions that are visible to FXML file

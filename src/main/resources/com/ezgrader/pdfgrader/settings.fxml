@@ -7,12 +7,12 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
-<AnchorPane prefHeight="256.0" prefWidth="150.0" stylesheets="@shared.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ezgrader.pdfgrader.SettingsController">
+<AnchorPane prefHeight="269.0" prefWidth="161.0" stylesheets="@shared.css" style="-fx-background-color: darkslategrey" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ezgrader.pdfgrader.SettingsController">
    <children>
-       <Button mnemonicParsing="false" prefHeight="77.0" prefWidth="150.0" text="Shortcuts" translateY="25.0" onAction="#openShortcuts"/>
-       <Button mnemonicParsing="false" prefHeight="77.0" prefWidth="150.0" text="Set Folder" translateY="105.0" onAction="#openFolder"/>
-       <Button mnemonicParsing="false" prefHeight="77.0" prefWidth="150.0" text="Set File" translateY="185.0" onAction="#selectFile"/>
-      <MenuBar prefHeight="25.0" prefWidth="150.0">
+       <Button mnemonicParsing="false" prefHeight="77.0" prefWidth="150.0" text="Shortcuts" translateY="27.0" translateX="5.0" onAction="#openShortcuts"/>
+       <Button mnemonicParsing="false" prefHeight="77.0" prefWidth="150.0" text="Set Folder" translateY="107.0" translateX="5.0" onAction="#openFolder"/>
+       <Button mnemonicParsing="false" prefHeight="77.0" prefWidth="150.0" text="Set File" translateY="187.0" translateX="5.0" onAction="#selectFile"/>
+      <MenuBar prefHeight="25.0" prefWidth="160.0">
 
       </MenuBar>
 

@@ -1,5 +1,6 @@
 package com.ezgrader.pdfgrader;
 
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -149,8 +150,11 @@ public class HomeController {
         stage.initStyle(StageStyle.UNDECORATED);
         stage.setTitle("Settings");
         stage.setScene(new Scene(root1));
-        stage.setX(getStage().getX()+200.0);
+        stage.setX(getStage().getX()+205.0);
         stage.setY(getStage().getY()+40.0);
+        Timeline tick = new Timeline();
+        tick.setCycleCount(Timeline.INDEFINITE);
+
         stage.show();
     }
 

@@ -1,1 +1,1 @@
-gradingSave=Ctrl+D
+gradingSave=Ctrl+S

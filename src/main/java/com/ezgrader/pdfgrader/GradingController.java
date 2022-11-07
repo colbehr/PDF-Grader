@@ -120,11 +120,13 @@ public class GradingController {
 
         pointsGivenField.textProperty().addListener((observable, oldValue, newValue) -> {
             double points = Double.parseDouble(newValue);
-            double maxPoints = workingTest.getQuestions().get(currentQuestion).getPointsPossible();
-            if (points > maxPoints) {
-                points = maxPoints;
-                pointsGivenField.setText(points + "");
-            }
+            // Taking point cap functionality out for now because of user case where extra
+            // credit may be given on a question.
+//            double maxPoints = workingTest.getQuestions().get(currentQuestion).getPointsPossible();
+//            if (points > maxPoints) {
+//                points = maxPoints;
+//                pointsGivenField.setText(points + "");
+//            }
 
             workingTest.getTakenTests()[currentTakenTest].GradeQuestion(currentQuestion, points);
         });

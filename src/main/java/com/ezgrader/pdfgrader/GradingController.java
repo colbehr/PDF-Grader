@@ -360,6 +360,16 @@ public class GradingController {
     private void getUsedFeedbacks() {
         ObservableList<Feedback> usedFeedbacks = FXCollections.observableArrayList();
         Set<String> usedFeedbackExplanations = new HashSet<>();
+
+        //insert dummy feedbacks for quick grading
+        usedFeedbacks.add(new Feedback("+" + workingTest.getTakenTests()[0].getTest().getQuestions().get(currentQuestion).getPointsPossible(), "Good Job"));
+        usedFeedbacks.add(new Feedback("+" + workingTest.getTakenTests()[0].getTest().getQuestions().get(currentQuestion).getPointsPossible()/2, "Needs work"));
+        usedFeedbacks.add(new Feedback("+" + 0, "No points"));
+        for (Feedback f : usedFeedbacks) {
+            usedFeedbackExplanations.add(f.getPoints() + f.getExplanation());
+        }
+
+        // Get feedbacks used by other test takers
         for (TakenTest t : workingTest.getTakenTests()) {
             for (Feedback f : t.GetQuestionFeedbacks(currentQuestion)) {
 
@@ -370,12 +380,6 @@ public class GradingController {
                 usedFeedbackExplanations.add(f.getPoints() + f.getExplanation());
             }
         }
-
-
-        //insert dummy feedbacks for quick grading
-        usedFeedbacks.add(new Feedback("+" + workingTest.getTakenTests()[0].getTest().getQuestions().get(currentQuestion).getPointsPossible(), "Good Job"));
-        usedFeedbacks.add(new Feedback("+" + workingTest.getTakenTests()[0].getTest().getQuestions().get(currentQuestion).getPointsPossible()/2, "Needs work"));
-        usedFeedbacks.add(new Feedback("+" + 0, "No points"));
 
         reuseFeedbackTable.setItems(usedFeedbacks);
         reuseFeedbackTable.refresh();

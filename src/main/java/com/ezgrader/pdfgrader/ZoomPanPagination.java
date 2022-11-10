@@ -13,8 +13,8 @@ import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
 
 public class ZoomPanPagination extends Pagination {
     private List<ImageView> pageImages;
-    private Double lastDragX;
-    private Double lastDragY;
+    private Double lastDragX = 0.0;
+    private Double lastDragY = 0.0;
     private Double panX;
     private Double panY;
     private Double zoomLevel;

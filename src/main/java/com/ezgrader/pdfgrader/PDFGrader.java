@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PDFGrader extends Application {
 
@@ -41,9 +42,9 @@ public class PDFGrader extends Application {
         stage.setMinHeight(MIN_HEIGHT);
         if (cmdLineStartMode == null) {
             SwitchScene("home.fxml", false);
-        } else if (cmdLineStartMode == "new") {
+        } else if (cmdLineStartMode.equals("new")) {
             SwitchScene("setup.fxml");
-        } else if (cmdLineStartMode == "open") {
+        } else if (cmdLineStartMode.equals("open")) {
             PDFGrader.SwitchScene("grading.fxml", false);
         }
         primaryStage.show();
@@ -138,7 +139,7 @@ public class PDFGrader extends Application {
      */
     public static void SwitchScene(String sceneName, boolean maintainSize) throws IOException {
         try {
-            AnchorPane newRoot = FXMLLoader.load(PDFGrader.class.getResource(sceneName));
+            AnchorPane newRoot = FXMLLoader.load(Objects.requireNonNull(PDFGrader.class.getResource(sceneName)));
 //            MakeStretchy(newRoot);
 
             if (maintainSize || stage.isMaximized()) {
@@ -253,7 +254,7 @@ public class PDFGrader extends Application {
         Scene dialogScene = null;
         window.setAlwaysOnTop(true);
         try {
-            dialogScene = new Scene( FXMLLoader.load(PDFGrader.class.getResource("about.fxml")));
+            dialogScene = new Scene( FXMLLoader.load(Objects.requireNonNull(PDFGrader.class.getResource("about.fxml"))));
         } catch (IOException e) {
             e.printStackTrace();
         }

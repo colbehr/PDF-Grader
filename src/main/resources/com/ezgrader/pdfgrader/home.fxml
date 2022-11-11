@@ -89,7 +89,7 @@
       </VBox>
       <AnchorPane layoutX="195.0" prefHeight="400.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="195.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <TextField layoutX="307.0" layoutY="19.0" prefHeight="35.0" prefWidth="169.0" promptText="Search" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="19.0">
+            <TextField fx:id="searchTextField" layoutX="307.0" layoutY="19.0" prefHeight="35.0" prefWidth="169.0" promptText="Search" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="19.0">
                <padding>
                   <Insets left="32.0" />
                </padding>

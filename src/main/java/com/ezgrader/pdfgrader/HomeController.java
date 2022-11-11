@@ -4,15 +4,19 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.TransferMode;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -21,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.ezgrader.pdfgrader.PDFGrader.getStage;
+import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
 
 public class HomeController {
     @FXML
@@ -29,6 +34,8 @@ public class HomeController {
     private TableColumn<String, String> pathCol;
     @FXML
     private TableColumn<String, String> nameCol;
+    @FXML
+    private TextField searchTextField;
     private ObservableList<String> recentTests;
 
     @FXML
@@ -41,7 +48,8 @@ public class HomeController {
             String name = data.getValue().substring(data.getValue().lastIndexOf("\\") + 1);
             return new SimpleStringProperty(name);
         });
-        recentTable.setItems(recentTests);
+        Platform.runLater(this::setupSearch);
+        // recentTable.setItems(recentTests);
 
         // Make recent tests open on click
         recentTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -114,6 +122,41 @@ public class HomeController {
                 event.consume();
             }
         });
+    }
+
+    private void setupSearch() {
+        // Sample code from:
+        // https://code.makery.ch/blog/javafx-8-tableview-sorting-filtering/
+
+        // 1. Wrap the ObservableList in a FilteredList (initially display all data).
+        FilteredList<String> filteredData = new FilteredList<>(recentTests, p -> true);
+
+        // 2. Set the filter Predicate whenever the filter changes.
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(s -> {
+                // If filter text is empty, display all persons.
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                // Compare first name and last name of every person with filter text.
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (s.toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches first name.
+                }
+                return false; // Does not match.
+            });
+        });
+
+        // 3. Wrap the FilteredList in a SortedList.
+        SortedList<String> sortedData = new SortedList<>(filteredData);
+
+        // 4. Bind the SortedList comparator to the TableView comparator.
+        sortedData.comparatorProperty().bind(recentTable.comparatorProperty());
+
+        // 5. Add sorted (and filtered) data to the table.
+        recentTable.setItems(sortedData);
     }
 
     @FXML

@@ -1,19 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="443.0" prefWidth="681.0" style="-fx-background-color: #222;" stylesheets="@shared.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ezgrader.pdfgrader.AboutController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="443.0" prefWidth="681.0" style="-fx-background-color: #1C1D26;" stylesheets="@shared.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ezgrader.pdfgrader.AboutController">
    <children>
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <image>
-            <Image url="@img/logo.png" />
-         </image>
-      </ImageView>
-      <HBox layoutY="107.0" prefHeight="310.0" prefWidth="681.0" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="107.0">
+      <Label alignment="TOP_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="77.0" prefWidth="287.0" text="Gradeflow" textFill="WHITE">
+         <font>
+            <Font size="22.0" />
+         </font>
+         <graphic>
+            <ImageView accessibleText="Logo" fitHeight="45.0" fitWidth="55.0" pickOnBounds="true">
+               <image>
+                  <Image url="@img/journals.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <padding>
+            <Insets left="10.0" top="15.0" />
+         </padding>
+      </Label>
+      <HBox alignment="BOTTOM_CENTER" layoutY="107.0" prefHeight="310.0" prefWidth="673.0" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="107.0">
          <children>
             <AnchorPane prefHeight="292.0" prefWidth="172.0">
                <children>
@@ -24,7 +37,7 @@
                   </ImageView>
                   <Label alignment="CENTER" layoutX="53.0" layoutY="107.0" text="Kiel M" textAlignment="CENTER" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <font>
-                        <Font size="18.0" />
+                        <Font size="20.0" />
                      </font>
                   </Label>
                   <Hyperlink alignment="CENTER" focusTraversable="false" layoutX="58.0" layoutY="223.0" onAction="#KielWebsite" text="Website" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
@@ -48,7 +61,7 @@
                   </ImageView>
                   <Label alignment="CENTER" layoutX="53.0" layoutY="107.0" text="Colby B" textAlignment="CENTER" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <font>
-                        <Font size="18.0" />
+                        <Font size="20.0" />
                      </font>
                   </Label>
                   <Hyperlink alignment="CENTER" focusTraversable="false" layoutX="58.0" layoutY="223.0" onAction="#ColbyWebsite" text="Website" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
@@ -72,7 +85,7 @@
                   </ImageView>
                   <Label alignment="CENTER" layoutX="53.0" layoutY="107.0" text="Dane B" textAlignment="CENTER" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <font>
-                        <Font size="18.0" />
+                        <Font size="20.0" />
                      </font>
                   </Label>
                   <Hyperlink alignment="CENTER" focusTraversable="false" layoutX="58.0" layoutY="223.0" onAction="#DaneWebsite" text="Website" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
@@ -96,7 +109,7 @@
                   </ImageView>
                   <Label alignment="CENTER" layoutX="53.0" layoutY="107.0" text="Shadrach R" textAlignment="CENTER" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <font>
-                        <Font size="18.0" />
+                        <Font size="20.0" />
                      </font>
                   </Label>
                   <Hyperlink alignment="CENTER" focusTraversable="false" layoutX="58.0" layoutY="223.0" onAction="#ShadrachWebsite" text="Website" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />

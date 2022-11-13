@@ -1,3 +1,21 @@
+/*dark blue main color #1C1D26*/
+/*bg white #E2E2E2*/
+/*white #F5F5F5*/
+/*super fg white #ffffff*/
+/*highlight blue #1E8AD8*/
+@font-face {
+    -fx-font-family: "Varela Round";
+    src: url("fonts/VarelaRound-Regular.ttf");
+}
+
+#root{
+    -fx-font-family: "Varela Round";
+
+}
+.root{
+    -fx-font-family: "Varela Round";
+}
+
 .pagination{
     -fx-page-information-visible:false;
     -fx-alignment:center;
@@ -42,7 +60,7 @@
 
 
 .menu-bar{
--fx-background-color: #333;
+-fx-background-color: #1C1D26;
 }
 .menu .label{
     -fx-text-fill: #fff;
@@ -70,7 +88,7 @@
 
 
 .button{
-    -fx-background-color:#333;
+    -fx-background-color:#1C1D26;
     -fx-text-fill: #fff;
 }
 .button:hover{
@@ -93,9 +111,11 @@
 .prettyTable {
     -fx-font-size: 11pt;
     -fx-border-color: transparent;
-    -fx-border-radius: 20px;
+    -fx-border-radius: 3px;
     -fx-border-width: 0;
     -fx-background-color: transparent;
+    -fx-background-radius: 3px;
+
 
 }
 .prettyTable .column-header {
@@ -120,10 +140,9 @@
 }
 .prettyTable .table-cell {
     -fx-background-color: transparent;
-    -fx-padding: 5 0 5 0px;
+    -fx-padding: 5 0 5 12px;
     -fx-border-width: 0;
-    -fx-text-alignment: center;
-    -fx-alignment: center;
+    -fx-alignment: center-left;
 }
 .prettyTable .table-row-cell:even {
     -fx-background-color: rgba(0,0,0,0.05);
@@ -136,7 +155,15 @@
     -fx-background-color: #00000033;
     -fx-background-radius: 3px;
 }
+.prettyTable .scroll-bar * {
+    -fx-min-width: 0;
+    -fx-pref-width: 0;
+    -fx-max-width: 0;
 
+    -fx-min-height: 0;
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
+}
 .menuHbox {
     -fx-spacing: 10px;
 }

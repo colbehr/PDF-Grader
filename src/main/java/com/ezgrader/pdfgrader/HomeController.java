@@ -1,5 +1,6 @@
 package com.ezgrader.pdfgrader;
 
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -8,6 +9,11 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Group;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -15,6 +21,8 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
+import javafx.stage.*;
 
 import java.awt.*;
 import java.io.File;
@@ -37,6 +45,7 @@ public class HomeController {
     @FXML
     private TextField searchTextField;
     private ObservableList<String> recentTests;
+
 
     @FXML
     public void initialize() throws IOException {
@@ -187,6 +196,22 @@ public class HomeController {
                 ke.consume();
             }
         });
+    }
+
+    public void settingsFrame() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("settings.fxml"));
+        Parent root1 = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setTitle("Settings");
+        stage.setScene(new Scene(root1));
+        stage.setX(getStage().getX()+205.0);
+        stage.setY(getStage().getY()+40.0);
+        Timeline tick = new Timeline();
+        tick.setCycleCount(Timeline.INDEFINITE);
+
+        stage.show();
     }
 
     @FXML

@@ -75,7 +75,7 @@
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button alignment="BASELINE_LEFT" graphicTextGap="16.0" layoutX="10.0" layoutY="261.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="196.0" style="-fx-background-color: #ffffff00; -fx-text-fill: #929292;" text="Settings" textFill="#727272">
+            <Button alignment="BASELINE_LEFT" graphicTextGap="16.0" layoutX="10.0" layoutY="261.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="196.0" style="-fx-background-color: #ffffff00; -fx-text-fill: #929292;" text="Settings" onAction="#settingsFrame" textFill="#727272">
                <graphic>
                   <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>

@@ -944,6 +944,11 @@ public class GradingController {
         filePathText = statisticsPath.toString();
     }
 
+    @FXML
+    public void Export() {
+        Export.simpleExport();
+    }
+
 
     // Utility functions that are visible to FXML file
     @FXML

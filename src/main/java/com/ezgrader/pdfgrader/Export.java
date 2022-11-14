@@ -28,28 +28,22 @@ import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
 /**
  * Export Controller works with export.fxml to set up UI and functionality for the scene.
  */
-public class ExportController {
-    private Path statisticsPath;
-    private Path folderPath;
+public class Export {
 
-    @FXML
-    private javafx.scene.control.Label folderPathText;
-    @FXML
-    private javafx.scene.control.Label filePathText;
+    private static Path statisticsPath;
+    private static Path folderPath;
 
-
-    @FXML void simpleExport(ActionEvent event) {
+    public static void simpleExport() {
         DirectoryChooser folderChooser = new DirectoryChooser();
         folderChooser.setTitle("Choose a folder to save graded files");
         //Set initial directory to users Desktop
         folderChooser.setInitialDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
-        File exportDir = folderChooser.showDialog(((Node) event.getSource()).getScene().getWindow());
+        File exportDir = folderChooser.showDialog(PDFGrader.getStage().getScene().getWindow());
         if (exportDir != null) {
-            folderPath = Paths.get(exportDir.getPath() + workingTest.getName() + "-OVERVIEW.pdf");
-            folderPathText.setText(folderPath.toString());
-
-            statisticsPath = Paths.get(exportDir.getPath());
-            filePathText.setText(statisticsPath.toString());
+            statisticsPath = Paths.get(exportDir.getPath() + "\\" + workingTest.getName() + "-OVERVIEW.pdf");
+            folderPath = Paths.get(exportDir.getPath());
+            System.out.println(statisticsPath);
+            System.out.println(folderPath);
 
             try {
                 exportFiles(null);
@@ -61,55 +55,11 @@ public class ExportController {
     }
 
     /**
-     * Opens a browser to find a folder to put tests into
-     *
-     * @param event
-     */
-    @FXML
-    public void browseForTestFolder(ActionEvent event) {
-        DirectoryChooser folderChooser = new DirectoryChooser();
-        folderChooser.setTitle("Choose a folder to save graded files");
-        //Set initial directory to users Desktop
-        folderChooser.setInitialDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
-        File pdf = folderChooser.showDialog(((Node) event.getSource()).getScene().getWindow());
-        if (pdf != null) {
-            folderPath = Paths.get(pdf.getPath());
-            folderPathText.setText(folderPath.toString());
-        }
-    }
-
-    /**
-     * Opens a new file chooser for saving a statistics file
-     *
-     * @param event
-     */
-    @FXML
-    private void browseForStatistics(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter pdfFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf", "*.PDF");
-        fileChooser.getExtensionFilters().add(pdfFilter);
-        fileChooser.setTitle("Choose a location to save statistics overview");
-        //Set initial directory to users Desktop
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
-        if (workingTest != null) {
-            fileChooser.setInitialFileName(workingTest.getName() + "_statistics.pdf");
-        } else {
-            fileChooser.setInitialFileName("grade_statistics.pdf");
-        }
-        File pdf = fileChooser.showSaveDialog(((Node) event.getSource()).getScene().getWindow());
-        if (pdf != null) {
-            statisticsPath = Paths.get(pdf.getPath());
-            filePathText.setText(statisticsPath.toString());
-        }
-    }
-
-    /**
      * Exports files when export button is pressed
      *
      * @param event
      */
-    @FXML
-    private void exportFiles(ActionEvent event) throws IOException {
+    private static void exportFiles(ActionEvent event) throws IOException {
         if (statisticsPath == null || folderPath == null) {
             String errorMessage = "";
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -126,18 +76,7 @@ public class ExportController {
             return;
         }
         exportStats();
-        System.out.println("Exported statistics");
-
-        //TODO: catch error when the tests cant be fully exported because of file replacement issue, show error on screen
         exportTests();
-        System.out.println("Exported students tests");
-
-        //open dialog, return to home
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Finished Exporting");
-        alert.setHeaderText("Files exported.");
-        alert.setContentText("Statistics exported to \n" + statisticsPath.toString() + "\n\nFiles exported to \n" + folderPath.toString());
-        alert.showAndWait();
 
         try {
             PDFGrader.SwitchScene("home.fxml");
@@ -146,7 +85,7 @@ public class ExportController {
         }
     }
 
-    private void exportStats() throws IOException {
+    private static void exportStats() throws IOException {
         PDDocument statsDoc = new PDDocument();
         statsDoc.addPage(new PDPage());
         int curPage = 0;
@@ -280,7 +219,7 @@ public class ExportController {
         statsDoc.close();
     }
 
-    void sort(double arr[]) {
+    static void sort(double arr[]) {
         double n = arr.length;
         for (int i = 1; i < n; ++i) {
             double key = arr[i];
@@ -301,7 +240,7 @@ public class ExportController {
      * Exports the tests to folderPath
      * @throws IOException
      */
-    private void exportTests() throws IOException {
+    static private void exportTests() throws IOException {
         int testsNumber = 1;
         //for each student
         for (TakenTest test : workingTest.getTakenTests()) {
@@ -363,7 +302,7 @@ public class ExportController {
      * @return height taken by box, so we can move the next box below it
      * @throws IOException
      */
-    private int generateBox(PDPageContentStream contentStream, int x, int y, int width, TakenTest test, Question question) throws IOException {
+    static private int generateBox(PDPageContentStream contentStream, int x, int y, int width, TakenTest test, Question question) throws IOException {
         int boxHeight = -40;
         ArrayList<String> lines = new ArrayList<>();
         contentStream.beginText();
@@ -407,7 +346,7 @@ public class ExportController {
      * @return Arraylist of the split strings
      * @throws IOException
      */
-    private ArrayList<String> splitString(String text, float width) throws IOException {
+    static private ArrayList<String> splitString(String text, float width) throws IOException {
         ArrayList<String> lines = new ArrayList<String>();
         int lastSpace = -1;
         while (text.length() > 0) {
@@ -438,23 +377,4 @@ public class ExportController {
         }
         return lines;
     }
-
-
-
-    /**
-     * sends user back to grading with current test
-     */
-    @FXML
-    private void backToGrading(){
-        File file = new File(PDFGrader.GetWorkingTest().toAbsolutePath().toString().replace(".pdf", ".json"));
-        try {
-            PDFGrader.workingTest = SaveLoad.LoadTest(file);
-            PDFGrader.SwitchScene("grading.fxml", false);
-        } catch (IOException e) {
-            System.err.println("Error loading recent test");
-            System.err.println(e);
-            e.printStackTrace();
-        }
-    }
-
 }

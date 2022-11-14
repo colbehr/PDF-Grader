@@ -78,7 +78,7 @@
       <Button layoutX="14.0" layoutY="35.0" mnemonicParsing="false" onAction="#backToGrading" text="Back to Grading" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="30.0" />
       <HBox alignment="CENTER" layoutX="265.0" layoutY="345.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#exportFiles" text="Export Files" />
+            <Button mnemonicParsing="false" onAction="#simpleExport" text="Export Files" />
          </children>
       </HBox>
    </children>

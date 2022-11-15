@@ -40,7 +40,7 @@ public class Export {
         folderChooser.setInitialDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
         File exportDir = folderChooser.showDialog(PDFGrader.getStage().getScene().getWindow());
         if (exportDir != null) {
-            statisticsPath = Paths.get(exportDir.getPath() + "\\" + workingTest.getName() + "-OVERVIEW.pdf");
+            statisticsPath = Paths.get(exportDir.getPath() + "/" + workingTest.getName() + "-OVERVIEW.pdf");
             folderPath = Paths.get(exportDir.getPath());
             System.out.println(statisticsPath);
             System.out.println(folderPath);
@@ -75,6 +75,7 @@ public class Export {
             alert.showAndWait();
             return;
         }
+        System.out.println(statisticsPath + "   --   " + folderPath);
         exportStats();
         exportTests();
 
@@ -285,7 +286,7 @@ public class Export {
                 contentStream.close();
             }
             //save file to path
-            studentTest.save(folderPath.toString() + "\\test_" + testsNumber + ".pdf");
+            studentTest.save(folderPath.toString() + "/test_" + testsNumber + ".pdf");
             testsNumber++;
         }
     }

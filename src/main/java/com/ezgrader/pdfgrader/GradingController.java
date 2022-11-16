@@ -90,6 +90,8 @@ public class GradingController {
     private Button prevTestButton;
     @FXML
     private Button nextTestButton;
+    @FXML
+    private TextField testOwnerField;
 
     private int currentQuestion;
     private int currentTakenTest;
@@ -139,6 +141,11 @@ public class GradingController {
         feedbackNewPoints.setTextFormatter(new TextFormatter<>(filter));
         // -------------
 
+        testOwnerField.setTextFormatter(TextFilters.MakeFilter("[\\w-]*"));
+        testOwnerField.focusedProperty().addListener((obs, oldVal, newVal) -> {
+                if (!newVal) updateTakenTestId(null);
+        });
+
         // Grading setup
         int savedPlace[] = workingTest.getSavedPlace();
         setCurrentQuestion(savedPlace[0]);
@@ -153,7 +160,6 @@ public class GradingController {
 //                points = maxPoints;
 //                pointsGivenField.setText(points + "");
 //            }
-
             workingTest.getTakenTests()[currentTakenTest].GradeQuestion(currentQuestion, points);
         });
 
@@ -353,6 +359,7 @@ public class GradingController {
         feedbacks = takenTest.GetQuestionFeedbacks(currentQuestion);
         feedbackTable.setItems(feedbacks);
         currentTestText.setText(currentTakenTest + 1 + "");
+        testOwnerField.setText(takenTest.getId());
 
         getUsedFeedbacks();
         UpdatePagination();
@@ -417,6 +424,15 @@ public class GradingController {
         int currentTestOffset = currentTakenTest * workingTest.getPagesPerTest();
         int page = Math.min(questionPage + currentTestOffset, workingTest.getTotalPages());
         pagination.setCurrentPageIndex(page);
+    }
+
+    @FXML
+    private void updateTakenTestId(ActionEvent e) {
+        if (testOwnerField.getText().length() > 0) {
+            workingTest.getTakenTests()[currentTakenTest].setId(testOwnerField.getText());
+        } else {
+            testOwnerField.setText(workingTest.getTakenTests()[currentTakenTest].getId());
+        }
     }
 
     public void finishedGrading(ActionEvent event) throws IOException {

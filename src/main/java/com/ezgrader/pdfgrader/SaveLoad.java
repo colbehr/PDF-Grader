@@ -48,9 +48,9 @@ public class SaveLoad {
         for (TakenTest takenTest : test.getTakenTests()) {
             JSONObject takenTestJSObj = new JSONObject();
             takenTestsJSArr.put(takenTestJSObj);
-            // For now, nothing is in the takenTest objects except the questions,
-            // but I'm leaving room in the hierarchy in case something like the name
-            // of the test taker needs to be stored later on
+
+            // Store Taken Test ID
+            takenTestJSObj.put("id", takenTest.getId());
 
             // Store Question Results
             JSONArray questionResultsJSArr = new JSONArray();
@@ -122,6 +122,13 @@ public class SaveLoad {
         for (int i = 0; i < takenTestsJSArr.length(); i++) {
             TakenTest takenTest = new TakenTest(test);
             JSONArray takenTestQuestionsJSArr = takenTestsJSArr.getJSONObject(i).getJSONArray("questions");
+            // Retrieve ID
+            if (takenTestsJSArr.getJSONObject(i).has("id")) {
+                takenTest.setId(takenTestsJSArr.getJSONObject(i).getString("id"));
+            } else {
+                takenTest.setId("test_" + i);
+            }
+
             // Retrieve Question Results
             for (Object q : takenTestQuestionsJSArr) {
                 JSONObject questionJSObj = (JSONObject) q;

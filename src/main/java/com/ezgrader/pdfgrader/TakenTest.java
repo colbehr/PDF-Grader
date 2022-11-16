@@ -23,10 +23,16 @@ public class TakenTest {
 
     public int total;
     private Map<Question, QuestionResult> questionResultMap;
-    //TODO: maybe sum all the question feedback points here instead of the export controller
+    private String id = "";
     public TakenTest(Test test) {
         this.test = test;
         questionResultMap = new HashMap<>();
+    }
+
+    public TakenTest(Test test, String id) {
+        this.test = test;
+        questionResultMap = new HashMap<>();
+        this.id = id;
     }
 
     public void GradeQuestion(int questionNumber, double pointsGiven) {
@@ -95,6 +101,14 @@ public class TakenTest {
 
     public Test getTest() {
         return test;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
 }

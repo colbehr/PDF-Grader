@@ -16,6 +16,10 @@ public class Toast {
         MakeToast(text, "-fx-background-color: red; -fx-text-fill: black; -fx-padding: 5px;");
     }
 
+    public static void Warning(String text) {
+        MakeToast(text, "-fx-background-color: yellow; -fx-text-fill: black; -fx-padding: 5px;");
+    }
+
     private static void MakeToast(String text, String style) {
         if (PDFGrader.getStage() == null) return;
 

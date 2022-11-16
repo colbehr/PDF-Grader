@@ -71,7 +71,7 @@ public class Test {
     public void CreateTakenTests() {
         takenTests = new TakenTest[totalPages / pagesPerTest];
         for (int i = 0; i < takenTests.length; i++) {
-            takenTests[i] = new TakenTest(this);
+            takenTests[i] = new TakenTest(this, "test_" + i);
         }
 
     }

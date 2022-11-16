@@ -40,7 +40,7 @@ public class Export {
         folderChooser.setInitialDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
         File exportDir = folderChooser.showDialog(PDFGrader.getStage().getScene().getWindow());
         if (exportDir != null) {
-            statisticsPath = Paths.get(exportDir.getPath() + "\\" + workingTest.getName() + "-OVERVIEW.pdf");
+            statisticsPath = Paths.get(exportDir.getPath() + "/" + workingTest.getName() + "-OVERVIEW.pdf");
             folderPath = Paths.get(exportDir.getPath());
             System.out.println(statisticsPath);
             System.out.println(folderPath);
@@ -75,6 +75,7 @@ public class Export {
             alert.showAndWait();
             return;
         }
+        System.out.println(statisticsPath + "   --   " + folderPath);
         exportStats();
         exportTests();
 
@@ -242,11 +243,10 @@ public class Export {
      */
     static private void exportTests() throws IOException {
         int testsNumber = 1;
-        int overwrites = 0;
-        File testsInnerDir = new File(folderPath.toString() + "/tests");
-        testsInnerDir.mkdir();
         //for each student
         for (TakenTest test : workingTest.getTakenTests()) {
+            System.out.println("Total tests: " + workingTest.getTakenTests().length);
+            System.out.println("Working on: " + testsNumber);
             //create a new test that is wider than original
             //TODO: Consider A3 page size, eg double wide 8.5x11
             //Our pages right now are ~800x600 pts
@@ -286,17 +286,8 @@ public class Export {
                 contentStream.close();
             }
             //save file to path
-            String testName = test.getId().length() > 0 ? test.getId() : "test_" + testsNumber;
-            File saveFile = new File(testName);
-            if (saveFile.exists()) {
-                overwrites++;
-            }
-            studentTest.save(testsInnerDir + "/" + testName + ".pdf");
+            studentTest.save(folderPath.toString() + "/test_" + testsNumber + ".pdf");
             testsNumber++;
-        }
-
-        if (overwrites > 0) {
-            Toast.Warning("WARNING: " + overwrites + " files overwritten during individual test export");
         }
     }
 

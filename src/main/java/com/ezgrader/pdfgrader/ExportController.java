@@ -37,29 +37,6 @@ public class ExportController {
     @FXML
     private javafx.scene.control.Label filePathText;
 
-
-    @FXML void simpleExport(ActionEvent event) {
-        DirectoryChooser folderChooser = new DirectoryChooser();
-        folderChooser.setTitle("Choose a folder to save graded files");
-        //Set initial directory to users Desktop
-        folderChooser.setInitialDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
-        File exportDir = folderChooser.showDialog(((Node) event.getSource()).getScene().getWindow());
-        if (exportDir != null) {
-            folderPath = Paths.get(exportDir.getPath() + workingTest.getName() + "-OVERVIEW.pdf");
-            folderPathText.setText(folderPath.toString());
-
-            statisticsPath = Paths.get(exportDir.getPath());
-            filePathText.setText(statisticsPath.toString());
-
-            try {
-                exportFiles(null);
-                Toast.Notification("Successfully exported " + workingTest.getName());
-            } catch (IOException e) {
-                Toast.Error("Could not export tests. Try again.");
-            }
-        }
-    }
-
     /**
      * Opens a browser to find a folder to put tests into
      *
@@ -346,7 +323,7 @@ public class ExportController {
                 contentStream.close();
             }
             //save file to path
-            studentTest.save(folderPath.toString() + "\\test_" + testsNumber + ".pdf");
+            studentTest.save(folderPath.toString() + "/test_" + testsNumber + ".pdf");
             testsNumber++;
         }
     }

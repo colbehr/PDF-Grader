@@ -2,7 +2,7 @@
 > Test grading is a time-consuming task that professors have to go through. More and more often tests are being submitted through web based programs leading to digital files being graded. In order to more efficiently grade it is proposed that a piece of software can help a professor grade a PDF (scanned or digital) file while also speeding the process up by presenting the question in a more efficient order.
 
 
-[![Build Status][travis-image]][travis-url]
+![License][license-image]  ![Stars][stars-image]
 
 The program will take in one pdf file with multiple tests in it. This means, for a five page test, every five pages is the fifth/last page of each test. You will input how many pages are in a test, and how many questions there are. The professor will then go through each page and drag a box over each question/answer location for the entire test. Using that box, it goes question by question (all the 1s, then all the 2s, etc) of each test for grading.
 
@@ -17,7 +17,7 @@ Once the tests have been graded, the software will generate a table of scores as
 ## Development setup
 
 #### Recommended Tools:
-- Java 17 with javafx 17.0.1
+- Java 17 with JavaFX 17.0.1
 - [Intellij IDEA](https://www.jetbrains.com/idea/)
 - [SceneBuilder](https://gluonhq.com/products/scene-builder/) for adjusting UI elements.
 
@@ -59,5 +59,6 @@ https://openjfx.io/openjfx-docs/#IDE-Intellij
 
 
 <!-- Markdown link & img dfn's -->
-[travis-image]: https://img.shields.io/travis/dbader/node-datadog-metrics/master.svg?style=flat-square
+[license-image]: https://img.shields.io/github/license/colbehr/PDF-Grader?style=flat-square
 [travis-url]: https://travis-ci.org/dbader/node-datadog-metrics
+[stars-image]: https://img.shields.io/github/stars/colbehr/PDF-Grader?style=flat-square

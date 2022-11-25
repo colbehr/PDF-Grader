@@ -435,17 +435,6 @@ public class GradingController {
         }
     }
 
-    public void finishedGrading(ActionEvent event) throws IOException {
-        //save the file before going to export, so we can go back if needed.
-        if (workingTest.savePath == null) {
-            SaveTestAsDefault(); // quietly save backup if user never saved
-        } else {
-            SaveTest();
-        }
-        //finish grading and go to export page
-
-        PDFGrader.SwitchScene("export.fxml"); //this is where the export button goes
-    }
 
     // Thanks to https://riptutorial.com/javafx/example/27946/add-button-to-tableview
     private void addButtonToReuseFeedbacksTable() {

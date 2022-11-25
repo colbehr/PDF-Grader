@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.ezgrader</groupId>
+    <groupId>com.gradeflow</groupId>
     <artifactId>pdfgrader</artifactId>
-    <version>Pre-Alpha_0.9</version>
+    <version>1.0</version>
     <name>pdfgrader</name>
 
     <properties>
@@ -87,7 +87,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.ezgrader.pdfgrader/com.ezgrader.pdfgrader.PDFGrader</mainClass>
+                            <mainClass>com.gradeflow.pdfgrader/com.gradeflow.pdfgrader.PDFGrader</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
@@ -112,7 +112,7 @@
                             <transformers>
                                 <transformer implementation=
                                                      "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.ezgrader.pdfgrader.Main</mainClass>
+                                    <mainClass>com.gradeflow.pdfgrader.Main</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

@@ -1,5 +1,5 @@
 # PDF Grader
-> Test grading is a time consuming task that professors have to go through. More and more often tests are being submitted through web based programs leading to digital files being graded. In order to more efficiently grade it is proposed that a piece of software can help a professor grade a PDF (scanned or digital) file while also speeding the process up by presenting the question in a more efficient order.
+> Test grading is a time-consuming task that professors have to go through. More and more often tests are being submitted through web based programs leading to digital files being graded. In order to more efficiently grade it is proposed that a piece of software can help a professor grade a PDF (scanned or digital) file while also speeding the process up by presenting the question in a more efficient order.
 
 
 [![Build Status][travis-image]][travis-url]
@@ -15,17 +15,20 @@ Once the tests have been graded, the software will generate a table of scores as
 ![pdfGrader](PDFGrader.jpg)
 
 ## Development setup
-Note: I am running Java 17 with javafx 17.0.1
 
-#### (NEW) For IntelliJ IDEA:
+#### Recommended Tools:
+- Java 17 with javafx 17.0.1
+- [Intellij IDEA](https://www.jetbrains.com/idea/)
+- [SceneBuilder](https://gluonhq.com/products/scene-builder/) for adjusting UI elements.
+
+#### For IntelliJ IDEA:
 - Add the repo and clone the project using `File>New>Project From Version Control` or using the `Get from VCS` button on the home page.
   - This should autopopulate if you log into Github.
 - Add a new 'Application configuration under `Run>Edit Configurations...` or at the top right under `Add Configuration...`
-- Confirm you are using `Java 17` and choose a main class using the icon on the right, should be `com.ezgrader.pdfgrader.PDFGrader`
+- Confirm you are using `Java 17` and choose a main class using the icon on the right, should be `com.gradeflow.pdfgrader.PDFGrader`
   - The main class should autopopulate, if it does not there may be a problem.
 - Add a name at the top and hit Apply or OK.
 - The project should now run.
-- Download [SceneBuilder](https://gluonhq.com/products/scene-builder/) for adjusting UI elements.
 
 #### Troubleshooting tips:
 - On the far right there is a 'Maven' tab, within that tab there is `pdfgrader>lifecycle>install` this should install everything in the pom.xml file.
@@ -35,10 +38,7 @@ Note: I am running Java 17 with javafx 17.0.1
 For more info go to the openjfx docs:
 https://openjfx.io/openjfx-docs/#IDE-Intellij
 
-
-
 ## Release History
-
 
 * 0.1
   * All pages implemented
@@ -48,28 +48,16 @@ https://openjfx.io/openjfx-docs/#IDE-Intellij
   * Added statistics template exporting (unfinished)
   * Added file save and load
 * 1.0
-  * Pages stay sized throughout application.
-  * Exporting now comes with statistics.
-
-<!---
-## Meta
-
-Your Name – [@YourTwitter](https://twitter.com/dbader_org) – YourEmail@example.com
-
-Distributed under the XYZ license. See ``LICENSE`` for more information.
-
-[https://github.com/yourname/github-link](https://github.com/dbader/)
+  * Pages stay sized throughout application
+  * Exporting now comes with statistics
+* 1.5
+  * UI Redesign
+  * Hotkeys/Shortcuts
+  * Recent Files
+  * Tests can be saved and opened later
+  * Multiple pdfs will be merged when importing
 
 
-## Contributing
-
-1. Fork it (<https://github.com/yourname/yourproject/fork>)
-2. Create your feature branch (`git checkout -b feature/fooBar`)
-3. Commit your changes (`git commit -am 'Add some fooBar'`)
-4. Push to the branch (`git push origin feature/fooBar`)
-5. Create a new Pull Request
---->
 <!-- Markdown link & img dfn's -->
 [travis-image]: https://img.shields.io/travis/dbader/node-datadog-metrics/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/dbader/node-datadog-metrics
-[wiki]: https://github.com/yourname/yourproject/wiki

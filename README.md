@@ -12,7 +12,7 @@ After an initial release more features may be added like allowing two or more pe
 
 Once the tests have been graded, the software will generate a table of scores as a pdf, and a pdf for each student. This pdf for the student will be as many pages as were questions in the test, and list their feedback that they received on each question (1 question per page).
 
-![pdfGrader](PDFGrader.jpg)
+![pdfGrader](PDFGrader.png)
 
 ## Development setup
 

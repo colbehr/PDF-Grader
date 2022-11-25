@@ -60,5 +60,4 @@ https://openjfx.io/openjfx-docs/#IDE-Intellij
 
 <!-- Markdown link & img dfn's -->
 [license-image]: https://img.shields.io/github/license/colbehr/PDF-Grader?style=flat-square
-[travis-url]: https://travis-ci.org/dbader/node-datadog-metrics
 [stars-image]: https://img.shields.io/github/stars/colbehr/PDF-Grader?style=flat-square

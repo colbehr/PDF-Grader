@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="161.0" prefWidth="221.0" style="-fx-background-color: #E2E2E2;" stylesheets="@shared.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gradeflow.pdfgrader.SettingsController">
+   <children>
+       <Button layoutX="7.0" layoutY="89.0" mnemonicParsing="false" onAction="#openShortcuts" prefHeight="32.0" prefWidth="197.0" text="Shortcuts" translateX="5.0" translateY="27.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="17.0" />
+       <Button layoutX="7.0" layoutY="-36.0" mnemonicParsing="false" onAction="#openFolder" prefHeight="32.0" prefWidth="197.0" text="Set Folder" translateX="5.0" translateY="107.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="17.0" />
+<!--       <Button mnemonicParsing="false" prefHeight="77.0" prefWidth="150.0" text="Set File" translateY="187.0" translateX="5.0" onAction="#selectFile"/>-->
+
+
+       <Button layoutX="37.0" layoutY="14.0" mnemonicParsing="false" onAction="#closeSettings" style="-fx-background-color: #E2E2E2;" translateX="-25.0" AnchorPane.leftAnchor="37.0" AnchorPane.topAnchor="14.0">
+           <graphic>
+               <ImageView fitHeight="24.0" fitWidth="24.0" onMouseClicked="#closeSettings" pickOnBounds="true" preserveRatio="true">
+                   <image>
+                       <Image url="@img/x.png" />
+                   </image>
+               </ImageView>
+           </graphic>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+       </Button>
+   </children>
+</AnchorPane>

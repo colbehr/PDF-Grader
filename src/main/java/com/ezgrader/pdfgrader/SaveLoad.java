@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 
@@ -19,9 +20,12 @@ public class SaveLoad {
     public static void SaveTest(Test test, String filepath, int currentQuestion, int currentTakenTest) {
         JSONArray wrapperJSArr = new JSONArray();
         JSONObject testJSObj = new JSONObject();
+        // Store Test Info
         testJSObj.put("path", test.getPdfPath());
         testJSObj.put("pagesPerTest", test.getPagesPerTest());
         testJSObj.put("name", test.getName());
+        // Save export folder for this test (possibly still null);
+        if (Export.getFolderPath() != null) testJSObj.put("exportFolder", Export.getFolderPath().toString());
         // Save where grading left off
         JSONObject savedPlaceJSObj = new JSONObject();
         testJSObj.put("savedPlace", savedPlaceJSObj);
@@ -99,6 +103,8 @@ public class SaveLoad {
         Test test = new Test(path);
         test.setPagesPerTest(testJSObj.getInt("pagesPerTest"));
         test.setName(testJSObj.getString("name"));
+        // Set Export Folder if previously set
+        if (testJSObj.has("exportFolder")) Export.setExportFolder(Paths.get(testJSObj.getString("exportFolder")));
         // Set where grading left off
         JSONObject savedPlaceJSObj = testJSObj.getJSONObject("savedPlace");
         test.setSavedPlace(savedPlaceJSObj.getInt("question"), savedPlaceJSObj.getInt("takenTest"));

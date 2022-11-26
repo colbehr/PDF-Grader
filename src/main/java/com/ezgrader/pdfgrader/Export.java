@@ -1,13 +1,8 @@
 package com.ezgrader.pdfgrader;
 
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -23,30 +18,19 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import static com.ezgrader.pdfgrader.PDFGrader.getStage;
 import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
 
-/**
- * Export Controller works with export.fxml to set up UI and functionality for the scene.
- */
 public class Export {
 
-    private static Path statisticsPath;
     private static Path folderPath;
 
     public static void simpleExport() {
-        DirectoryChooser folderChooser = new DirectoryChooser();
-        folderChooser.setTitle("Choose a folder to save graded files");
-        //Set initial directory to users Desktop
-        folderChooser.setInitialDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
-        File exportDir = folderChooser.showDialog(PDFGrader.getStage().getScene().getWindow());
-        if (exportDir != null) {
-            statisticsPath = Paths.get(exportDir.getPath() + "/" + workingTest.getName() + "-OVERVIEW.pdf");
-            folderPath = Paths.get(exportDir.getPath());
-            System.out.println(statisticsPath);
-            System.out.println(folderPath);
+        if (folderPath == null) browseAndSetExportFolder();
 
+        if (folderPath != null && folderPath.toFile().exists()) {
             try {
-                exportFiles(null);
+                exportFiles();
                 Toast.Notification("Successfully exported " + workingTest.getName());
             } catch (IOException e) {
                 Toast.Error("Could not export tests. Try again.");
@@ -55,27 +39,10 @@ public class Export {
     }
 
     /**
-     * Exports files when export button is pressed
+     * Exports overview and individual tests, then returns the user to the home screen
      *
-     * @param event
      */
-    private static void exportFiles(ActionEvent event) throws IOException {
-        if (statisticsPath == null || folderPath == null) {
-            String errorMessage = "";
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Path has not been set");
-            if (statisticsPath == null) {
-                errorMessage = "Please find a location for the statistics file.\n\n";
-            }
-            if (folderPath == null) {
-                errorMessage += "Please find a folder for graded files.";
-            }
-            alert.setContentText(errorMessage);
-            alert.showAndWait();
-            return;
-        }
-        System.out.println(statisticsPath + "   --   " + folderPath);
+    private static void exportFiles() throws IOException {
         exportStats();
         exportTests();
 
@@ -216,7 +183,7 @@ public class Export {
 
         contentStream.stroke();
         contentStream.close();
-        statsDoc.save(statisticsPath.toString());
+        statsDoc.save(getOverviewPath().toString());
         statsDoc.close();
     }
 
@@ -314,7 +281,7 @@ public class Export {
         //sum all feedbacks for a point total on the question, this could be refactored into takenTest
         float totalPoints = 0;
         for (Feedback f : test.GetQuestionFeedbacks(question.getQNum() - 1)) {
-            totalPoints += Float.parseFloat(f.getPoints());
+            if (f.getPoints().length() > 0) totalPoints += Float.parseFloat(f.getPoints());
         }
 
         //initial info line
@@ -377,5 +344,35 @@ public class Export {
             }
         }
         return lines;
+    }
+
+    public static void browseAndSetExportFolder() {
+        //open a FileChooser when ChoosePDF is clicked
+        DirectoryChooser folderChooser = new DirectoryChooser();
+        folderChooser.setTitle("Choose a folder to save test results");
+        //Set initial directory to previously set path, otherwise to user's Desktop
+        if (Export.getFolderPath() != null) {
+            folderChooser.setInitialDirectory(Export.getFolderPath().toFile());
+        } else {
+            folderChooser.setInitialDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
+        }
+        File folder = folderChooser.showDialog(getStage());
+        if (folder != null) {
+            folderPath = Paths.get(folder.getPath());
+        }
+    }
+
+    public static void setExportFolder(Path path) {
+        folderPath = path;
+    }
+
+    public static Path getFolderPath() {
+        return folderPath;
+    }
+
+    public static Path getOverviewPath() {
+        if (workingTest == null) return null;
+
+        return Paths.get(folderPath + "/" + workingTest.getName() + "-OVERVIEW.pdf");
     }
 }

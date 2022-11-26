@@ -1,19 +1,9 @@
 package com.ezgrader.pdfgrader;
 
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
-import java.io.File;
-import java.nio.file.Paths;
-
-import static com.ezgrader.pdfgrader.GradingController.folderPath;
-import static com.ezgrader.pdfgrader.PDFGrader.getStage;
-import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
 
 public class SettingsController {
 
@@ -28,33 +18,7 @@ public class SettingsController {
             Shortcuts.ShowShortcutDialog(keywords, "Grading Shortcuts");
         }
 
-        public void openFolder(ActionEvent actionEvent) {
-            //open a FileChooser when ChoosePDF is clicked
-            DirectoryChooser folderChooser = new DirectoryChooser();
-            folderChooser.setTitle("Choose a folder to save graded files");
-            //Set initial directory to users Desktop
-            folderChooser.setInitialDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
-            File pdf = folderChooser.showDialog(getStage());
-            if (pdf != null) {
-                GradingController.setFolderPath(Paths.get(pdf.getPath()));
-            }
-        }
-
-        public void selectFile(ActionEvent actionEvent) {
-            FileChooser fileChooser = new FileChooser();
-            FileChooser.ExtensionFilter pdfFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf", "*.PDF");
-            fileChooser.getExtensionFilters().add(pdfFilter);
-            fileChooser.setTitle("Choose a location to save statistics overview");
-            //Set initial directory to users Desktop
-            fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator") + "Desktop"));
-            if (workingTest != null) {
-                fileChooser.setInitialFileName(workingTest.getName() + "_statistics.pdf");
-            } else {
-                fileChooser.setInitialFileName("grade_statistics.pdf");
-            }
-            File pdf = fileChooser.showSaveDialog(getStage());
-            if (pdf != null) {
-                GradingController.setFilePathText(Paths.get(pdf.getPath()));
-            }
+        public void SetExportFolder(ActionEvent actionEvent) {
+            Export.browseAndSetExportFolder();
         }
 }

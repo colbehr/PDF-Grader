@@ -40,13 +40,6 @@
                        <MenuItem mnemonicParsing="false" onAction="#Exit" text="Exit" />
                    </items>
                </Menu>
-               <Menu mnemonicParsing="false" text="Edit">
-                   <items>
-                       <MenuItem mnemonicParsing="false" text="Cut" />
-                       <MenuItem mnemonicParsing="false" text="Copy" />
-                       <MenuItem mnemonicParsing="false" text="Paste" />
-                   </items>
-               </Menu>
                <Menu mnemonicParsing="false" text="Help">
                    <items>
                        <MenuItem mnemonicParsing="false" onAction="#OpenAbout" text="About" />

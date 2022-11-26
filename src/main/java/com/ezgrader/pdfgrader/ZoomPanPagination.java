@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.control.Pagination;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +33,24 @@ public class ZoomPanPagination extends Pagination {
                 ImageView imageView = new ImageView(workingTest.renderPageImage(i));
                 pageImages.add(imageView);
             }
+            // RESET PAN & ZOOM ON RIGHT CLICK
+            this.setOnMouseClicked((e) -> {
+                if (e.getButton() == MouseButton.SECONDARY) {
+                    int page = this.getCurrentPageIndex();
+                    pageResetPan(page);
+                    pageAutoZoom(page);
+                }
+            });
             // PANNING
             this.setOnMousePressed((e) -> {
+                if (e.getButton() != MouseButton.PRIMARY) return;
+
                 lastDragX = e.getX();
                 lastDragY = e.getY();
             });
             this.setOnMouseDragged((e) -> {
+                if (e.getButton() != MouseButton.PRIMARY) return;
+
                 int page = this.getCurrentPageIndex();
                 Double deltaX = e.getX() - lastDragX;
                 Double deltaY = e.getY() - lastDragY;

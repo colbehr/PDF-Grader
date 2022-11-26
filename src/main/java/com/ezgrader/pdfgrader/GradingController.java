@@ -147,7 +147,7 @@ public class GradingController {
         });
 
         // Grading setup
-        int savedPlace[] = workingTest.getSavedPlace();
+        int[] savedPlace = workingTest.getSavedPlace();
         setCurrentQuestion(savedPlace[0]);
         setCurrentTakenTest(savedPlace[1]);
 

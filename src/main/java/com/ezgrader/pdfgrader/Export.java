@@ -26,7 +26,7 @@ public class Export {
     private static Path folderPath;
 
     public static void simpleExport() {
-        if (folderPath == null) browseAndSetExportFolder();
+        if (folderPath == null || !folderPath.toFile().exists()) browseAndSetExportFolder();
 
         if (folderPath != null && folderPath.toFile().exists()) {
             try {

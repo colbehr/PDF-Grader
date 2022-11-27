@@ -86,6 +86,7 @@ public class Export {
         double mean = 0;
         double median;
 
+        // STUDENT SCORES /////////////////////////////////
         int colCount = workingTest.getQuestions().size() + 2;
         int rowCount = takenTests.length;
 
@@ -134,7 +135,7 @@ public class Export {
         currX = initX;
         currY = initY;
 
-        // OVERALL STATS
+        // OVERALL STATS //////////////////////////////////
         // Mean
         currY = csPrintLine("OVERALL SCORE STATISTICS", contentStream, currX, currY, cellWidth, cellHeight, fontSize, true, 1);
         currX = initX;
@@ -164,7 +165,7 @@ public class Export {
         currY = csPrintLine("Std Deviation: " + stdDev, contentStream, currX, currY, cellWidth, cellHeight, fontSize, false, 2);
         currX = initX;
 
-        // INDIVIDUAL QUESTION STATS
+        // INDIVIDUAL QUESTION STATS //////////////////////
         currY = csPrintLine("PER QUESTION STATISTICS", contentStream, currX, currY, cellWidth, cellHeight, fontSize, true, 1);
         currX = initX;
 
@@ -261,6 +262,14 @@ public class Export {
                 PDPage page = studentTest.getPage(i);
 
                 PDPageContentStream contentStream = new PDPageContentStream(studentTest, page);
+
+                if (i == 0) { // TOTAL SCORE
+                    int margin = 15;
+                    int offsetX = csPrint("Total Score: ", contentStream, margin, (int) page.getTrimBox().getHeight() - margin, 100, 50, 14, false);
+                    double percent = Math.round(test.GetTotalPoints() / test.GetTotalPointsPossible() * 10.0) * 10.0;
+                    String scoreText = test.GetTotalPoints() +  " / " + test.GetTotalPointsPossible() + " \u2014 " + percent + "%";
+                    csPrintLine(scoreText, contentStream, offsetX, (int) page.getTrimBox().getHeight() - margin, 100, 50, 14, true);
+                }
 
                 //add original image of page to left side
                 System.out.println("Render Page " + (i + (workingTest.getPagesPerTest() * testsNumber - workingTest.getPagesPerTest())) + " of Original pdf");

@@ -49,14 +49,6 @@ public class TakenTest {
         questionResultMap.get(test.getQuestions().get(questionNumber)).feedbacks.add(feedback);
     }
 
-    public double GetTotalScore() {
-        double total = 0.0;
-        for (QuestionResult result : questionResultMap.values()) {
-            total += result.pointsGiven;
-        }
-        return total;
-    }
-
     public double GetQuestionPointsGiven(Question question) {
         if (questionResultMap.containsKey(question)) {
             return questionResultMap.get(question).pointsGiven;
@@ -91,6 +83,14 @@ public class TakenTest {
             Map.Entry mapElement = (Map.Entry) questionMapIterator.next();
             Question question = (Question) mapElement.getKey();
             total += questionResultMap.get(question).pointsGiven;
+        }
+        return total;
+    }
+
+    public double GetTotalPointsPossible() {
+        double total = 0.0;
+        for (Question q : questionResultMap.keySet()) {
+            total += q.getPointsPossible();
         }
         return total;
     }

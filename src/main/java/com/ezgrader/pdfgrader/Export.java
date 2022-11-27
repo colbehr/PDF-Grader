@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Map;
 
 import static com.ezgrader.pdfgrader.PDFGrader.getStage;
 import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
@@ -56,14 +57,16 @@ public class Export {
     private static void exportStats() throws IOException {
         PDDocument statsDoc = new PDDocument();
         statsDoc.addPage(new PDPage());
-        int curPage = 0;
-        PDPage thisPage = statsDoc.getPage(curPage);
-        curPage++;
+        int currPage = 0;
+        PDPage thisPage = statsDoc.getPage(currPage);
+        currPage++;
 
         int pageHeight = (int) thisPage.getTrimBox().getHeight();
         int pageWidth = (int) thisPage.getTrimBox().getWidth();
 
         PDPageContentStream contentStream = new PDPageContentStream(statsDoc, thisPage);
+
+        TakenTest[] takenTests = workingTest.getTakenTests();
 
         //creating table
         contentStream.setStrokingColor(Color.DARK_GRAY);
@@ -71,115 +74,236 @@ public class Export {
 
         int initX = 50;
         int initY = pageHeight - 50;
-        int cellHeight = 30;
-        int cellWidth = 100;
+        int cellHeight = 20;
+        int cellWidth = 130;
+        int fontSize = 14;
+
+        int currX = initX;
+        int currY = initY - cellHeight + 10;
         int tableCounter = 1;
         double pointArray[];
-        pointArray = new double[workingTest.getTakenTests().length];
-        int mean = 0;
+        pointArray = new double[takenTests.length];
+        double mean = 0;
         double median;
 
         int colCount = workingTest.getQuestions().size() + 2;
-        int rowCount = workingTest.getTakenTests().length;
+        int rowCount = takenTests.length;
 
         contentStream.beginText();
-        contentStream.newLineAtOffset(initX + 18, initY - cellHeight + 10);
-        contentStream.setFont(PDType1Font.TIMES_ROMAN, 18);
+        contentStream.newLineAtOffset(initX + 10, currY);
+        contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontSize);
+        contentStream.showText(workingTest.getName() + " - Overview");
+        contentStream.endText();
+        currY -= cellHeight * 2;
+
+        contentStream.beginText();
+        contentStream.newLineAtOffset(initX + 10, currY);
         contentStream.showText("Student");
         contentStream.endText();
 
-        contentStream.addRect(initX, initY, cellWidth, -cellHeight);
-        initX += cellWidth;
-
-        contentStream.addRect(initX, initY, cellWidth, -cellHeight);
+        contentStream.addRect(currX, currY, cellWidth, -cellHeight);
+        currX += cellWidth;
+        contentStream.addRect(currX, currY, cellWidth, -cellHeight);
 
         contentStream.beginText();
-        contentStream.newLineAtOffset(initX + 10, initY - cellHeight + 10);
-        contentStream.setFont(PDType1Font.TIMES_ROMAN, 18);
+        contentStream.newLineAtOffset(currX + 10, currY);
         contentStream.showText("Total Score");
         contentStream.endText();
 
-        initX = 50;
-        initY -= cellHeight;
+        currX = initX;
+        currY -= cellHeight;
+
+        contentStream.setFont(PDType1Font.HELVETICA, fontSize);
 
         for (int i = 1; i <= rowCount; i++) {
             if (tableCounter == 23) {
                 contentStream.stroke();
                 contentStream.close();
                 tableCounter = 1;
-                initX = 50;
-                initY = pageHeight-50;
+                currX = initX;
+                currY = initY;
                 statsDoc.addPage(new PDPage());
-                thisPage = statsDoc.getPage(curPage);
-                curPage++;
+                thisPage = statsDoc.getPage(currPage);
+                currPage++;
                 contentStream = new PDPageContentStream(statsDoc, thisPage);
             }
             contentStream.beginText();
-            contentStream.newLineAtOffset(initX + 10, initY - cellHeight + 10);
-            contentStream.setFont(PDType1Font.TIMES_ROMAN, 18);
-            //TODO: Figure out a way to label the students correctly
-            contentStream.showText("Student " + i);
+            contentStream.newLineAtOffset(currX + 10, currY - cellHeight + 10);
+            contentStream.showText(takenTests[i-1].getId());
             contentStream.endText();
 
             for (int j = 1; j <= 2; j++) {
-                contentStream.addRect(initX, initY, cellWidth, -cellHeight);
-                initX += cellWidth;
+                contentStream.addRect(currX, currY, cellWidth, -cellHeight);
+                currX += cellWidth;
                 if (j == 2) {
-                    double totalPoints = workingTest.getTakenTests()[i - 1].GetTotalPoints();
-                    pointArray[i-1] = workingTest.getTakenTests()[i - 1].GetTotalPoints();
+                    double totalPoints = takenTests[i - 1].GetTotalPoints();
+                    pointArray[i-1] = takenTests[i - 1].GetTotalPoints();
                     mean += totalPoints;
                     contentStream.beginText();
-                    contentStream.newLineAtOffset(initX + 10 - cellWidth, initY - cellHeight + 10);
-                    contentStream.setFont(PDType1Font.TIMES_ROMAN, 18);
+                    contentStream.newLineAtOffset(currX + 10 - cellWidth, currY - cellHeight + 10);
                     contentStream.showText(String.valueOf(totalPoints));
                     contentStream.endText();
                 }
             }
-            initX = 50;
-            initY -= cellHeight;
+            currX = initX;
+            currY -= cellHeight;
             tableCounter++;
         }
+        mean = Math.round(mean/takenTests.length * 100.0) / 100.0; // 2 decimal places
 
         //TODO: seperate table for other stats (mean, median, more???)
         contentStream.stroke();
         contentStream.close();
         statsDoc.addPage(new PDPage());
-        PDPage overviewPage = statsDoc.getPage(curPage);
+        PDPage overviewPage = statsDoc.getPage(currPage);
         contentStream = new PDPageContentStream(statsDoc, overviewPage);
 
+        currX = initX;
+        currY = initY;
+
+        // OVERALL STATS
+        // Mean
         contentStream.beginText();
-        contentStream.newLineAtOffset(initX + 18, initY - cellHeight + 10);
-        contentStream.setFont(PDType1Font.TIMES_ROMAN, 18);
-        contentStream.showText("Mean: " + mean/workingTest.getTakenTests().length);
+        contentStream.newLineAtOffset(initX + 10, currY);
+        contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontSize);
+        contentStream.showText("OVERALL SCORE STATISTICS");
+        contentStream.endText();
+        currY -= cellHeight;
+
+        contentStream.beginText();
+        contentStream.newLineAtOffset(currX + 18, currY);
+        contentStream.setFont(PDType1Font.HELVETICA, fontSize);
+        contentStream.showText("Mean: " + mean);
         contentStream.endText();
 
-        contentStream.addRect(initX, initY, cellWidth, -cellHeight);
-        initX += cellWidth;
+        // Median
+        sort(pointArray);
+        if (takenTests.length%2==1) {
+            median = pointArray[(takenTests.length+1)/2-1];
+        } else {
+            median = (pointArray[takenTests.length/2-1]+pointArray[takenTests.length/2])/2;
+            median = Math.round(median * 100.0) / 100.0; // 2 decimal places
+        }
 
-        contentStream.addRect(initX, initY, cellWidth+20, -cellHeight);
+        contentStream.addRect(currX, currY, cellWidth, -cellHeight);
+        currX += cellWidth;
+        contentStream.addRect(currX, currY, cellWidth+20, -cellHeight);
 
         contentStream.beginText();
-        contentStream.newLineAtOffset(initX + 10, initY - cellHeight + 10);
-        contentStream.setFont(PDType1Font.TIMES_ROMAN, 18);
-
-        sort(pointArray);
-
-        //        if (workingTest.getTakenTests().length % 2 == 0) {
-        //            median = (pointArray[workingTest.getTakenTests().length/2-1] + pointArray[workingTest.getTakenTests().length/2])/2;
-        //        } else {
-        //            median = pointArray[(workingTest.getTakenTests().length+1) - 1];
-        //        }
-        if(workingTest.getTakenTests().length%2==1)
-        {
-            median=pointArray[(workingTest.getTakenTests().length+1)/2-1];
-        }
-        else
-        {
-            median=(pointArray[workingTest.getTakenTests().length/2-1]+pointArray[workingTest.getTakenTests().length/2])/2;
-        }
+        contentStream.newLineAtOffset(currX + 10, currY);
+        contentStream.setFont(PDType1Font.HELVETICA, fontSize);
 
         contentStream.showText("Median: " + median);
         contentStream.endText();
+
+        // Std Deviation
+        double sqrDistSum = 0;
+        for (int i = 0; i < takenTests.length; i++) {
+            double score = takenTests[i].GetTotalPoints();
+            sqrDistSum += Math.pow(score - mean, 2);
+        }
+        double stdDev = Math.sqrt(sqrDistSum / takenTests.length);
+        stdDev = Math.round(stdDev * 100.0) / 100.0; // 2 decimal places
+
+        contentStream.addRect(currX, currY, cellWidth, -cellHeight);
+        currX += cellWidth;
+        contentStream.addRect(currX, currY, cellWidth+20, -cellHeight);
+
+        contentStream.beginText();
+        contentStream.newLineAtOffset(currX, currY);
+        contentStream.setFont(PDType1Font.HELVETICA, fontSize);
+        contentStream.showText("Std Deviation: " + stdDev);
+        contentStream.endText();
+
+        currY -= cellHeight * 2;
+
+        // INDIVIDUAL QUESTION STATS
+        currX = initX;
+        contentStream.beginText();
+        contentStream.newLineAtOffset(currX + 10, currY);
+        contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontSize);
+        contentStream.showText("PER QUESTION STATISTICS");
+        contentStream.endText();
+        currY -= cellHeight;
+
+        // Calculate everything upfront
+        int questionCount = workingTest.getQuestions().size();
+        int studentCount = takenTests.length;
+
+        double[] qMedians = new double[questionCount];
+        double[] qMeans = new double[questionCount];
+        double[] qStdDevs = new double[questionCount];
+
+        for (int i = 0; i < questionCount; i++) {
+            double[] studentPoints = new double[takenTests.length];
+            double studentPointsSum = 0;
+
+            for (int j = 0; j < takenTests.length; j++) {
+                double pointsGiven = takenTests[j].GetQuestionPointsGiven(i);
+                studentPoints[j] = pointsGiven;
+                studentPointsSum += pointsGiven;
+            }
+            // Median
+            sort(studentPoints);
+            if (takenTests.length % 2 == 1) {
+                qMedians[i] = studentPoints[(studentCount+1)/2-1];
+            } else {
+                qMedians[i] = (studentPoints[studentCount/2-1]+studentPoints[studentCount/2]) / 2;
+                qMedians[i] = Math.round(qMedians[i] * 100.0) / 100.0; // 2 decimal places
+            }
+            // Mean
+            qMeans[i] = studentPointsSum / studentCount;
+            qMeans[i] = Math.round(qMeans[i] * 100.0) / 100.0; // 2 decimal places
+            // Std Deviation
+            sqrDistSum = 0; // reuse variable from general std dev
+            for (double p : studentPoints) {
+                sqrDistSum += Math.pow(p - qMeans[i], 2);
+            }
+            qStdDevs[i] = Math.sqrt(sqrDistSum / studentCount);
+            qStdDevs[i] = Math.round(qStdDevs[i] * 100.0) / 100.0; // 2 decimal places
+        }
+
+        // Write to stream
+        for (int i = 0; i < questionCount; i++) {
+            currX = initX;
+
+            contentStream.beginText();
+            contentStream.newLineAtOffset(currX + 10, currY);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontSize);
+            contentStream.showText("Question " + (i+1));
+            contentStream.endText();
+            currY -= cellHeight;
+
+            contentStream.beginText();
+            contentStream.newLineAtOffset(currX + 18, currY);
+            contentStream.setFont(PDType1Font.HELVETICA, fontSize);
+            contentStream.showText("Mean: " + qMeans[i]);
+            contentStream.endText();
+
+            contentStream.addRect(currX, currY, cellWidth, -cellHeight);
+            currX += cellWidth;
+
+            contentStream.addRect(currX, currY, cellWidth+20, -cellHeight);
+
+            contentStream.beginText();
+            contentStream.newLineAtOffset(currX + 10, currY);
+            contentStream.setFont(PDType1Font.HELVETICA, fontSize);
+            contentStream.showText("Median: " + qMedians[i]);
+            contentStream.endText();
+
+            contentStream.addRect(currX, currY, cellWidth, -cellHeight);
+            currX += cellWidth;
+
+            contentStream.addRect(currX, currY, cellWidth+20, -cellHeight);
+
+            contentStream.beginText();
+            contentStream.newLineAtOffset(currX + 10, currY);
+            contentStream.setFont(PDType1Font.HELVETICA, fontSize);
+            contentStream.showText("Std Deviation: " + qStdDevs[i]);
+            contentStream.endText();
+
+            currY -= cellHeight;
+        }
 
         contentStream.stroke();
         contentStream.close();
@@ -256,6 +380,33 @@ public class Export {
             studentTest.save(folderPath.toString() + "/test_" + testsNumber + ".pdf");
             testsNumber++;
         }
+    }
+
+    private int csPrint(PDPageContentStream contentStream, int x, int y, int w, int h, String text, int fontSize, boolean boldText) throws IOException {
+        contentStream.beginText();
+        contentStream.newLineAtOffset(x + 10, y);
+        contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontSize);
+        contentStream.showText(text);
+        contentStream.endText();
+
+        contentStream.addRect(x, y, w, -h);
+        x += w;
+        contentStream.addRect(x, y, w, -h);
+
+        return x;
+    }
+
+    private int csPrintLine(PDPageContentStream contentStream, int x, int y, int w, int h, String text, int fontSize, boolean boldText, int lineSpacing) throws IOException {
+        contentStream.beginText();
+        contentStream.newLineAtOffset(x + 10, y);
+        contentStream.setFont(PDType1Font.HELVETICA_BOLD, fontSize);
+        contentStream.showText(text);
+        contentStream.endText();
+        return y - h * lineSpacing;
+    }
+
+    private int csPrintLine(PDPageContentStream contentStream, int x, int y, int w, int h, String text, int fontSize, boolean boldText) throws IOException {
+        return csPrintLine(contentStream, x, y, w, h, text, fontSize, boldText, 1);
     }
 
     /**

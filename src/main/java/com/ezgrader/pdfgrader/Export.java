@@ -1,8 +1,16 @@
 package com.ezgrader.pdfgrader;
 
+import javafx.embed.swing.JFXPanel;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.Scene;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -10,6 +18,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -221,6 +230,34 @@ public class Export {
 
         contentStream.stroke();
         contentStream.close();
+
+
+        //TODO: TEASDFA
+        statsDoc.addPage(new PDPage());
+
+        currPage++;
+        thisPage = statsDoc.getPage(currPage);
+        contentStream = new PDPageContentStream(statsDoc, thisPage);
+
+        createChart(pointArray, folderPath.toString(), 1, mean/workingTest.getTakenTests().length, median); //creates chart image to add
+        PDImageXObject pdImage = PDImageXObject.createFromFile(folderPath.toString() + "/a.png", statsDoc);
+        contentStream.drawImage(pdImage, 50, 566);
+        File toDelete = new File(folderPath.toString() + "/a.png");
+        toDelete.delete(); //deletes chart image
+
+        createChart(pointArray, folderPath.toString(), 2, mean/workingTest.getTakenTests().length, median); //creates chart image to add
+        pdImage = PDImageXObject.createFromFile(folderPath.toString() + "/a.png", statsDoc);
+        contentStream.drawImage(pdImage, 50, 316);
+        toDelete.delete();
+
+        createChart(pointArray, folderPath.toString(), 3, mean/workingTest.getTakenTests().length, median); //creates chart image to add
+        pdImage = PDImageXObject.createFromFile(folderPath.toString() + "/a.png", statsDoc);
+        contentStream.drawImage(pdImage, 50, 66);
+        toDelete.delete();
+
+        contentStream.stroke();
+        contentStream.close();
+
         statsDoc.save(getOverviewPath().toString());
         statsDoc.close();
     }
@@ -448,4 +485,60 @@ public class Export {
 
         return Paths.get(folderPath + "/" + workingTest.getName() + "-OVERVIEW.pdf");
     }
+    public static void createChart(double[] pointsArray, String path, int type, double mean, double median) throws IOException {
+        new JFXPanel();
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("Students");
+        final LineChart<String,Number> chart = new LineChart<>(xAxis, yAxis);
+        chart.setTitle("Overall test results");
+        XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();
+        XYChart.Series<String, Number> series2 = new XYChart.Series<String, Number>();
+        XYChart.Series<String, Number> series3 = new XYChart.Series<String, Number>();
+        series2.setName("Mean");
+        series.setName("test3");
+        switch (type) {
+            case 1:
+                for (int i = 0; i < workingTest.getTakenTests().length; i++) {
+                    series.getData().add(new XYChart.Data<>(Integer.toString(i), pointsArray[i]));
+                }
+                chart.getData().add(series);
+                break;
+            case 2:
+                for (int i = 0; i < workingTest.getTakenTests().length; i++) {
+                    series.getData().add(new XYChart.Data<>(Integer.toString(i), pointsArray[i]));
+                }
+                for (int j = 0; j < workingTest.getTakenTests().length; j++) {
+                    series2.getData().add(new XYChart.Data<>(Integer.toString(j), mean));
+                }
+                chart.getData().add(series);
+                chart.getData().add(series2);
+                break;
+            case 3:
+                for (int i = 0; i < workingTest.getTakenTests().length; i++) {
+                    series.getData().add(new XYChart.Data<>(Integer.toString(i), pointsArray[i]));
+                }
+                for (int i = 0; i < workingTest.getTakenTests().length; i++) {
+                    series3.getData().add(new XYChart.Data<>(Integer.toString(i), median));
+                }
+
+                chart.getData().add(series);
+                chart.getData().add(series3);
+                break;
+        }
+        chart.setAnimated(false);
+        Stage stage = new Stage();
+        Scene scene = new Scene(chart, 515, 200);
+        stage.setScene(scene);
+        WritableImage img = new WritableImage(515, 200);
+        scene.snapshot(img);
+
+        File file = new File(Paths.get(path, "a.png").toString());
+        try {
+            ImageIO.write(SwingFXUtils.fromFXImage(img, null), "png", file);
+        } catch (IOException e) {
+            //logger.error("Error occurred while writing the chart image
+        }
+    }
+
 }

@@ -47,9 +47,8 @@
                   <MenuItem mnemonicParsing="false" onAction="#SaveTestAs" text="Save As" />
                   <Menu mnemonicParsing="false" text="Export">
                       <items>
-                          <MenuItem mnemonicParsing="false" onAction="#browseForTestFolder" text="Select Folder" />
-                          <MenuItem mnemonicParsing="false" onAction="#browseForStatistics" text="Select File" />
-                          <MenuItem mnemonicParsing="false" onAction="#exportFiles" text="Export Files" />
+                          <MenuItem mnemonicParsing="false" text="Select Folder" onAction="#SetExportFolder"/>
+                          <MenuItem mnemonicParsing="false" text="Export Files" onAction="#Export"/>
                       </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Settings">

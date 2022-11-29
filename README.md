@@ -59,5 +59,5 @@ https://openjfx.io/openjfx-docs/#IDE-Intellij
 
 
 <!-- Markdown link & img dfn's -->
-[license-image]: https://img.shields.io/github/license/colbehr/PDF-Grader?style=flat-square
-[stars-image]: https://img.shields.io/github/stars/colbehr/PDF-Grader?style=flat-square
+[license-image]: https://img.shields.io/github/license/colbehr/PDF-Grader?style=for-the-badge
+[stars-image]: https://img.shields.io/github/stars/colbehr/PDF-Grader?style=for-the-badge

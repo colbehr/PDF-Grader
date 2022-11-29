@@ -1,4 +1,4 @@
-package com.ezgrader.pdfgrader;
+package com.gradeflow.pdfgrader;
 
 import javafx.embed.swing.JFXPanel;
 import javafx.embed.swing.SwingFXUtils;
@@ -28,8 +28,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Map;
 
-import static com.ezgrader.pdfgrader.PDFGrader.getStage;
-import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
+import static com.gradeflow.pdfgrader.PDFGrader.workingTest;
+import static com.gradeflow.pdfgrader.PDFGrader.getStage;
+import static com.gradeflow.pdfgrader.PDFGrader.workingTest;
 
 public class Export {
 

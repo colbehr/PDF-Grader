@@ -1,4 +1,4 @@
-package com.ezgrader.pdfgrader;
+package com.gradeflow.pdfgrader;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -9,8 +9,8 @@ import javafx.scene.input.MouseButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ezgrader.pdfgrader.PDFGrader.getStage;
-import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
+import static com.gradeflow.pdfgrader.PDFGrader.getStage;
+import static com.gradeflow.pdfgrader.PDFGrader.workingTest;
 
 public class ZoomPanPagination extends Pagination {
     private List<ImageView> pageImages;

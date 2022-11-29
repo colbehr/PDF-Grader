@@ -1,4 +1,4 @@
-package com.ezgrader.pdfgrader;
+package com.gradeflow.pdfgrader;
 
 
 import javafx.application.Platform;
@@ -7,18 +7,26 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.util.Callback;
 import javafx.util.converter.DefaultStringConverter;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,8 +40,8 @@ import java.util.function.UnaryOperator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.ezgrader.pdfgrader.PDFGrader.getStage;
-import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
+import static com.gradeflow.pdfgrader.PDFGrader.getStage;
+import static com.gradeflow.pdfgrader.PDFGrader.workingTest;
 
 public class GradingController {
     @FXML
@@ -151,7 +159,10 @@ public class GradingController {
         totalTestsText.setText(workingTest.getTakenTests().length + "");
         addButtonToReuseFeedbacksTable();
         setTableEditable();
-        Platform.runLater(() -> getStage().setTitle("PDF Grader - " + workingTest.getName()));
+        Platform.runLater(() -> {
+            getStage().setTitle("Gradeflow - " + workingTest.getName());
+            getStage().getIcons().add(new Image(getClass().getResourceAsStream("img/journals-square.png")));
+        }); // reset title
         getUsedFeedbacks();
         Platform.runLater(this::setupKeyboardShortcuts);
 
@@ -414,17 +425,6 @@ public class GradingController {
         }
     }
 
-    public void finishedGrading(ActionEvent event) throws IOException {
-        //save the file before going to export, so we can go back if needed.
-        if (workingTest.savePath == null) {
-            SaveTestAsDefault(); // quietly save backup if user never saved
-        } else {
-            SaveTest();
-        }
-        //finish grading and go to export page
-
-        PDFGrader.SwitchScene("export.fxml"); //this is where the export button goes
-    }
 
     // Thanks to https://riptutorial.com/javafx/example/27946/add-button-to-tableview
     private void addButtonToReuseFeedbacksTable() {

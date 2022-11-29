@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="300.0" minWidth="660.0" prefHeight="500.0" prefWidth="760.0" stylesheets="@shared.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ezgrader.pdfgrader.HomeController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="300.0" minWidth="660.0" prefHeight="500.0" prefWidth="760.0" stylesheets="@shared.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gradeflow.pdfgrader.HomeController">
    <children>
       <VBox prefHeight="500.0" prefWidth="220.0" style="-fx-background-color: #1C1D26;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>

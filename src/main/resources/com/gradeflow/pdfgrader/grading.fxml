@@ -21,9 +21,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<?import com.ezgrader.pdfgrader.ZoomPanPagination?>
+<?import com.gradeflow.pdfgrader.ZoomPanPagination?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="779.0" stylesheets="@shared.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ezgrader.pdfgrader.GradingController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="779.0" stylesheets="@shared.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gradeflow.pdfgrader.GradingController">
    <children>
       <MenuBar prefHeight="25.0" prefWidth="779.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
@@ -39,12 +39,19 @@
               <items>
                   <MenuItem mnemonicParsing="false" onAction="#GoToSetup" text="New" />
                   <MenuItem mnemonicParsing="false" onAction="#OpenTest" text="Open" />
-                  <MenuItem mnemonicParsing="false" onAction="#SaveTestAs" text="Save As" />
                   <CustomMenuItem mnemonicParsing="false" onAction="#SaveTest">
                       <content>
                           <HBox styleClass="menuHbox"><Text>Save</Text><Text fx:id="gradingSaveMenuText" styleClass="menuShortcutText"> </Text></HBox>
                       </content>
                   </CustomMenuItem>
+                  <MenuItem mnemonicParsing="false" onAction="#SaveTestAs" text="Save As" />
+                  <Menu mnemonicParsing="false" text="Export">
+                      <items>
+                          <MenuItem mnemonicParsing="false" onAction="#browseForTestFolder" text="Select Folder" />
+                          <MenuItem mnemonicParsing="false" onAction="#browseForStatistics" text="Select File" />
+                          <MenuItem mnemonicParsing="false" onAction="#exportFiles" text="Export Files" />
+                      </items>
+                  </Menu>
                   <Menu mnemonicParsing="false" text="Settings">
                       <MenuItem mnemonicParsing="false" onAction="#ShowShortcutDialog" text="Shortcuts" />
                   </Menu>
@@ -55,12 +62,6 @@
                 <items>
                     <MenuItem mnemonicParsing="false" onAction="#OpenAbout" text="About" />
                     <MenuItem mnemonicParsing="false" onAction="#OpenGithub" text="Github" />
-                </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Export">
-                <items>
-                    <MenuItem mnemonicParsing="false" text="Select Folder" onAction="#SetExportFolder"/>
-                    <MenuItem mnemonicParsing="false" text="Export Files" onAction="#Export"/>
                 </items>
             </Menu>
         </menus>
@@ -76,16 +77,18 @@
                <children>
                   <AnchorPane layoutX="5.0" layoutY="5.0" prefHeight="124.0" prefWidth="351.0" style="-fx-background-color: F5F5F5; -fx-background-radius: 10;" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="12.0">
                      <children>
-                         <HBox alignment="CENTER_LEFT" spacing="20" layoutX="43.0" layoutY="11.0" prefHeight="17.0" prefWidth="231.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="108.0" AnchorPane.topAnchor="12.0">
-                            <Label fx:id="testNameText" text="Nickname" style="-fx-font-weight: bold">
+                         <HBox alignment="CENTER_LEFT" layoutX="43.0" layoutY="11.0" prefHeight="17.0" prefWidth="231.0" spacing="10.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="108.0" AnchorPane.topAnchor="12.0">
+                            <Label fx:id="testNameText" prefHeight="22.0" style="-fx-font-weight: bold" text="Nickname">
                                <font>
                                   <Font size="16.0" />
                                </font>
                             </Label>
-                             <HBox alignment="CENTER_LEFT" spacing="5">
-                                 <Label text="ID:"></Label>
-                                 <TextField fx:id="testOwnerField" onAction="#updateTakenTestId"/>
-                             </HBox>
+                           <AnchorPane prefHeight="25.0" prefWidth="155.0">
+                              <children>
+                                    <Label layoutY="3.0" text="ID:" />
+                                    <TextField fx:id="testOwnerField" layoutX="26.0" layoutY="-1.0" onAction="#updateTakenTestId" prefHeight="25.0" prefWidth="121.0" />
+                              </children>
+                           </AnchorPane>
                          </HBox>
                         <Label layoutX="12.0" layoutY="49.0" text="Question" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="49.0" />
                         <Label layoutX="88.0" layoutY="49.0" prefHeight="17.0" prefWidth="16.0" text="of" AnchorPane.leftAnchor="88.0" AnchorPane.topAnchor="49.0" />

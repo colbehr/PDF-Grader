@@ -1,4 +1,4 @@
-package com.ezgrader.pdfgrader;
+package com.gradeflow.pdfgrader;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;

@@ -1,4 +1,4 @@
-package com.ezgrader.pdfgrader;
+package com.gradeflow.pdfgrader;
 
 import javafx.event.ActionEvent;
 import javafx.event.Event;

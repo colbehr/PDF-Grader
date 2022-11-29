@@ -1,9 +1,16 @@
-package com.ezgrader.pdfgrader;
+package com.gradeflow.pdfgrader;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.stage.Stage;
+
+import java.io.File;
+import java.nio.file.Paths;
+
+import static com.gradeflow.pdfgrader.GradingController.folderPath;
+import static com.gradeflow.pdfgrader.PDFGrader.getStage;
+import static com.gradeflow.pdfgrader.PDFGrader.workingTest;
 
 public class SettingsController {
 

@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Hyperlink?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="443.0" prefWidth="681.0" style="-fx-background-color: #1C1D26;" stylesheets="@shared.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ezgrader.pdfgrader.AboutController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="443.0" prefWidth="681.0" style="-fx-background-color: #1C1D26;" stylesheets="@shared.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gradeflow.pdfgrader.AboutController">
    <children>
       <Label alignment="TOP_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="77.0" prefWidth="287.0" text="Gradeflow" textFill="WHITE">
          <font>
@@ -30,7 +27,7 @@
          <children>
             <AnchorPane prefHeight="292.0" prefWidth="172.0">
                <children>
-                  <ImageView fitHeight="109.0" fitWidth="85.0" layoutX="41.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="109.0" fitWidth="65.0" layoutX="53.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@img/gear.png" />
                      </image>
@@ -54,7 +51,7 @@
             </AnchorPane>
             <AnchorPane prefHeight="292.0" prefWidth="172.0">
                <children>
-                  <ImageView fitHeight="109.0" fitWidth="85.0" layoutX="41.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="109.0" fitWidth="65.0" layoutX="53.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@img/gear.png" />
                      </image>
@@ -78,7 +75,7 @@
             </AnchorPane>
             <AnchorPane prefHeight="292.0" prefWidth="172.0">
                <children>
-                  <ImageView fitHeight="109.0" fitWidth="85.0" layoutX="41.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="109.0" fitWidth="65.0" layoutX="53.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@img/gear.png" />
                      </image>
@@ -88,9 +85,9 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <Hyperlink alignment="CENTER" focusTraversable="false" layoutX="58.0" layoutY="223.0" onAction="#DaneWebsite" text="Website" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                  <Hyperlink alignment="CENTER" disable="true" focusTraversable="false" layoutX="58.0" layoutY="223.0" onAction="#DaneWebsite" text="Website" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
                   <Hyperlink alignment="CENTER" focusTraversable="false" layoutX="62.0" layoutY="247.0" onAction="#DaneGithub" text="Github" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-                  <Label alignment="CENTER" layoutX="16.0" layoutY="133.0" prefHeight="69.0" prefWidth="141.0" text="Some text" textAlignment="CENTER" textFill="WHITE" wrapText="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <Label alignment="CENTER" layoutX="16.0" layoutY="133.0" prefHeight="69.0" prefWidth="141.0" text="Export and Settings" textAlignment="CENTER" textFill="WHITE" wrapText="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -102,7 +99,7 @@
             </AnchorPane>
             <AnchorPane prefHeight="292.0" prefWidth="172.0">
                <children>
-                  <ImageView fitHeight="109.0" fitWidth="85.0" layoutX="41.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="109.0" fitWidth="65.0" layoutX="53.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@img/gear.png" />
                      </image>
@@ -112,9 +109,9 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <Hyperlink alignment="CENTER" focusTraversable="false" layoutX="58.0" layoutY="223.0" onAction="#ShadrachWebsite" text="Website" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                  <Hyperlink alignment="CENTER" disable="true" focusTraversable="false" layoutX="58.0" layoutY="223.0" onAction="#ShadrachWebsite" text="Website" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
                   <Hyperlink alignment="CENTER" focusTraversable="false" layoutX="62.0" layoutY="247.0" onAction="#ShadrachGithub" text="Github" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-                  <Label alignment="CENTER" layoutX="16.0" layoutY="133.0" prefHeight="69.0" prefWidth="141.0" text="Some text" textAlignment="CENTER" textFill="WHITE" wrapText="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <Label alignment="CENTER" layoutX="16.0" layoutY="133.0" prefHeight="69.0" prefWidth="141.0" text="Testing" textAlignment="CENTER" textFill="WHITE" wrapText="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <font>
                         <Font size="14.0" />
                      </font>

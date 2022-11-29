@@ -1,12 +1,14 @@
-package com.ezgrader.pdfgrader;
+package com.gradeflow.pdfgrader;
 
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.layout.*;
-import javafx.scene.text.Text;
+import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -37,7 +39,7 @@ public class PDFGrader extends Application {
     public void start(Stage primaryStage) throws Exception{
         instance = this;
         stage = primaryStage;
-        stage.setTitle("PDF Grader");
+        stage.setTitle("Gradeflow");
         stage.setMinWidth(MIN_WIDTH);
         stage.setMinHeight(MIN_HEIGHT);
         if (cmdLineStartMode == null) {
@@ -253,6 +255,10 @@ public class PDFGrader extends Application {
 
         final Stage window = new Stage();
         window.setTitle("About the Project");
+
+        window.setTitle("Gradeflow - About the Project");
+        window.getIcons().add(new Image(PDFGrader.class.getResourceAsStream("img/journals-square.png")));
+
         window.initModality(Modality.WINDOW_MODAL);
         window.initOwner(PDFGrader.getStage());
         Scene dialogScene = null;

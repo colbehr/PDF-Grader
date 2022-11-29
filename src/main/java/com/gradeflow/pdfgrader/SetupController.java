@@ -1,10 +1,11 @@
-package com.ezgrader.pdfgrader;
+package com.gradeflow.pdfgrader;
 
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
@@ -17,8 +18,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static com.ezgrader.pdfgrader.PDFGrader.getStage;
-import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
+import static com.gradeflow.pdfgrader.PDFGrader.getStage;
+import static com.gradeflow.pdfgrader.PDFGrader.workingTest;
 
 /**
  * Setup Controller works with setup.fxml to setup UI and functionality for the scene.
@@ -67,7 +68,10 @@ public class SetupController {
         setNewPDF(workingTest.getPdfPath().toFile());
 
 
-        Platform.runLater(() -> getStage().setTitle("PDF Grader")); // reset title
+        Platform.runLater(() -> {
+            getStage().setTitle("Gradeflow");
+            getStage().getIcons().add(new Image(getClass().getResourceAsStream("img/journals-square.png")));
+        }); // reset title
         if (PDFGrader.getCmdLinePageCount() > -1) {
             Platform.runLater(() -> pagesField.setText("" + PDFGrader.getCmdLinePageCount()));
         }

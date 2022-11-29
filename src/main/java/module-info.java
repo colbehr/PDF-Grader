@@ -1,4 +1,4 @@
-module com.ezgrader.pdfgrader {
+module com.gradeflow.pdfgrader {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
@@ -8,6 +8,6 @@ module com.ezgrader.pdfgrader {
     requires org.json;
 
 
-    opens com.ezgrader.pdfgrader to javafx.fxml;
-    exports com.ezgrader.pdfgrader;
+    opens com.gradeflow.pdfgrader to javafx.fxml;
+    exports com.gradeflow.pdfgrader;
 }

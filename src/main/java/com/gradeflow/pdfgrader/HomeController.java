@@ -1,4 +1,4 @@
-package com.ezgrader.pdfgrader;
+package com.gradeflow.pdfgrader;
 
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -10,21 +10,20 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.TransferMode;
-import javafx.scene.input.*;
-import javafx.stage.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -32,8 +31,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ezgrader.pdfgrader.PDFGrader.getStage;
-import static com.ezgrader.pdfgrader.PDFGrader.workingTest;
+import static com.gradeflow.pdfgrader.PDFGrader.getStage;
 
 public class HomeController {
     @FXML
@@ -78,7 +76,10 @@ public class HomeController {
         // Run AFTER stage is created (which is after this init method)
         Platform.runLater(this::setupKeyboardShortcuts);
         Platform.runLater(this::setupDragNDrop);
-        Platform.runLater(() -> getStage().setTitle("PDF Grader"));
+        Platform.runLater(() -> {
+            getStage().setTitle("Gradeflow");
+            getStage().getIcons().add(new Image(getClass().getResourceAsStream("img/journals-square.png")));
+        }); // reset title
     }
 
     private void setupDragNDrop() {
@@ -206,8 +207,8 @@ public class HomeController {
         stage.initStyle(StageStyle.UNDECORATED);
         stage.setTitle("Settings");
         stage.setScene(new Scene(root1));
-        stage.setX(getStage().getX()+205.0);
-        stage.setY(getStage().getY()+40.0);
+        stage.setX(getStage().getX()+230);
+        stage.setY(getStage().getY()+50.0);
         Timeline tick = new Timeline();
         tick.setCycleCount(Timeline.INDEFINITE);
 

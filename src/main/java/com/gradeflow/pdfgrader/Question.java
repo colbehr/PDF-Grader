@@ -3,6 +3,9 @@ package com.gradeflow.pdfgrader;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
+/**
+ * Class representing an individual Question within a Test
+ */
 public class Question {
 
     private final SimpleIntegerProperty qNum;
@@ -10,6 +13,12 @@ public class Question {
     private final SimpleDoubleProperty pointsGiven;
     private final SimpleIntegerProperty pageNum;      // placeholder for question boxes
 
+    /**
+     * Constructor
+     * @param qNumber the number this question appears as in the Test
+     * @param pointsPossible max points possible for this question
+     * @param pageNum the page within the PDF this question appears on for each Test
+     */
     public Question(int qNumber, double pointsPossible, int pageNum) {
         this.qNum = new SimpleIntegerProperty(this, "qNumber", qNumber);
         this.pointsPossible = new SimpleDoubleProperty(this, "pointsPossible", pointsPossible);

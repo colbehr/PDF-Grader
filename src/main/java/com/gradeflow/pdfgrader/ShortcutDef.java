@@ -6,6 +6,10 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 
 // For viewing shortcuts within app
+
+/**
+ * Class for viewing Shortcuts within the dialog to edit their keybinds.
+ */
 public class ShortcutDef {
 
 

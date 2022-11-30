@@ -7,7 +7,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+/**
+ * Stores all data related to an individual test taker's grading and feedback for a certain Test.
+ */
 public class TakenTest {
+    /**
+     * Stores score and feedbacks for a particular Test Question.
+     */
     private class QuestionResult {
         private double pointsGiven;
 
@@ -20,10 +26,8 @@ public class TakenTest {
     }
 
     private Test test;
-
-    public int total;
     private Map<Question, QuestionResult> questionResultMap;
-    private String id = "";
+    private String id = ""; // Name that will be used to identify this test taker's exported results pdf.
     public TakenTest(Test test) {
         this.test = test;
         questionResultMap = new HashMap<>();
@@ -35,6 +39,11 @@ public class TakenTest {
         this.id = id;
     }
 
+    /**
+     * Assigns a score for a certain question.
+     * @param questionNumber
+     * @param pointsGiven
+     */
     public void GradeQuestion(int questionNumber, double pointsGiven) {
         Question question = test.getQuestions().get(questionNumber);
         pointsGiven = Math.min(pointsGiven, question.getPointsPossible()); // ensure only max amount of points can be given
@@ -45,10 +54,20 @@ public class TakenTest {
         }
     }
 
+    /**
+     * Adds a new feedback for the given question.
+     * @param questionNumber
+     * @param feedback
+     */
     public void AddFeedbackToQuestion(int questionNumber, Feedback feedback) {
         questionResultMap.get(test.getQuestions().get(questionNumber)).feedbacks.add(feedback);
     }
 
+    /**
+     * Gets the graded score for the given question
+     * @param question
+     * @return question score
+     */
     public double GetQuestionPointsGiven(Question question) {
         if (questionResultMap.containsKey(question)) {
             return questionResultMap.get(question).pointsGiven;
@@ -58,10 +77,20 @@ public class TakenTest {
         }
     }
 
+    /**
+     * Gets a question's score by question index
+     * @param questionNumber
+     * @return question score
+     */
     public double GetQuestionPointsGiven(int questionNumber) {
         return GetQuestionPointsGiven(test.getQuestions().get(questionNumber));
     }
 
+    /**
+     * Gets all feedbacks for a given question
+     * @param question
+     * @return List of feedbacks
+     */
     public ObservableList<Feedback> GetQuestionFeedbacks(Question question) {
         if (questionResultMap.containsKey(question)) {
             return questionResultMap.get(question).feedbacks;
@@ -72,10 +101,19 @@ public class TakenTest {
         }
     }
 
+    /**
+     * Gets all feedbacks for a given question index
+     * @param questionNumber
+     * @return list of Feedbacks
+     */
     public ObservableList<Feedback> GetQuestionFeedbacks(int questionNumber) {
         return GetQuestionFeedbacks(test.getQuestions().get(questionNumber));
     }
 
+    /**
+     * Gets the total given points for the whole test
+     * @return overall score for this TakenTest
+     */
     public double GetTotalPoints() {
         double total = 0;
         Iterator questionMapIterator = questionResultMap.entrySet().iterator();
@@ -87,6 +125,10 @@ public class TakenTest {
         return total;
     }
 
+    /**
+     * Gets the number of points that would be a perfect score for this test.
+     * @return max score for this Test
+     */
     public double GetTotalPointsPossible() {
         double total = 0.0;
         for (Question q : questionResultMap.keySet()) {

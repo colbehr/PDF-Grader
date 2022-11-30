@@ -26,9 +26,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Map;
 
-import static com.gradeflow.pdfgrader.PDFGrader.workingTest;
 import static com.gradeflow.pdfgrader.PDFGrader.getStage;
 import static com.gradeflow.pdfgrader.PDFGrader.workingTest;
 
@@ -338,7 +336,7 @@ public class Export {
                 contentStream.close();
             }
             //save file to path
-            studentTest.save(folderPath.toString() + "/" + workingTest.getName() + "_" + test.getId() + ".pdf");
+            studentTest.save(folderPath.toString() + "/" + test.getTest().getName() + testsNumber + "_" + test.getId() +  ".pdf");
             testsNumber++;
         }
     }

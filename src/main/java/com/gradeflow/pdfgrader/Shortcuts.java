@@ -21,6 +21,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Class responsible for storing and reassigning shortcuts via dialog
+ */
 public class Shortcuts {
 
     private static final String USER_SHORTCUTS_FILE_PATH = "userShortcuts.txt";
@@ -66,6 +69,10 @@ public class Shortcuts {
         }
     }
 
+    /**
+     * Loads previously set custom shortcuts from ./userShortcuts.txt
+     * @return
+     */
     private static HashMap<String, KeyCodeCombination> ParseShortcutsFromFile() {
         Scanner scanner;
         try {
@@ -107,6 +114,9 @@ public class Shortcuts {
         return shortcuts;
     }
 
+    /**
+     * Saves customized user shortcuts to ./userShortcuts.txt
+     */
     public static void SaveUserShortcuts() {
         File file = new File(USER_SHORTCUTS_FILE_PATH);
         FileWriter writer;
@@ -122,6 +132,11 @@ public class Shortcuts {
         }
     }
 
+    /**
+     * Opens dialog for user to customize shortcuts
+     * @param shortcutKeywords keywords for shortcuts relevant to the page in which this dialog was opened (Home, Setup, Grading)
+     * @param title the dialog title, should refer to the page in which this dialog was opened
+     */
     public static void ShowShortcutDialog(String[] shortcutKeywords, String title) {
 
         ObservableList<ShortcutDef> data = FXCollections.observableArrayList();

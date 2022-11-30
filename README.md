@@ -56,8 +56,12 @@ https://openjfx.io/openjfx-docs/#IDE-Intellij
   * Recent Files
   * Tests can be saved and opened later
   * Multiple pdfs will be merged when importing
+* 1.6
+  * UI Tweaks
+  * Export files have more useful data
+  * General polish
 
 
 <!-- Markdown link & img dfn's -->
-[license-image]: https://img.shields.io/github/license/colbehr/PDF-Grader?style=flat-square
-[stars-image]: https://img.shields.io/github/stars/colbehr/PDF-Grader?style=flat-square
+[license-image]: https://img.shields.io/github/license/colbehr/PDF-Grader?style=for-the-badge
+[stars-image]: https://img.shields.io/github/stars/colbehr/PDF-Grader?style=for-the-badge

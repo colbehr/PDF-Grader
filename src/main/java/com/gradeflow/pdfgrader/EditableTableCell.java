@@ -18,13 +18,22 @@ import java.util.regex.Pattern;
 
 // Modified from Dan Newton's original code, found at https://lankydan.dev/2017/02/11/editable-tables-in-javafx
 
+/**
+ * Extension of TableCell that allows for its observed value to be edited via TextField upon clicking.
+ * Also allows for moving between cells column-wise using Tab and Shift-Tab.
+ */
 public class EditableTableCell<S, T> extends TextFieldTableCell<S, T> {
 
     private TextField textField;
     private boolean escapePressed = false;
     private TablePosition<S, ?> tablePos = null;
-    private String filterRegex;
+    private final String filterRegex;
 
+    /**
+     * Constructor for the Editable cell limited to the given regex
+     * @param converter
+     * @param filterRegex The regex to be used for the TextField while editing
+     */
     public EditableTableCell(final StringConverter<T> converter, String filterRegex) {
         super(converter);
         this.filterRegex = filterRegex;
@@ -39,6 +48,7 @@ public class EditableTableCell<S, T> extends TextFieldTableCell<S, T> {
         return list -> new EditableTableCell<S, T>(converter, filterRegex);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void startEdit() {
         if (!isEditable() || !getTableView().isEditable()
@@ -114,6 +124,10 @@ public class EditableTableCell<S, T> extends TextFieldTableCell<S, T> {
         updateItem();
     }
 
+    /**
+     * Creates TextField to be used within the cell with this cell's text filter.
+     * @return the custom TextField
+     */
     private TextField getTextField() {
 
         final TextField textField = new TextField(getItemText());

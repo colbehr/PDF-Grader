@@ -6,7 +6,9 @@ import javafx.scene.control.Label;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 
-
+/**
+ * Static class for displaying small, temporary messages to the user
+ */
 public class Toast {
     public static void Notification(String text) {
         MakeToast(text, "-fx-background-color: black; -fx-text-fill: white; -fx-padding: 5px;");
@@ -20,6 +22,11 @@ public class Toast {
         MakeToast(text, "-fx-background-color: yellow; -fx-text-fill: black; -fx-padding: 5px;");
     }
 
+    /**
+     * Make new toast and immediately display to user for 3 seconds
+     * @param text
+     * @param style
+     */
     private static void MakeToast(String text, String style) {
         if (PDFGrader.getStage() == null) return;
 
@@ -34,6 +41,11 @@ public class Toast {
         delay(3000, toast::hide);
     }
 
+    /**
+     * Helper method to hide toast after a delay
+     * @param millis
+     * @param continuation
+     */
     private static void delay(long millis, Runnable continuation) {
         Task<Void> sleeper = new Task<Void>() {
             @Override

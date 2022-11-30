@@ -82,6 +82,9 @@ public class HomeController {
         }); // reset title
     }
 
+    /**
+     * Initializes functionality to drop PDF anywhere on home page to open it
+     */
     private void setupDragNDrop() {
         PDFGrader.getStage().getScene().setOnDragOver(new EventHandler<DragEvent>() {
             @Override
@@ -134,6 +137,9 @@ public class HomeController {
         });
     }
 
+    /**
+     * Initializes search for recent tests table
+     */
     private void setupSearch() {
         // Sample code from:
         // https://code.makery.ch/blog/javafx-8-tableview-sorting-filtering/

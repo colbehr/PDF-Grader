@@ -12,6 +12,9 @@ import java.util.List;
 import static com.gradeflow.pdfgrader.PDFGrader.getStage;
 import static com.gradeflow.pdfgrader.PDFGrader.workingTest;
 
+/**
+ * Extended Pagination that allows for the image to be zoomed and panned using the mouse
+ */
 public class ZoomPanPagination extends Pagination {
     private List<ImageView> pageImages;
     private Double lastDragX = 0.0;
@@ -25,6 +28,9 @@ public class ZoomPanPagination extends Pagination {
         reSetup();
     }
 
+    /**
+     * Initializes functionality
+     */
     public void reSetup() {
         pageImages = new ArrayList<>();
 
@@ -96,6 +102,10 @@ public class ZoomPanPagination extends Pagination {
         }
     }
 
+    /**
+     * Fits the page to the PDF viewing window
+     * @param page the current page
+     */
     private void pageAutoZoom(int page) {
         ImageView imgView = pageImages.get(page);
         zoomLevel = Double.min(this.getWidth(), this.getHeight()) / Double.max(imgView.getImage().getWidth(), imgView.getImage().getHeight());
@@ -103,6 +113,10 @@ public class ZoomPanPagination extends Pagination {
         pageImages.get(page).setScaleY(zoomLevel);
     }
 
+    /**
+     * Recenters page by resetting pan
+     * @param page the current page
+     */
     private void pageResetPan(int page) {
         panX = 0.0;
         panY = 0.0;

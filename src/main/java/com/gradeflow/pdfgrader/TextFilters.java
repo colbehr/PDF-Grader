@@ -6,6 +6,9 @@ import java.util.function.UnaryOperator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Class for creating regex filters for various UI TextFields
+ */
 public class TextFilters {
     public static final String intRegex = "(\\d*)";
     public static final String doubleRegex = "(\\d+)\\.?(\\d)*";
@@ -19,6 +22,11 @@ public class TextFilters {
         return MakeFilter(doubleRegex);
     }
 
+    /**
+     * Creates a new custom filter
+     * @param regex - the regular expression which the input will be limited to
+     * @return the custom TextFormatter
+     */
     public static TextFormatter MakeFilter(String regex) {
         UnaryOperator<TextFormatter.Change> filter = c -> {
             if (c.getText().equals("")) return c;

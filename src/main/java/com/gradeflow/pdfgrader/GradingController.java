@@ -79,7 +79,6 @@ public class GradingController {
 
     private int currentQuestion;
     private int currentTakenTest;
-    public static Path folderPath;
     private ObservableList<Feedback> feedbacks;
     private Double zoomLevel = 1.0;
     private Double zoomSensitivity = 0.005;
@@ -168,6 +167,10 @@ public class GradingController {
         getStage().setHeight(bounds.getHeight());
     }
 
+    /**
+     * Method called by Auto Total checkbox to toggle score
+     * being summed from Feedbacks or entered manually
+     */
     @FXML
     private void ToggleAutoTotal() {
         if (autoTotalCheckbox.isSelected()) {
@@ -178,6 +181,9 @@ public class GradingController {
         }
     }
 
+    /**
+     * Totals question score from Feedback
+     */
     private void autoTotal() {
         double total = 0;
         if (feedbacks != null && !feedbacks.isEmpty()) {
@@ -194,6 +200,9 @@ public class GradingController {
         pointsGivenField.setText(total + "");
     }
 
+    /**
+     * Adds a blank new feedback for the TakenTest
+     */
     @FXML
     private void addFeedback() {
         if (feedbackNewDesc.getText().equals("")) {
@@ -203,6 +212,10 @@ public class GradingController {
         addFeedback(new Feedback(feedbackNewPoints.getText(), feedbackNewDesc.getText()));
     }
 
+    /**
+     * Copys an existing feedback into this TakenTest's Feedbacks for this question.
+     * @param f feedback to add
+     */
     private void addFeedback(Feedback f) {
         feedbackTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -218,6 +231,10 @@ public class GradingController {
         }
     }
 
+    /**
+     * Called on cell key press. Deletes currently selected feedback if key was DELETE
+     * @param keyEvent
+     */
     @FXML
     public void deleteFeedback(javafx.scene.input.KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.DELETE) {
@@ -230,26 +247,41 @@ public class GradingController {
         }
     }
 
+    /**
+     * Updates UI to show next test
+     */
     @FXML
     public void nextTest() {
         setCurrentTakenTest(currentTakenTest + 1);
     }
 
+    /**
+     * Updates UI to show previous test
+     */
     @FXML
     public void prevTest() {
         setCurrentTakenTest(currentTakenTest - 1);
     }
 
+    /**
+     * Updates UI to show next question
+     */
     @FXML
     public void nextQuestion() {
         setCurrentQuestion(currentQuestion + 1);
     }
 
+    /**
+     * Updates UI to show previous question
+     */
     @FXML
     public void prevQuestion() {
         setCurrentQuestion(currentQuestion - 1);
     }
 
+    /**
+     * Calls SaveLoad to save test. User chooses a save location if Test has not ever been saved.
+     */
     @FXML
     public void SaveTest() {
         if (workingTest.savePath == null) {
@@ -260,6 +292,9 @@ public class GradingController {
         }
     }
 
+    /**
+     * User chooses a folder to save test in. Save location is stored for later saves.
+     */
     @FXML
     public void SaveTestAs() {
         FileChooser fileChooser = new FileChooser();
@@ -280,6 +315,9 @@ public class GradingController {
         }
     }
 
+    /**
+     * Saves test in same location as the Test's PDF.
+     */
     @FXML
     public void SaveTestAsDefault() {
         //get parent folder of original pdf
@@ -291,6 +329,11 @@ public class GradingController {
         SaveLoad.SaveTest(workingTest, currentPath, currentQuestion, currentTakenTest);
     }
 
+    /**
+     * Removes the extension from a filepath
+     * @param filePath
+     * @return
+     */
     // https://stackoverflow.com/questions/3449218/remove-filename-extension-in-java
     public static String removeExtention(String filePath) {
         // These first few lines the same as Justin's
@@ -316,6 +359,11 @@ public class GradingController {
         }
     }
 
+    /**
+     * Updates UI to display the TakenTest with the given index at the current question.
+     * Enables/Disables relevant buttons if at the start/end index.
+     * @param t
+     */
     private void setCurrentTakenTest(int t) {
         // safe clamped assignment
         currentTakenTest = Math.min(Math.max(0, t), workingTest.getTakenTests().length - 1);
@@ -333,6 +381,9 @@ public class GradingController {
         }
     }
 
+    /**
+     * Updates relevant UI fields with the current TakenTest data for this question
+     */
     private void loadCurrentTakenTest() {
         TakenTest takenTest = workingTest.getTakenTests()[currentTakenTest];
         pointsGivenField.setText(takenTest.GetQuestionPointsGiven(currentQuestion) + "");
@@ -346,6 +397,10 @@ public class GradingController {
         Platform.runLater(() -> feedbackNewPoints.requestFocus());
     }
 
+    /**
+     * Updates the UI to display this question with the first TakenTest
+     * @param q
+     */
     private void setCurrentQuestion(int q) {
         if (workingTest != null) {
             // safe clamped assignment
@@ -370,6 +425,9 @@ public class GradingController {
         }
     }
 
+    /**
+     * Gets the feedbacks used for this question on other TakenTests and fills the related UI table
+     */
     private void getUsedFeedbacks() {
         ObservableList<Feedback> usedFeedbacks = FXCollections.observableArrayList();
         Set<String> usedFeedbackExplanations = new HashSet<>();
@@ -398,6 +456,9 @@ public class GradingController {
         reuseFeedbackTable.refresh();
     }
 
+    /**
+     * Displays the current proper page in the test PDF
+     */
     private void UpdatePagination() {
         //set the current page number to the question's page number
         int questionPage = workingTest.getQuestions().get(currentQuestion).getPageNum() - 1;
@@ -406,6 +467,10 @@ public class GradingController {
         pagination.setCurrentPageIndex(page);
     }
 
+    /**
+     * Updates the current TakenTest's id when the user changes it through the UI
+     * @param e
+     */
     @FXML
     private void updateTakenTestId(ActionEvent e) {
         if (testOwnerField.getText().length() > 0) {
@@ -415,7 +480,10 @@ public class GradingController {
         }
     }
 
-
+    /**
+     * Adds buttons to all Feedbacks in the reuse feedbacks table so they may be added to the
+     * current TakenTest.
+     */
     // Thanks to https://riptutorial.com/javafx/example/27946/add-button-to-tableview
     private void addButtonToReuseFeedbacksTable() {
         TableColumn<Feedback, Void> colBtn = new TableColumn("Add");
@@ -455,7 +523,9 @@ public class GradingController {
     }
 
 
-
+    /**
+     * Initializes the feedback table to be editable
+     */
     private void setTableEditable() {
         feedbackTable.setEditable(true);
 
@@ -494,6 +564,9 @@ public class GradingController {
         feedbackTable.edit(focusedCell.getRow(), focusedCell.getTableColumn());
     }
 
+    /**
+     * Initializes keyboard shortcuts for this UI grading page.
+     */
     private void setupKeyboardShortcuts() {
         UpdateShortcutMenuText();
 
@@ -541,10 +614,16 @@ public class GradingController {
         });
     }
 
+    /**
+     * Updates the shortcuts shown in menu items upon changing shortcut keybinds
+     */
     private void UpdateShortcutMenuText() {
         gradingSaveMenuText.setText(Shortcuts.get("gradingSave").getName());
     }
 
+    /**
+     * Opens dialog with the relevant shortcuts for this UI grading page.
+     */
     @FXML
     private void ShowShortcutDialog() {
         String[] keywords = {"grading", "page"};

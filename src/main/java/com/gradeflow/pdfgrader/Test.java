@@ -147,6 +147,12 @@ public class Test {
         return pdfPath;
     }
 
+    /**
+     * Stores the last Question and TakenTest the user was viewing/grading.
+     * Used to resume progress when loading a previously saved Test.
+     * @param question
+     * @param takenTest
+     */
     public void setSavedPlace(int question, int takenTest) {
         savedPlace[0] = question;
         savedPlace[1] = takenTest;

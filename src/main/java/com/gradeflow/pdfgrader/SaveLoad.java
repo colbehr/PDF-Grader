@@ -11,12 +11,21 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-
+/**
+ * Handles Save and Load functionality for the application
+ */
 public class SaveLoad {
 
     public static final String RECENTS_FILENAME = "pdfgrader-recents.txt";
     public static Set<String> recents;
 
+    /**
+     * Converts all current Test and associated TakenTest data into a JSON file file later importing.
+     * @param test
+     * @param filepath
+     * @param currentQuestion
+     * @param currentTakenTest
+     */
     public static void SaveTest(Test test, String filepath, int currentQuestion, int currentTakenTest) {
         JSONArray wrapperJSArr = new JSONArray();
         JSONObject testJSObj = new JSONObject();
@@ -94,6 +103,12 @@ public class SaveLoad {
         }
     }
 
+    /**
+     * Creates grading-ready Test and TakenTest objects from previously saved JSON data.
+     * @param testFile
+     * @return
+     * @throws IOException
+     */
     public static Test LoadTest(File testFile) throws IOException {
         String jsonString = Files.readString(testFile.toPath());
         JSONObject testJSObj = (new JSONArray(jsonString)).getJSONObject(0);
@@ -158,6 +173,11 @@ public class SaveLoad {
         return test;
     }
 
+    /**
+     * Reads and stores the filenames of previously recorded recent tests from local
+     * file ./pdfgrader-recents.txt
+     * @throws IOException
+     */
     private static void LoadRecentTestsFromFile() throws IOException {
         if (recents == null) {
             recents = new LinkedHashSet<>();
@@ -171,6 +191,12 @@ public class SaveLoad {
         }
     }
 
+    /**
+     * Updates recent tests file ./pdfgrader-recents.txt by putting the given file at the top.
+     * Called after saving a test or loading a recent test.
+     * @param absPath
+     * @throws IOException
+     */
     private static void PutTestInRecent(String absPath) throws IOException {
         LoadRecentTestsFromFile();
         if (recents.contains(absPath)) recents.remove(absPath);
@@ -185,6 +211,11 @@ public class SaveLoad {
         writer.close();
     }
 
+    /**
+     * Returns the list of recently opened test's filenames
+     * @return
+     * @throws IOException
+     */
     public static List<String> GetRecentTests() throws IOException {
         LoadRecentTestsFromFile();
         List<String> recentsList = new ArrayList<>();

@@ -47,14 +47,15 @@
                   <MenuItem mnemonicParsing="false" onAction="#SaveTestAs" text="Save As" />
                   <Menu mnemonicParsing="false" text="Export">
                       <items>
-                          <MenuItem mnemonicParsing="false" text="Select Folder" onAction="#SetExportFolder"/>
-                          <MenuItem mnemonicParsing="false" text="Export Files" onAction="#Export"/>
+                          <MenuItem mnemonicParsing="false" onAction="#SetExportFolder" text="Select Folder" />
+                          <MenuItem mnemonicParsing="false" onAction="#Export" text="Export Files" />
                       </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Settings">
                       <MenuItem mnemonicParsing="false" onAction="#ShowShortcutDialog" text="Shortcuts" />
                   </Menu>
-                  <MenuItem mnemonicParsing="false" onAction="#Exit" text="Exit" />
+                  <MenuItem mnemonicParsing="false" onAction="#ExitToHome" text="Exit to Home" />
+                  <MenuItem mnemonicParsing="false" onAction="#Exit" text="Quit" />
               </items>
           </Menu>
             <Menu mnemonicParsing="false" text="Help">

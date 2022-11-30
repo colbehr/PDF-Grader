@@ -7,26 +7,16 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.util.Callback;
 import javafx.util.converter.DefaultStringConverter;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
-import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -568,6 +558,11 @@ public class GradingController {
     public void GoToSetup() throws IOException { PDFGrader.GoToSetup(); }
     @FXML
     private void Exit() { PDFGrader.Exit(); }
+    @FXML
+    private void ExitToHome() throws IOException {
+        SaveTest();
+        PDFGrader.SwitchScene("home.fxml");
+    }
     @FXML
     private void OpenGithub() { PDFGrader.OpenGithub(); }
     @FXML

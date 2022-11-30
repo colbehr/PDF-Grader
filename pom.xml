@@ -6,7 +6,7 @@
 
     <groupId>com.gradeflow</groupId>
     <artifactId>pdfgrader</artifactId>
-    <version>1.0</version>
+    <version>1.6</version>
     <name>pdfgrader</name>
 
     <properties>

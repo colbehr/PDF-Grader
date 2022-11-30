@@ -56,6 +56,10 @@ https://openjfx.io/openjfx-docs/#IDE-Intellij
   * Recent Files
   * Tests can be saved and opened later
   * Multiple pdfs will be merged when importing
+* 1.6
+  * UI Tweaks
+  * Export files have more useful data
+  * General polish
 
 
 <!-- Markdown link & img dfn's -->

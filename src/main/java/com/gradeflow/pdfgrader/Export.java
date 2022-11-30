@@ -1,12 +1,12 @@
 package com.gradeflow.pdfgrader;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.JFXPanel;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.stage.DirectoryChooser;
@@ -246,15 +246,16 @@ public class Export {
         File toDelete = new File(folderPath.toString() + "/a.png");
         toDelete.delete(); //deletes chart image
 
-        createChart(pointArray, folderPath.toString(), 2, mean/workingTest.getTakenTests().length, median); //creates chart image to add
+        createChart(pointArray, folderPath.toString(), 2, mean, median); //creates chart image to add
         pdImage = PDImageXObject.createFromFile(folderPath.toString() + "/a.png", statsDoc);
         contentStream.drawImage(pdImage, 50, 316);
         toDelete.delete();
 
-        createChart(pointArray, folderPath.toString(), 3, mean/workingTest.getTakenTests().length, median); //creates chart image to add
-        pdImage = PDImageXObject.createFromFile(folderPath.toString() + "/a.png", statsDoc);
-        contentStream.drawImage(pdImage, 50, 66);
-        toDelete.delete();
+        //TODO: Pie chart
+//        createChart(pointArray, folderPath.toString(), 3, mean/workingTest.getTakenTests().length, median); //creates chart image to add
+//        pdImage = PDImageXObject.createFromFile(folderPath.toString() + "/a.png", statsDoc);
+//        contentStream.drawImage(pdImage, 50, 66);
+//        toDelete.delete();
 
         contentStream.stroke();
         contentStream.close();
@@ -337,7 +338,7 @@ public class Export {
                 contentStream.close();
             }
             //save file to path
-            studentTest.save(folderPath.toString() + "/test_" + testsNumber + ".pdf");
+            studentTest.save(folderPath.toString() + "/" + workingTest.getName() + "_" + test.getId() + ".pdf");
             testsNumber++;
         }
     }
@@ -492,18 +493,25 @@ public class Export {
         final NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Students");
         final LineChart<String,Number> chart = new LineChart<>(xAxis, yAxis);
-        chart.setTitle("Overall test results");
         XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();
         XYChart.Series<String, Number> series2 = new XYChart.Series<String, Number>();
-        XYChart.Series<String, Number> series3 = new XYChart.Series<String, Number>();
+        ObservableList<PieChart.Data> pieChartData =
+                FXCollections.observableArrayList(
+                        new PieChart.Data("Grapefruit", 13),
+                        new PieChart.Data("Oranges", 25),
+                        new PieChart.Data("Plums", 10),
+                        new PieChart.Data("Pears", 22),
+                        new PieChart.Data("Apples", 30));
+        final PieChart pChart = new PieChart(pieChartData);
         series2.setName("Mean");
-        series.setName("test3");
+        series.setName("Students scores");
         switch (type) {
             case 1:
                 for (int i = 0; i < workingTest.getTakenTests().length; i++) {
                     series.getData().add(new XYChart.Data<>(Integer.toString(i), pointsArray[i]));
                 }
                 chart.getData().add(series);
+                chart.setTitle("Overall test results");
                 break;
             case 2:
                 for (int i = 0; i < workingTest.getTakenTests().length; i++) {
@@ -516,15 +524,13 @@ public class Export {
                 chart.getData().add(series2);
                 break;
             case 3:
-                for (int i = 0; i < workingTest.getTakenTests().length; i++) {
-                    series.getData().add(new XYChart.Data<>(Integer.toString(i), pointsArray[i]));
-                }
-                for (int i = 0; i < workingTest.getTakenTests().length; i++) {
-                    series3.getData().add(new XYChart.Data<>(Integer.toString(i), median));
-                }
-
-                chart.getData().add(series);
-                chart.getData().add(series3);
+//                for (int i = 0; i < workingTest.getTakenTests().length; i++) {
+//                    series.getData().add(new XYChart.Data<>(Integer.toString(i), pointsArray[i]));
+//                }
+//                for (int i = 0; i < workingTest.getTakenTests().length; i++) {
+//                    series3.getData().add(new XYChart.Data<>(Integer.toString(i), median));
+//                }
+                
                 break;
         }
         chart.setAnimated(false);

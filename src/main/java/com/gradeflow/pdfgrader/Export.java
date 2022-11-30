@@ -336,7 +336,7 @@ public class Export {
                 contentStream.close();
             }
             //save file to path
-            studentTest.save(folderPath.toString() + "/" + test.getTest().getName() + testsNumber + "_" + test.getId() +  ".pdf");
+            studentTest.save(folderPath.toString() + "/" + test.getTest().getName() + "_" + test.getId() +  ".pdf");
             testsNumber++;
         }
     }
